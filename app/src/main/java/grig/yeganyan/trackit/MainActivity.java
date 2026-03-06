@@ -1,7 +1,10 @@
 package grig.yeganyan.trackit;
 
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -21,12 +24,12 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         FloatingActionButton addBtn = findViewById(R.id.addHabitButton);
 
-        // Load the initial fragment
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, new MainFragment())
                 .commit();
 
-        // Add Habit button
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

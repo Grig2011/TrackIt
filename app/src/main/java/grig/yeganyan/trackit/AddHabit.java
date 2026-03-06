@@ -10,8 +10,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.UUID;
 
 import grig.yeganyan.trackit.model.Habit;
 
@@ -21,22 +22,20 @@ public class AddHabit extends AppCompatActivity {
     Spinner typeSpinner, unitSpinner, daysSpinner;
     Button saveHabitBtn;
 
-    DatabaseReference habitsRef;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
+
         Button back = findViewById(R.id.backBtn);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(AddHabit.this,MainActivity.class);
-                startActivity(i);
-            }
+        back.setOnClickListener(v -> {
+            Intent i = new Intent(AddHabit.this, MainActivity.class);
+            startActivity(i);
+            finish();
         });
 
-        // Views
         emojiInput = findViewById(R.id.emojiInput);
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
@@ -48,9 +47,7 @@ public class AddHabit extends AppCompatActivity {
 
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
 
-        // Firebase reference
-        habitsRef = FirebaseDatabase.getInstance()
-                .getReference("habits");
+        db = FirebaseFirestore.getInstance();
 
         saveHabitBtn.setOnClickListener(v -> saveHabit());
     }
@@ -74,7 +71,7 @@ public class AddHabit extends AppCompatActivity {
             goal = Double.parseDouble(goalInput.getText().toString());
         }
 
-        String habitId = habitsRef.push().getKey();
+        String habitId = UUID.randomUUID().toString();
 
         Habit habit = new Habit(
                 habitId,
@@ -88,10 +85,12 @@ public class AddHabit extends AppCompatActivity {
                 days
         );
 
-        habitsRef.child(habitId).setValue(habit)
+        db.collection("habits")
+                .document(habitId)
+                .set(habit)
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(this, "Habit saved", Toast.LENGTH_SHORT).show();
-                    finish(); // go back to MainActivity
+                    finish();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
