@@ -101,14 +101,33 @@
                 android:text="Colour"
                 android:textSize="16sp"
                 android:layout_marginTop="16dp"/>
-
-            <Button
-                android:id="@+id/colorButton"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">          <Button
+                android:id="@+id/Purple"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pick a Colour"
                 android:backgroundTint="#6200EE"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="30dp"
+                />
+            <Button
+                android:id="@+id/Green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#32a852"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="10dp"
+                />
+                <Button
+                    android:id="@+id/Red"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#f51111"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginLeft="10dp"
+                    />
+            </LinearLayout>
 
             <!-- Habit Type -->
             <TextView

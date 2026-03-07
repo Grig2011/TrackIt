@@ -20,7 +20,8 @@ public class AddHabit extends AppCompatActivity {
 
     TextInputEditText emojiInput, titleInput, descInput, goalInput;
     Spinner typeSpinner, unitSpinner, daysSpinner;
-    Button saveHabitBtn;
+    Button saveHabitBtn,Green,Purple,Red,ColorBtn;
+    String colour;
 
     FirebaseFirestore db;
 
@@ -44,9 +45,31 @@ public class AddHabit extends AppCompatActivity {
         typeSpinner = findViewById(R.id.typeSpinner);
         unitSpinner = findViewById(R.id.unitSpinner);
         daysSpinner = findViewById(R.id.daysSpinner);
-
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
 
+        Green = findViewById(R.id.Green);
+        Purple = findViewById(R.id.Purple);
+        Red = findViewById(R.id.Red);
+
+        Purple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colour = "#6200EE";
+            }
+        });
+        Red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colour = "#f51111";
+            }
+        });
+        Green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colour = "#32a852";
+                Green.setText("");
+            }
+        });
         db = FirebaseFirestore.getInstance();
 
         saveHabitBtn.setOnClickListener(v -> saveHabit());
@@ -61,10 +84,12 @@ public class AddHabit extends AppCompatActivity {
         String unit = unitSpinner.getSelectedItem().toString();
         String days = daysSpinner.getSelectedItem().toString();
 
+
         if (title.isEmpty()) {
             titleInput.setError("Title required");
             return;
         }
+
 
         double goal = 0;
         if (!goalInput.getText().toString().isEmpty()) {
@@ -78,7 +103,7 @@ public class AddHabit extends AppCompatActivity {
                 emoji,
                 title,
                 desc,
-                "#6200EE",
+                colour,
                 type,
                 goal,
                 unit,
