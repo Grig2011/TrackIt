@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_vertical">
+
+        <!-- Color Indicator -->
+        <View
+            android:id="@+id/colorBar"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:background="#7E57C2"/>
+
+        <!-- Habit Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/habitTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Habit title"
+                android:textSize="18sp"
+                android:textColor="#311B92"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/habitDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Habit description"
+                android:textSize="14sp"
+                android:textColor="#5E35B1"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/habitGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Goal"
+                android:textSize="12sp"
+                android:textColor="#9575CD"
+                android:layout_marginTop="4dp"/>
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/habitProgress"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="8dp"
+                android:progress="40"
+                app:indicatorColor="#673AB7"
+                app:trackColor="#D1C4E9"
+                app:trackCornerRadius="5dp"
+                app:trackThickness="10dp"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Delete habit"
+            android:padding="4dp"
+            android:src="@drawable/outline_delete_24"
+            />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
