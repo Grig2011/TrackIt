@@ -55,19 +55,27 @@ public class AddHabit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 colour = "#6200EE";
+                Purple.setText("✔");
+                Green.setText("");
+                Red.setText("");
             }
         });
         Red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 colour = "#f51111";
+                Red.setText("✔");
+                Purple.setText("");
+                Green.setText("");
             }
         });
         Green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 colour = "#32a852";
-                Green.setText("");
+                Green.setText("✔");
+                Red.setText("");
+                Purple.setText("");
             }
         });
         db = FirebaseFirestore.getInstance();
@@ -83,6 +91,7 @@ public class AddHabit extends AppCompatActivity {
         String type = typeSpinner.getSelectedItem().toString();
         String unit = unitSpinner.getSelectedItem().toString();
         String days = daysSpinner.getSelectedItem().toString();
+        int streak = 0;
 
 
         if (title.isEmpty()) {
@@ -107,7 +116,8 @@ public class AddHabit extends AppCompatActivity {
                 type,
                 goal,
                 unit,
-                days
+                days,
+                streak
         );
 
         db.collection("habits")

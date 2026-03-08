@@ -127,6 +127,7 @@
                     android:textColor="#FFFFFF"
                     android:layout_marginLeft="10dp"
                     />
+
             </LinearLayout>
 
             <!-- Habit Type -->

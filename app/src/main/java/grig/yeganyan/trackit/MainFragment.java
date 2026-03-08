@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,16 +71,18 @@ public class MainFragment extends Fragment {
         TextView title = card.findViewById(R.id.habitTitle);
         TextView desc = card.findViewById(R.id.habitDesc);
         TextView goal = card.findViewById(R.id.habitGoal);
+        TextView streak = card.findViewById(R.id.Strak);
         title.setTextColor(Color.parseColor(habit.color));
         goal.setTextColor(Color.parseColor(habit.color));
         desc.setTextColor(Color.parseColor(habit.color));
         LinearProgressIndicator progress = card.findViewById(R.id.habitProgress);
         View colorBar = card.findViewById(R.id.colorBar);
         ImageButton deleteButton = card.findViewById(R.id.deleteButton);
-
         title.setText((habit.emoji != null ? habit.emoji + " " : "") + habit.title);
         desc.setText(habit.description);
         goal.setText(habit.goal > 0 ? "Goal: " + habit.goal + " " + habit.unit : "");
+        streak.setText(String.valueOf(habit.Streak+"🔥"));
+
 
         int prog = (int) Math.min(Math.max(habit.goal, 0), 100);
         progress.setProgress(prog);

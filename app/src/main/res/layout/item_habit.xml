@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
     app:cardCornerRadius="20dp"
-    app:cardElevation="10dp"
-    android:background="#FFFFFF">
+    app:cardElevation="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,6 +56,11 @@
                 android:textSize="12sp"
                 android:textColor="#9575CD"
                 android:layout_marginTop="4dp"/>
+            <TextView
+                android:id="@+id/Strak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔥 Streak"/>
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/habitProgress"

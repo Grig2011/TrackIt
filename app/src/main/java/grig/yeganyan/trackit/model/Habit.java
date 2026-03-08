@@ -11,11 +11,12 @@ public class Habit {
     public double goal;
     public String unit;
     public String days;
+    public int Streak = 0;
 
     public Habit() {}
 
     public Habit(String id, String emoji, String title, String description,
-                 String color, String type, double goal, String unit, String days) {
+                 String color, String type, double goal, String unit, String days,int streak) {
         this.id = id;
         this.emoji = emoji;
         this.title = title;
@@ -25,5 +26,6 @@ public class Habit {
         this.goal = goal;
         this.unit = unit;
         this.days = days;
+        this.Streak = streak;
     }
 }
