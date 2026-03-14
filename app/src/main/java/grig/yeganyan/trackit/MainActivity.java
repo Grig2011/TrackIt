@@ -47,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_profile) {
                 selected = new ProfileFragment();
             } else if (id == R.id.nav_habit) {
-                selected = new HabitFragment(); // create this fragment
+                selected = new HabitFragment();
+            }
+            else if (id == R.id.nav_todo) {
+                selected = new ToDoList();
             }
 
             if (selected != null) {

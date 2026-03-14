@@ -15,7 +15,8 @@
 
         <activity
             android:name=".AddHabit"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="locked"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

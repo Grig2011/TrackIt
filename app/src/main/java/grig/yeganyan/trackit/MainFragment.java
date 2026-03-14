@@ -1,5 +1,7 @@
 package grig.yeganyan.trackit;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -101,14 +103,30 @@ public class MainFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         deleteButton.setOnClickListener(v -> {
-            db.collection("habits").document(habit.id).delete()
-                    .addOnSuccessListener(aVoid -> {
-                        habits_container.removeView(card); // remove from UI
-                        Toast.makeText(getContext(), "Habit deleted", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Delete Habit")
+                    .setMessage("Are you sure you want to delete this?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            db.collection("habits").document(habit.id).delete()
+                                    .addOnSuccessListener(aVoid -> {
+                                        habits_container.removeView(card); // remove from UI
+                                        Toast.makeText(getContext(), "Habit deleted", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(getContext(), "Failed to delete habit", Toast.LENGTH_SHORT).show();
+                                    });
+                        }
                     })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(getContext(), "Failed to delete habit", Toast.LENGTH_SHORT).show();
-                    });
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // User pressed Cancel
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+
         });
 
 
