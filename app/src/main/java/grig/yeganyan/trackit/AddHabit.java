@@ -1,8 +1,8 @@
 package grig.yeganyan.trackit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,22 +20,23 @@ public class AddHabit extends AppCompatActivity {
 
     TextInputEditText emojiInput, titleInput, descInput, goalInput;
     Spinner typeSpinner, unitSpinner, daysSpinner;
-    Button saveHabitBtn,Green,Purple,Red,ColorBtn;
-    String colour;
-
+    Button saveHabitBtn, greenBtn, purpleBtn, redBtn;
+    String colour = "#32a852"; // default green
     FirebaseFirestore db;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
 
-        Button back = findViewById(R.id.backBtn);
-        back.setOnClickListener(v -> {
-            Intent i = new Intent(AddHabit.this, MainActivity.class);
-            startActivity(i);
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        userId = prefs.getString("userId", null);
+        if (userId == null) {
+            Toast.makeText(this, "User not found. Please login again.", Toast.LENGTH_SHORT).show();
             finish();
-        });
+            return;
+        }
 
         emojiInput = findViewById(R.id.emojiInput);
         titleInput = findViewById(R.id.titleInput);
@@ -47,44 +48,33 @@ public class AddHabit extends AppCompatActivity {
         daysSpinner = findViewById(R.id.daysSpinner);
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
 
-        Green = findViewById(R.id.Green);
-        Purple = findViewById(R.id.Purple);
-        Red = findViewById(R.id.Red);
+        greenBtn = findViewById(R.id.Green);
+        purpleBtn = findViewById(R.id.Purple);
+        redBtn = findViewById(R.id.Red);
 
-        Purple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colour = "#6200EE";
-                Purple.setText("✔");
-                Green.setText("");
-                Red.setText("");
-            }
+        purpleBtn.setOnClickListener(v -> selectColor("#6200EE", purpleBtn));
+        redBtn.setOnClickListener(v -> selectColor("#f51111", redBtn));
+        greenBtn.setOnClickListener(v -> selectColor("#32a852", greenBtn));
+
+        Button backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(v -> {
+            startActivity(new Intent(AddHabit.this, MainActivity.class));
+            finish();
         });
-        Red.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colour = "#f51111";
-                Red.setText("✔");
-                Purple.setText("");
-                Green.setText("");
-            }
-        });
-        Green.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colour = "#32a852";
-                Green.setText("✔");
-                Red.setText("");
-                Purple.setText("");
-            }
-        });
+
         db = FirebaseFirestore.getInstance();
-
         saveHabitBtn.setOnClickListener(v -> saveHabit());
     }
 
-    private void saveHabit() {
+    private void selectColor(String selectedColor, Button clickedBtn) {
+        colour = selectedColor;
+        greenBtn.setText("");
+        purpleBtn.setText("");
+        redBtn.setText("");
+        clickedBtn.setText("✔");
+    }
 
+    private void saveHabit() {
         String emoji = emojiInput.getText().toString().trim();
         String title = titleInput.getText().toString().trim();
         String desc = descInput.getText().toString().trim();
@@ -93,34 +83,27 @@ public class AddHabit extends AppCompatActivity {
         String days = daysSpinner.getSelectedItem().toString();
         int streak = 0;
 
-
         if (title.isEmpty()) {
             titleInput.setError("Title required");
             return;
         }
 
-
         double goal = 0;
         if (!goalInput.getText().toString().isEmpty()) {
-            goal = Double.parseDouble(goalInput.getText().toString());
+            try {
+                goal = Double.parseDouble(goalInput.getText().toString());
+            } catch (NumberFormatException e) {
+                goalInput.setError("Invalid number");
+                return;
+            }
         }
 
         String habitId = UUID.randomUUID().toString();
+        Habit habit = new Habit(habitId, emoji, title, desc, colour, type, goal, unit, days, streak);
 
-        Habit habit = new Habit(
-                habitId,
-                emoji,
-                title,
-                desc,
-                colour,
-                type,
-                goal,
-                unit,
-                days,
-                streak
-        );
-
-        db.collection("habits")
+        db.collection("users")
+                .document(userId)
+                .collection("habits")
                 .document(habitId)
                 .set(habit)
                 .addOnSuccessListener(unused -> {

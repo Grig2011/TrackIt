@@ -12,20 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrackIt">
 
-
         <activity
-            android:name=".AddHabit"
-            android:exported="false"
-            android:screenOrientation="locked"/>
-        <activity
-            android:name=".MainActivity"
+            android:name=".LauncherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Register"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".AddHabit"
+            android:exported="false"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
