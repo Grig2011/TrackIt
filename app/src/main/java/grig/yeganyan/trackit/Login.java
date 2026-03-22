@@ -31,14 +31,21 @@ public class Login extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
-
+        TextView GuestLink = findViewById(R.id.Guest);
         TextView link = findViewById(R.id.RegisterLink);
         link.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, Register.class);
             startActivity(intent);
         });
+        GuestLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Guest();
+            }
+        });
 
         btnLogin.setOnClickListener(v -> loginUser());
+
     }
 
     private void loginUser() {
@@ -66,6 +73,34 @@ public class Login extends AppCompatActivity {
                         prefs.edit().putString("userId", userId).apply(); // <-- save userId
 
                         Toast.makeText(this, "Welcome " + loggedUser.getUsername(), Toast.LENGTH_SHORT).show();
+
+                        startActivity(new Intent(Login.this, MainActivity.class));
+                        finish();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+    private void Guest(){
+        String email = "gyeganyan11@gmail.com";
+        String password = "Grig2011";
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .whereEqualTo("password", password)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if(snapshot.isEmpty()) {
+                        Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    } else {
+                        User loggedUser = snapshot.getDocuments().get(0).toObject(User.class);
+                        String userId = snapshot.getDocuments().get(0).getId();
+
+                        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        prefs.edit().putBoolean("registered", true).apply();
+                        prefs.edit().putString("userId", userId).apply();
+
+                        Toast.makeText(this, "Welcome " + "Dear Guest", Toast.LENGTH_SHORT).show();
 
                         startActivity(new Intent(Login.this, MainActivity.class));
                         finish();

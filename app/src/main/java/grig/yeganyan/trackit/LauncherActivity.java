@@ -15,7 +15,7 @@ public class LauncherActivity extends AppCompatActivity {
         boolean registered = prefs.getBoolean("registered", false);
 
         if (registered) {
-            startActivity(new Intent(this, Login.class));
+            startActivity(new Intent(this, MainActivity.class));
         } else {
             startActivity(new Intent(this, Register.class));
         }

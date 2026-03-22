@@ -30,13 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, AddHabit.class);
-                startActivity(i);
-            }
-        });
+
 
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selected = null;
