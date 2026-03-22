@@ -20,7 +20,6 @@
             android:text="👱"
             android:textSize="60sp"
             android:gravity="center"
-            android:background="#D1C4E9"
             android:padding="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="12dp"
@@ -177,12 +176,12 @@
 
         <!-- Settings Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/settingsBtn"
+            android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="⚙️ Settings"
+            android:text="Logout"
             android:layout_marginTop="32dp"
-            app:backgroundTint="#7E57C2"
+            app:backgroundTint="#ff0000"
             android:textColor="#FFFFFF"
             android:textAllCaps="false"/>
     </LinearLayout>

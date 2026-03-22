@@ -47,31 +47,6 @@ public class AddHabit extends AppCompatActivity {
         descInput = findViewById(R.id.descInput);
         goalInput = findViewById(R.id.goalInput);
 
-        // Emoji-only input
-        emojiInput.addTextChangedListener(new android.text.TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String filtered = s.toString().replaceAll("[^\\p{So}\\p{Cn}]", "");
-                if (!s.toString().equals(filtered)) {
-                    emojiInput.setText(filtered);
-                    emojiInput.setSelection(filtered.length());
-                }
-            }
-            @Override
-            public void afterTextChanged(android.text.Editable s) { }
-        });
-        emojiInput.requestFocus();
-        emojiInput.post(() -> {
-            android.view.inputmethod.InputMethodManager imm =
-                    (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
-            if (imm != null) {
-                imm.showSoftInput(emojiInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
         // Spinners
         typeSpinner = findViewById(R.id.typeSpinner);
         unitSpinner = findViewById(R.id.unitSpinner);
@@ -93,17 +68,10 @@ public class AddHabit extends AppCompatActivity {
         indigoBtn = findViewById(R.id.Indigo);
         brownBtn = findViewById(R.id.Brown);
 
-        // Back button
-        Button backBtn = findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(v -> {
-            startActivity(new Intent(AddHabit.this, MainActivity.class));
-            finish();
-        });
-
         // Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Color button click listeners
+        // Color buttons
         purpleBtn.setOnClickListener(v -> selectColor("#6200EE", purpleBtn));
         greenBtn.setOnClickListener(v -> selectColor("#32A852", greenBtn));
         redBtn.setOnClickListener(v -> selectColor("#F51111", redBtn));
@@ -116,6 +84,13 @@ public class AddHabit extends AppCompatActivity {
         deepOrangeBtn.setOnClickListener(v -> selectColor("#FF5722", deepOrangeBtn));
         indigoBtn.setOnClickListener(v -> selectColor("#3F51B5", indigoBtn));
         brownBtn.setOnClickListener(v -> selectColor("#795548", brownBtn));
+
+        // Back button
+        Button backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(v -> finish());
+
+        // Prefill values from HabitFragment
+        receiveHabitTemplate(); // ✅ call this here, AFTER findViewById
 
         // Save habit
         saveHabitBtn.setOnClickListener(v -> saveHabit());
@@ -181,5 +156,19 @@ public class AddHabit extends AppCompatActivity {
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
+    }
+
+    private void receiveHabitTemplate() {
+        Intent intent = getIntent();
+        if(intent == null) return;
+
+        String emoji = intent.getStringExtra("emoji");
+        String title = intent.getStringExtra("title");
+        String desc = intent.getStringExtra("desc");
+
+        // ✅ prefill EditTexts
+        if(emoji != null) emojiInput.setText(emoji);
+        if(title != null) titleInput.setText(title);
+        if(desc != null) descInput.setText(desc);
     }
 }

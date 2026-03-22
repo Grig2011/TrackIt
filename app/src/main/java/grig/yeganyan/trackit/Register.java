@@ -36,8 +36,7 @@ public class Register extends AppCompatActivity {
 
         TextView tvLoginLink = findViewById(R.id.tvLoginLink);
         tvLoginLink.setOnClickListener(v -> {
-            Intent intent = new Intent(Register.this, Login.class);
-            startActivity(intent);
+            startActivity(new Intent(Register.this, Login.class));
             finish();
         });
 
@@ -49,39 +48,52 @@ public class Register extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
+        if (username.isEmpty()) {
+            etUsername.setError("Username required");
+            etUsername.requestFocus();
+            return;
+        }
+
+        if (email.isEmpty()) {
+            etEmail.setError("Email required");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            etPassword.setError("Password required");
+            etPassword.requestFocus();
             return;
         }
 
         CollectionReference usersRef = db.collection("users");
 
+        // Check if email already exists
         usersRef.whereEqualTo("email", email).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         QuerySnapshot snapshot = task.getResult();
                         if (snapshot.isEmpty()) {
+                            // Email is free, register user
                             User user = new User(username, email, password);
-
                             usersRef.add(user)
                                     .addOnSuccessListener(doc -> {
                                         Toast.makeText(this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-
 
                                         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                                         prefs.edit().putBoolean("registered", true).apply();
                                         prefs.edit().putString("userId", doc.getId()).apply();
 
-                                        Intent intent = new Intent(Register.this, MainActivity.class);
-                                        startActivity(intent);
+                                        startActivity(new Intent(Register.this, MainActivity.class));
                                         finish();
                                     })
                                     .addOnFailureListener(e ->
                                             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                                     );
-
                         } else {
-                            Toast.makeText(this, "Email already exists", Toast.LENGTH_SHORT).show();
+                            // Email already exists
+                            etEmail.setError("Email already exists");
+                            etEmail.requestFocus();
                         }
                     } else {
                         Toast.makeText(this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

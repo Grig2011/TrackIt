@@ -23,7 +23,7 @@
             android:text="TrackIt"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="#4527A0"/>
+            android:textColor="#2e7d57"/>
 
         <TextView
             android:id="@+id/header_subtitle"
@@ -57,6 +57,6 @@
         android:layout_gravity="end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        app:backgroundTint="#6200EE" />
+        app:backgroundTint="#2e7d57" />
 
 </LinearLayout>
