@@ -4,87 +4,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_margin="12dp"
     app:cardCornerRadius="20dp"
-    app:cardElevation="10dp">
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="20dp"
-        android:gravity="center_vertical">
+        android:orientation="horizontal">
 
-        <!-- Color Indicator -->
+        <!-- COLOR STRIPE -->
         <View
             android:id="@+id/colorBar"
-            android:layout_width="6dp"
+            android:layout_width="8dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
             android:background="#7E57C2"/>
 
-        <!-- Habit Content -->
+        <!-- CONTENT -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/habitTitle"
-                android:layout_width="wrap_content"
+            <!-- HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Habit title"
-                android:textSize="18sp"
-                android:textColor="#311B92"
-                android:textStyle="bold"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
+                <TextView
+                    android:id="@+id/habitTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Habit title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"/>
+
+                <ImageButton
+                    android:id="@+id/deleteButton"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/outline_delete_24"
+                    android:tint="#9E9E9E"
+                    android:padding="4dp"
+                    android:contentDescription="Delete"/>
+            </LinearLayout>
+
+            <!-- DESCRIPTION -->
             <TextView
                 android:id="@+id/habitDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Habit description"
                 android:textSize="14sp"
-                android:textColor="#5E35B1"
+                android:textColor="#6B6B6B"
                 android:layout_marginTop="4dp"/>
 
-            <TextView
-                android:id="@+id/habitGoal"
-                android:layout_width="wrap_content"
+            <!-- GOAL + STREAK ROW -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Goal"
-                android:textSize="12sp"
-                android:textColor="#9575CD"
-                android:layout_marginTop="4dp"/>
-            <TextView
-                android:id="@+id/Strak"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🔥 Streak"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
+                <TextView
+                    android:id="@+id/habitGoal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Goal"
+                    android:textSize="13sp"
+                    android:textColor="#8A8A8A"/>
+
+                <TextView
+                    android:id="@+id/Strak"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔥 Streak"
+                    android:textSize="13sp"
+                    android:textColor="#FF6D00"/>
+            </LinearLayout>
+
+            <!-- PROGRESS -->
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/habitProgress"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="12dp"
                 android:progress="40"
-                app:indicatorColor="#673AB7"
-                app:trackColor="#D1C4E9"
-                app:trackCornerRadius="5dp"
-                app:trackThickness="10dp"/>
+                app:indicatorColor="#7E57C2"
+                app:trackColor="#E8E8E8"
+                app:trackCornerRadius="6dp"
+                app:trackThickness="8dp"/>
 
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/deleteButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Delete habit"
-            android:padding="4dp"
-            android:src="@drawable/outline_delete_24"
-            />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

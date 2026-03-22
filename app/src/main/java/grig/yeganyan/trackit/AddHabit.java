@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,8 +21,10 @@ public class AddHabit extends AppCompatActivity {
 
     TextInputEditText emojiInput, titleInput, descInput, goalInput;
     Spinner typeSpinner, unitSpinner, daysSpinner;
-    Button saveHabitBtn, greenBtn, purpleBtn, redBtn;
-    String colour = "#32a852"; // default green
+    Button saveHabitBtn;
+    MaterialButton purpleBtn, greenBtn, redBtn, orangeBtn, blueBtn, yellowBtn,
+            pinkBtn, cyanBtn, limeBtn, deepOrangeBtn, indigoBtn, brownBtn;
+    String colour = "#32A852"; // default green
     FirebaseFirestore db;
     String userId;
 
@@ -38,39 +41,104 @@ public class AddHabit extends AppCompatActivity {
             return;
         }
 
+        // Inputs
         emojiInput = findViewById(R.id.emojiInput);
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
         goalInput = findViewById(R.id.goalInput);
 
+        // Emoji-only input
+        emojiInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String filtered = s.toString().replaceAll("[^\\p{So}\\p{Cn}]", "");
+                if (!s.toString().equals(filtered)) {
+                    emojiInput.setText(filtered);
+                    emojiInput.setSelection(filtered.length());
+                }
+            }
+            @Override
+            public void afterTextChanged(android.text.Editable s) { }
+        });
+        emojiInput.requestFocus();
+        emojiInput.post(() -> {
+            android.view.inputmethod.InputMethodManager imm =
+                    (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+            if (imm != null) {
+                imm.showSoftInput(emojiInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
+        // Spinners
         typeSpinner = findViewById(R.id.typeSpinner);
         unitSpinner = findViewById(R.id.unitSpinner);
         daysSpinner = findViewById(R.id.daysSpinner);
+
+        // Buttons
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
 
-        greenBtn = findViewById(R.id.Green);
         purpleBtn = findViewById(R.id.Purple);
+        greenBtn = findViewById(R.id.Green);
         redBtn = findViewById(R.id.Red);
+        orangeBtn = findViewById(R.id.Orange);
+        blueBtn = findViewById(R.id.Blue);
+        yellowBtn = findViewById(R.id.Yellow);
+        pinkBtn = findViewById(R.id.Pink);
+        cyanBtn = findViewById(R.id.Cyan);
+        limeBtn = findViewById(R.id.Lime);
+        deepOrangeBtn = findViewById(R.id.DeepOrange);
+        indigoBtn = findViewById(R.id.Indigo);
+        brownBtn = findViewById(R.id.Brown);
 
-        purpleBtn.setOnClickListener(v -> selectColor("#6200EE", purpleBtn));
-        redBtn.setOnClickListener(v -> selectColor("#f51111", redBtn));
-        greenBtn.setOnClickListener(v -> selectColor("#32a852", greenBtn));
-
+        // Back button
         Button backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(v -> {
             startActivity(new Intent(AddHabit.this, MainActivity.class));
             finish();
         });
 
+        // Firestore
         db = FirebaseFirestore.getInstance();
+
+        // Color button click listeners
+        purpleBtn.setOnClickListener(v -> selectColor("#6200EE", purpleBtn));
+        greenBtn.setOnClickListener(v -> selectColor("#32A852", greenBtn));
+        redBtn.setOnClickListener(v -> selectColor("#F51111", redBtn));
+        orangeBtn.setOnClickListener(v -> selectColor("#EB8F34", orangeBtn));
+        blueBtn.setOnClickListener(v -> selectColor("#2962FF", blueBtn));
+        yellowBtn.setOnClickListener(v -> selectColor("#FFD600", yellowBtn));
+        pinkBtn.setOnClickListener(v -> selectColor("#FF4081", pinkBtn));
+        cyanBtn.setOnClickListener(v -> selectColor("#00BCD4", cyanBtn));
+        limeBtn.setOnClickListener(v -> selectColor("#CDDC39", limeBtn));
+        deepOrangeBtn.setOnClickListener(v -> selectColor("#FF5722", deepOrangeBtn));
+        indigoBtn.setOnClickListener(v -> selectColor("#3F51B5", indigoBtn));
+        brownBtn.setOnClickListener(v -> selectColor("#795548", brownBtn));
+
+        // Save habit
         saveHabitBtn.setOnClickListener(v -> saveHabit());
     }
 
-    private void selectColor(String selectedColor, Button clickedBtn) {
+    private void selectColor(String selectedColor, MaterialButton clickedBtn) {
         colour = selectedColor;
-        greenBtn.setText("");
+
+        // Clear previous checkmarks
         purpleBtn.setText("");
+        greenBtn.setText("");
         redBtn.setText("");
+        orangeBtn.setText("");
+        blueBtn.setText("");
+        yellowBtn.setText("");
+        pinkBtn.setText("");
+        cyanBtn.setText("");
+        limeBtn.setText("");
+        deepOrangeBtn.setText("");
+        indigoBtn.setText("");
+        brownBtn.setText("");
+
+        // Mark selected button
         clickedBtn.setText("✔");
     }
 
