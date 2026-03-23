@@ -71,6 +71,6 @@
         android:textSize="16sp"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
-        app:backgroundTint="#6200EE"/>
+        app:backgroundTint="#187d24"/>
 
 </LinearLayout>

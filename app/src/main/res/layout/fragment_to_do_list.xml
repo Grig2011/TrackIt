@@ -18,7 +18,8 @@
             android:text="My To-Do List"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:textColor="#187d24"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTasks"
@@ -34,8 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Add Task"
-        android:src="@android:drawable/ic_input_add"
-        android:tint="@android:color/white"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="#2e7d57"
+        app:tint="@android:color/white"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

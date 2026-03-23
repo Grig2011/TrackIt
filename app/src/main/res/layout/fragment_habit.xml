@@ -25,66 +25,385 @@
             android:layout_marginBottom="16dp"/>
 
         <!-- Habit Card Example -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/habitCard1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:background="#FFFFFF">
 
-            <LinearLayout
+
+            <!-- Habit Card 5: Morning Stretch -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/habitCard5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/habitIcon1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🧘‍♂️"
-                    android:textSize="28sp"
-                    android:layout_marginEnd="16dp"/>
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="#FFFFFF">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
 
                     <TextView
-                        android:id="@+id/habitTitle1"
+                        android:id="@+id/habitIcon5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Morning Meditation"
-                        android:textSize="18sp"
-                        android:textColor="#311B92"
-                        android:textStyle="bold"/>
+                        android:text="🤸‍♂️"
+                        android:textSize="28sp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/habitTitle5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Morning Stretch"
+                            android:textSize="18sp"
+                            android:textColor="#F57F17"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/habitDesc5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wake up your body in 10 minutes"
+                            android:textSize="14sp"
+                            android:textColor="#F9A825"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/habitDesc1"
+                        android:id="@+id/habitAddIcon5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🧘‍♂️ 15 min daily mindfulness"
-                        android:textSize="14sp"
-                        android:textColor="#5E35B1"
-                        android:layout_marginTop="4dp"/>
+                        android:text="➕"
+                        android:textSize="24sp"
+                        android:textColor="#4527A0"
+                        android:layout_marginStart="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Habit Card 6: Journaling -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/habitCard6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/habitIcon6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📝"
+                        android:textSize="28sp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/habitTitle6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Journaling"
+                            android:textSize="18sp"
+                            android:textColor="#6A1B9A"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/habitDesc6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reflect on your day in 5 minutes"
+                            android:textSize="14sp"
+                            android:textColor="#8E24AA"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/habitAddIcon6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="➕"
+                        android:textSize="24sp"
+                        android:textColor="#4527A0"
+                        android:layout_marginStart="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Habit Card 7: Daily Coding -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/habitCard7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/habitIcon7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💻"
+                        android:textSize="28sp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/habitTitle7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daily Coding"
+                            android:textSize="18sp"
+                            android:textColor="#1976D2"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/habitDesc7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Solve a coding problem every day"
+                            android:textSize="14sp"
+                            android:textColor="#2196F3"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/habitAddIcon7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="➕"
+                        android:textSize="24sp"
+                        android:textColor="#4527A0"
+                        android:layout_marginStart="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Habit Card 8: Sleep Early -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/habitCard8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/habitIcon8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🌙"
+                        android:textSize="28sp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/habitTitle8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sleep Early"
+                            android:textSize="18sp"
+                            android:textColor="#455A64"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/habitDesc8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Set a bedtime and stick to it"
+                            android:textSize="14sp"
+                            android:textColor="#607D8B"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/habitAddIcon8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="➕"
+                        android:textSize="24sp"
+                        android:textColor="#4527A0"
+                        android:layout_marginStart="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Habit Card 9: Healthy Snack -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/habitCard9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/habitIcon9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🥗"
+                        android:textSize="28sp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/habitTitle9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Healthy Snack"
+                            android:textSize="18sp"
+                            android:textColor="#388E3C"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/habitDesc9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Choose fruits or nuts instead of junk food"
+                            android:textSize="14sp"
+                            android:textColor="#43A047"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/habitAddIcon9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="➕"
+                        android:textSize="24sp"
+                        android:textColor="#4527A0"
+                        android:layout_marginStart="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Habit Card 10: Evening Reflection -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/habitCard10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/habitIcon10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🌅"
+                        android:textSize="28sp"
+                        android:layout_marginEnd="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/habitTitle10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Evening Reflection"
+                            android:textSize="18sp"
+                            android:textColor="#6D4C41"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/habitDesc10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Spend 5 minutes reviewing your day"
+                            android:textSize="14sp"
+                            android:textColor="#8D6E63"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/habitAddIcon10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="➕"
+                        android:textSize="24sp"
+                        android:textColor="#4527A0"
+                        android:layout_marginStart="12dp"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/habitAddIcon1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="➕"
-                    android:textSize="24sp"
-                    android:textColor="#4527A0"
-                    android:layout_marginStart="12dp"/>
-            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Habit Card 2: Drink Water -->

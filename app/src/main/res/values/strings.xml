@@ -6,9 +6,15 @@
     </string-array>
 
     <string-array name="goal_units">
-        <item>kg</item>
-        <item>day</item>
+        <item>Select</item>
+        <item>count</item>
+        <item>steps</item>
+        <item>m</item>
+        <item>km</item>
+        <item>mile</item>
+        <item>ml</item>
         <item>cal</item>
+        <item>g</item>
     </string-array>
 
     <string-array name="task_days">

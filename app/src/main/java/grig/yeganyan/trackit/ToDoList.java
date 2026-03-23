@@ -116,7 +116,7 @@ public class ToDoList extends Fragment {
             Tasks task = tasks.get(position);
             holder.tvTitle.setText(task.getTitle());
             holder.tvDescription.setText(task.getDescription());
-            holder.tvTime.setText(task.getTime());
+            holder.tvTime.setText(task.getTime().toString());
 
             holder.btnDelete.setOnClickListener(v -> deleteTask(position));
         }

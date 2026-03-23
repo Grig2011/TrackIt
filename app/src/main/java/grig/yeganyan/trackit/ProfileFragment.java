@@ -2,6 +2,7 @@ package grig.yeganyan.trackit;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import grig.yeganyan.trackit.Login;
+import grig.yeganyan.trackit.model.User;
 
 public class ProfileFragment extends Fragment {
 
@@ -32,14 +36,27 @@ public class ProfileFragment extends Fragment {
 
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
-
-
+        Button deleteButton = view.findViewById(R.id.btndelete);
+        deleteButton.setOnClickListener(v -> showDeleteConfirmation());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            profileName.setText(user.getDisplayName() != null ? user.getDisplayName() : "User");
+
+
             profileEmail.setText(user.getEmail() != null ? user.getEmail() : "No Email");
         }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users")
+                .document(user.getUid())
+                .get()
+                .addOnSuccessListener(document -> {
+                    if (document.exists()) {
+                        String username = document.getString("username");
+                        profileName.setText(username);
+                    }
+                });
+
 
 
         logoutButton = view.findViewById(R.id.btnLogout);
@@ -62,5 +79,46 @@ public class ProfileFragment extends Fragment {
         if (getActivity() != null) {
             getActivity().finish();
         }
+    }
+    private void showDeleteConfirmation() {
+        new androidx.appcompat.app.AlertDialog.Builder(getContext())
+                .setTitle("Delete Account")
+                .setMessage("⚠️ Warning! Deleting your account is permanent.\n\n" +
+                        "All your habits, tasks, and personal data will be lost forever.\n" +
+                        "You will not be able to recover your account.\n\n" +
+                        "Are you sure you want to continue?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteUserAccount())
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setCancelable(true)
+                .show();
+    }
+    private void deleteUserAccount() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (user == null) return;
+
+        String userId = user.getUid();
+
+
+        db.collection("users").document(userId)
+                .delete()
+                .addOnCompleteListener(task -> {
+                    // 2. Delete Firebase Authentication account
+                    user.delete()
+                            .addOnCompleteListener(deleteTask -> {
+                                if (deleteTask.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Account deleted permanently", Toast.LENGTH_LONG).show();
+                                    // Redirect to login screen or finish activity
+                                    startActivity(new Intent(getContext(), Login.class));
+                                    getActivity().finish();
+                                } else {
+                                    Toast.makeText(getContext(), "Error: " + deleteTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Error deleting data: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
     }
 }

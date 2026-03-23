@@ -9,6 +9,7 @@
     tools:context=".AddHabit">
 
     <ScrollView
+        android:layout_marginTop="30dp"
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -25,14 +26,20 @@
             android:orientation="vertical"
             android:paddingBottom="32dp">
 
-            <!-- Back Button (escaped "<") -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&lt;-- back"
-                android:backgroundTint="#6200EE"
-                android:textColor="#FFFFFF"/>
+                android:text="Back"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:backgroundTint="#32A852"
+                app:cornerRadius="12dp"
+                app:iconGravity="textStart"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
 
             <!-- Emoji -->
             <TextView
@@ -234,6 +241,205 @@
                     android:backgroundTint="#795548"
                     android:foreground="?attr/selectableItemBackground"/>
             </LinearLayout>
+            <!-- Third row of 6 colors -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Teal"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#009688"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/DeepPurple"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#673AB7"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Amber"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#FFC107"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/LightBlue"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#03A9F4"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/PurpleDark"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#512DA8"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Gray"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#9E9E9E"
+                    android:foreground="?attr/selectableItemBackground"/>
+            </LinearLayout>
+
+            <!-- Fourth row of 6 colors -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/BlueGray"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#607D8B"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/LightGreen"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#8BC34A"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/OrangeDark"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#FF6F00"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/RedDark"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#B71C1C"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/IndigoDark"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#1A237E"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/BrownDark"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#4E342E"
+                    android:foreground="?attr/selectableItemBackground"/>
+            </LinearLayout>
+            <!-- Fifth row of 6 colors -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Peach"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#FFAB91"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Mint"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#A7FFEB"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Lavender"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#B39DDB"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Coral"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#FF6E6E"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/SkyBlue"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#81D4FA"
+                    android:foreground="?attr/selectableItemBackground"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/Lemon"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    app:cornerRadius="28dp"
+                    android:backgroundTint="#FFF59D"
+                    android:foreground="?attr/selectableItemBackground"/>
+            </LinearLayout>
             <!-- Habit Type -->
             <TextView
                 android:layout_width="wrap_content"
@@ -304,7 +510,7 @@
                 android:layout_height="wrap_content"
                 android:text="Save Habit"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#6200EE"
+                android:backgroundTint="#187d24"
                 android:textColor="#FFFFFF"/>
 
         </LinearLayout>

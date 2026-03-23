@@ -80,4 +80,13 @@ public class AddTask extends DialogFragment {
                 })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add task: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9); // 90% of screen width
+            int height = getDialog().getWindow().getAttributes().height;
+            getDialog().getWindow().setLayout(width, height);
+        }
+    }
 }
