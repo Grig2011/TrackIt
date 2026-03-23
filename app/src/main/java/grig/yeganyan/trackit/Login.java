@@ -3,6 +3,7 @@ package grig.yeganyan.trackit;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import grig.yeganyan.trackit.model.User;
@@ -20,12 +23,12 @@ public class Login extends AppCompatActivity {
     EditText etEmail, etPassword;
     Button btnLogin;
     FirebaseFirestore db;
-
+    private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         etEmail = findViewById(R.id.etEmail);
@@ -57,57 +60,70 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        db.collection("users")
-                .whereEqualTo("email", email)
-                .whereEqualTo("password", password)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    if(snapshot.isEmpty()) {
-                        Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        FirebaseUser firebaseUser = auth.getCurrentUser();
+                        if(firebaseUser != null) {
+                            if(firebaseUser.isEmailVerified()) {
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("users").document(firebaseUser.getUid())
+                                        .get()
+                                        .addOnSuccessListener(doc -> {
+                                            if(doc.exists()) {
+                                                String username = doc.getString("username");
+
+                                                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                                                prefs.edit().putBoolean("registered", true).apply();
+                                                prefs.edit().putString("userId", firebaseUser.getUid()).apply();
+                                                prefs.edit().putString("username", username).apply();
+
+                                                Toast.makeText(this, "Welcome " + username, Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(Login.this, MainActivity.class));
+                                                finish();
+                                            }
+                                        })
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(this, "Firestore error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                        );
+                            } else {
+                                Toast.makeText(this, "Please verify your email first!", Toast.LENGTH_LONG).show();
+                            }
+                        }
                     } else {
-                        User loggedUser = snapshot.getDocuments().get(0).toObject(User.class);
-                        String userId = snapshot.getDocuments().get(0).getId(); // <-- get Firestore doc ID
-
-                        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                        prefs.edit().putBoolean("registered", true).apply();
-                        prefs.edit().putString("userId", userId).apply(); // <-- save userId
-
-                        Toast.makeText(this, "Welcome " + loggedUser.getUsername(), Toast.LENGTH_SHORT).show();
-
-                        startActivity(new Intent(Login.this, MainActivity.class));
-                        finish();
+                        Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                });
     }
-    private void Guest(){
-        String email = "gyeganyan11@gmail.com";
-        String password = "Grig2011";
-        db.collection("users")
-                .whereEqualTo("email", email)
-                .whereEqualTo("password", password)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    if(snapshot.isEmpty()) {
-                        Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+    private void Guest() {
+
+        auth.signInAnonymously()
+                .addOnCompleteListener(this, task -> {
+
+                    if (task.isSuccessful()) {
+
+                        FirebaseUser user = auth.getCurrentUser();
+
+                        if(user != null){
+
+                            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                            prefs.edit().putBoolean("registered", false).apply();
+                            prefs.edit().putString("userId", user.getUid()).apply();
+
+                            Toast.makeText(this, "Guest login success", Toast.LENGTH_SHORT).show();
+
+                            startActivity(new Intent(Login.this, MainActivity.class));
+                            finish();
+                        }
+
                     } else {
-                        User loggedUser = snapshot.getDocuments().get(0).toObject(User.class);
-                        String userId = snapshot.getDocuments().get(0).getId();
 
-                        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                        prefs.edit().putBoolean("registered", true).apply();
-                        prefs.edit().putString("userId", userId).apply();
-
-                        Toast.makeText(this, "Welcome " + "Dear Guest", Toast.LENGTH_SHORT).show();
-
-                        startActivity(new Intent(Login.this, MainActivity.class));
-                        finish();
+                        Exception e = task.getException();
+                        Log.e("AUTH_ERROR", e.getMessage());
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                });
     }
 }

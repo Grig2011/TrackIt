@@ -1,6 +1,7 @@
+
 plugins {
-    alias(libs.plugins.android.application)
-    id("com.google.gms.google-services")
+    id("com.android.application")       // Required for Android app
+    id("com.google.gms.google-services") // Required for Firebase
 }
 
 android {
@@ -34,19 +35,23 @@ android {
 }
 
 dependencies {
-
+    // AndroidX and Material
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
+    // Firebase BOM (manages versions)
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
 
+    // Firebase services
     implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore")
-    implementation(libs.activity)
+    implementation("com.google.firebase:firebase-auth")      // Authentication
+    implementation("com.google.firebase:firebase-firestore")  // Firestore database
 
+    implementation(libs.activity)  // keep your existing libs
+
+    // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
