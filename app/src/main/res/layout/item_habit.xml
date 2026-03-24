@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,102 +8,110 @@
     app:cardElevation="0dp"
     app:cardBackgroundColor="#FFFFFF">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <!-- COLOR STRIPE -->
-        <View
-            android:id="@+id/colorBar"
-            android:layout_width="8dp"
-            android:layout_height="match_parent"
-            android:background="#7E57C2"/>
-
-        <!-- CONTENT -->
+        <!-- Background buttons on LEFT -->
         <LinearLayout
+            android:id="@+id/backgroundButtons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="start|center_vertical"
+            android:paddingStart="0dp">
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="#faba0a"
+                android:src="@drawable/baseline_edit_24"
+                android:contentDescription="Edit"
+                app:tint="#FFFFFF" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="#E53935"
+                android:src="@drawable/outline_delete_24"
+                android:contentDescription="Delete"
+                app:tint="#FFFFFF" />
+        </LinearLayout>
+
+        <!-- Foreground: card content -->
+        <LinearLayout
+            android:id="@+id/cardContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal">
 
-            <!-- HEADER -->
+            <View
+                android:id="@+id/colorBar"
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:background="#7E57C2" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/habitTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Habit title"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A1A"/>
-
-                <ImageButton
-                    android:id="@+id/deleteButton"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/outline_delete_24"
-                    android:tint="#9E9E9E"
-                    android:padding="4dp"
-                    android:contentDescription="Delete"/>
-            </LinearLayout>
-
-            <!-- DESCRIPTION -->
-            <TextView
-                android:id="@+id/habitDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Habit description"
-                android:textSize="14sp"
-                android:textColor="#6B6B6B"
-                android:layout_marginTop="4dp"/>
-
-            <!-- GOAL + STREAK ROW -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                    android:textColor="#1A1A1A" />
 
                 <TextView
-                    android:id="@+id/habitGoal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Goal"
-                    android:textSize="13sp"
-                    android:textColor="#8A8A8A"/>
-
-                <TextView
-                    android:id="@+id/Strak"
+                    android:id="@+id/habitDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🔥 Streak"
-                    android:textSize="13sp"
-                    android:textColor="#FF6D00"/>
+                    android:text="Habit description"
+                    android:textSize="14sp"
+                    android:textColor="#6B6B6B"
+                    android:layout_marginTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/habitGoal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Goal"
+                        android:textSize="13sp"
+                        android:textColor="#8A8A8A" />
+
+                    <TextView
+                        android:id="@+id/Strak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔥 Streak"
+                        android:textSize="13sp"
+                        android:textColor="#FF6D00" />
+                </LinearLayout>
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/habitProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="12dp"
+                    android:progress="40"
+                    app:indicatorColor="#7E57C2"
+                    app:trackColor="#E8E8E8"
+                    app:trackCornerRadius="6dp"
+                    app:trackThickness="8dp" />
             </LinearLayout>
-
-            <!-- PROGRESS -->
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/habitProgress"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="12dp"
-                android:progress="40"
-                app:indicatorColor="#7E57C2"
-                app:trackColor="#E8E8E8"
-                app:trackCornerRadius="6dp"
-                app:trackThickness="8dp"/>
-
         </LinearLayout>
-
-    </LinearLayout>
-
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

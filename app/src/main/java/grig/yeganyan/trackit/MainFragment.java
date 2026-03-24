@@ -1,16 +1,14 @@
 package grig.yeganyan.trackit;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,18 +36,11 @@ public class MainFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        habitsContainer = view.findViewById(R.id.habits_container);
         FloatingActionButton addBtn = view.findViewById(R.id.addHabitButton);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), AddHabit.class);
-                startActivity(i);
-            }
-        });
-        habitsContainer = view.findViewById(R.id.habits_container);
+        addBtn.setOnClickListener(v -> startActivity(new Intent(getActivity(), AddHabit.class)));
 
-        // Get current userId
         SharedPreferences prefs = requireContext().getSharedPreferences("MyAppPrefs", getContext().MODE_PRIVATE);
         userId = prefs.getString("userId", null);
         if (userId == null) {
@@ -58,7 +49,6 @@ public class MainFragment extends Fragment {
         }
 
         loadHabits();
-
         return view;
     }
 
@@ -69,17 +59,14 @@ public class MainFragment extends Fragment {
                 .document(userId)
                 .collection("habits")
                 .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        Log.e("Firestore", "Listen failed.", error);
-                        return;
-                    }
+                    if (error != null) return;
 
                     habitsContainer.removeAllViews();
 
                     if (value != null) {
                         for (QueryDocumentSnapshot doc : value) {
                             Habit habit = doc.toObject(Habit.class);
-                            habit.id = doc.getId();
+                            habit.setId(doc.getId());
                             addHabitCard(habit);
                         }
                     }
@@ -99,14 +86,18 @@ public class MainFragment extends Fragment {
         LinearProgressIndicator progress = card.findViewById(R.id.habitProgress);
         View colorBar = card.findViewById(R.id.colorBar);
         ImageButton deleteButton = card.findViewById(R.id.deleteButton);
+        ImageButton editButton = card.findViewById(R.id.editButton);
+        LinearLayout cardContent = card.findViewById(R.id.cardContent); // foreground content
 
-        title.setText((habit.emoji != null ? habit.emoji + " " : "") + habit.title);
-        desc.setText(habit.description);
-        goal.setText(habit.goal > 0 ? "Goal: " + habit.goal + " " + habit.unit : "");
-        streak.setText(habit.Streak + "🔥");
+        // Set text
+        title.setText((habit.getEmoji() != null ? habit.getEmoji() + " " : "") + habit.getTitle());
+        desc.setText(habit.getDescription());
+        goal.setText(habit.getGoal() > 0 ? "Goal: " + habit.getGoal() + " " + habit.getUnit() : "");
+        streak.setText(habit.getStreak() + "🔥");
 
+        // Set colors
         try {
-            int color = Color.parseColor(habit.color);
+            int color = Color.parseColor(habit.getColor());
             title.setTextColor(color);
             desc.setTextColor(color);
             goal.setTextColor(color);
@@ -122,10 +113,61 @@ public class MainFragment extends Fragment {
             progress.setTrackColor(Color.parseColor("#D1C4E9"));
         }
 
-        int prog = habit.goal > 0 ? (int) Math.min((habit.Streak / habit.goal) * 100, 100) : 0;
+        int prog = habit.getGoal() > 0 ? (int) Math.min((habit.getStreak() / habit.getGoal()) * 100, 100) : 0;
         progress.setProgress(prog);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Hide buttons initially
+        editButton.setVisibility(View.GONE);
+        deleteButton.setVisibility(View.GONE);
+
+        // Swipe detection
+        cardContent.setOnTouchListener(new View.OnTouchListener() {
+            float startX;
+            boolean buttonsShown = false;
+            final float swipeDistance = 250f; // distance to reveal buttons
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getX();
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        float deltaX = event.getX() - startX;
+
+                        if (!buttonsShown && deltaX > 0) { // swiping right
+                            cardContent.setTranslationX(Math.min(deltaX, swipeDistance));
+                        } else if (buttonsShown && deltaX < 0) { // swipe left to hide
+                            cardContent.setTranslationX(Math.max(deltaX + swipeDistance, 0));
+                        }
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        if (!buttonsShown && cardContent.getTranslationX() >= swipeDistance / 2) {
+                            // reveal buttons
+                            cardContent.setTranslationX(swipeDistance);
+                            editButton.setVisibility(View.VISIBLE);
+                            deleteButton.setVisibility(View.VISIBLE);
+                            buttonsShown = true;
+                        } else if (buttonsShown && cardContent.getTranslationX() <= swipeDistance / 2) {
+                            // hide buttons
+                            cardContent.setTranslationX(0);
+                            editButton.setVisibility(View.GONE);
+                            deleteButton.setVisibility(View.GONE);
+                            buttonsShown = false;
+                        } else {
+                            // snap to nearest
+                            cardContent.setTranslationX(buttonsShown ? swipeDistance : 0);
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        // Delete action
         deleteButton.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
                 .setTitle("Delete Habit")
                 .setMessage("Are you sure you want to delete this habit?")
@@ -133,7 +175,7 @@ public class MainFragment extends Fragment {
                     db.collection("users")
                             .document(userId)
                             .collection("habits")
-                            .document(habit.id)
+                            .document(habit.getId())
                             .delete()
                             .addOnSuccessListener(aVoid -> {
                                 habitsContainer.removeView(card);
@@ -144,6 +186,22 @@ public class MainFragment extends Fragment {
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show()
         );
+
+        // Edit action
+        editButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), AddHabit.class);
+            intent.putExtra("MODE", "EDIT");
+            intent.putExtra("habitId", habit.getId());
+            intent.putExtra("title", habit.getTitle());
+            intent.putExtra("description", habit.getDescription());
+            intent.putExtra("emoji", habit.getEmoji());
+            intent.putExtra("goal", String.valueOf(habit.getGoal()));
+            intent.putExtra("color", habit.getColor());
+            intent.putExtra("type", habit.getType());
+            intent.putExtra("unit", habit.getUnit());
+            intent.putExtra("days", habit.getDays());
+            v.getContext().startActivity(intent);
+        });
 
         habitsContainer.addView(card);
     }
