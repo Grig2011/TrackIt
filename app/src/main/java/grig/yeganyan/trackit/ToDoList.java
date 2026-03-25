@@ -49,7 +49,9 @@ public class ToDoList extends Fragment {
             return view;
         }
 
-        // Setup FAB
+
+
+
         FloatingActionButton fab = view.findViewById(R.id.fabAddTask);
         fab.setOnClickListener(v -> openAddTaskDialog());
 
@@ -99,7 +101,7 @@ public class ToDoList extends Fragment {
         if (listenerRegistration != null) listenerRegistration.remove();
     }
 
-    // --- Adapter ---
+
     class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
         private List<Tasks> tasks;
         TaskAdapter(List<Tasks> tasks) { this.tasks = tasks; }
@@ -114,11 +116,14 @@ public class ToDoList extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
             Tasks task = tasks.get(position);
+
             holder.tvTitle.setText(task.getTitle());
             holder.tvDescription.setText(task.getDescription());
             holder.tvTime.setText(task.getTime().toString());
 
             holder.btnDelete.setOnClickListener(v -> deleteTask(position));
+
+            holder.btnEdit.setOnClickListener(v -> editTask(task));
         }
 
         @Override
@@ -126,7 +131,7 @@ public class ToDoList extends Fragment {
 
         class TaskViewHolder extends RecyclerView.ViewHolder {
             TextView tvTitle, tvDescription, tvTime;
-            ImageButton btnDelete;
+            ImageButton btnDelete,btnEdit;
 
             TaskViewHolder(View itemView) {
                 super(itemView);
@@ -134,18 +139,46 @@ public class ToDoList extends Fragment {
                 tvDescription = itemView.findViewById(R.id.tvDescription);
                 tvTime = itemView.findViewById(R.id.tvTime);
                 btnDelete = itemView.findViewById(R.id.btnDeleteTask);
+                btnEdit = itemView.findViewById(R.id.btnEditTask);
+
             }
         }
     }
 
     private void deleteTask(int position) {
         String taskId = taskList.get(position).getId();
-        db.collection("users")
-                .document(currentUserId)
-                .collection("tasks")
-                .document(taskId)
-                .delete()
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Task deleted", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to delete: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        new androidx.appcompat.app.AlertDialog.Builder(getContext())
+                .setTitle("Confirm Deletion")
+                .setMessage("Do you really want to remove this task? This cannot be undone.")
+                .setPositiveButton("Delete", (dialog, which) -> {
+
+                    db.collection("users")
+                            .document(currentUserId)
+                            .collection("tasks")
+                            .document(taskId)
+                            .delete()
+                            .addOnSuccessListener(aVoid ->
+                                    Toast.makeText(getContext(), "Task successfully removed", Toast.LENGTH_SHORT).show())
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(getContext(), "Oops! Could not delete task: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+    private void editTask(Tasks task) {
+
+        AddTask addTaskFragment = new AddTask();
+
+        Bundle args = new Bundle();
+        args.putString("userId", currentUserId);
+        args.putString("taskId", task.getId());
+        args.putString("title", task.getTitle());
+        args.putString("description", task.getDescription());
+        args.putString("time", task.getTime());
+
+        addTaskFragment.setArguments(args);
+
+        addTaskFragment.show(getParentFragmentManager(), "edit_task");
     }
 }

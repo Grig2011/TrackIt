@@ -189,12 +189,17 @@ public class AddHabit extends AppCompatActivity {
                 goalInput.setError("Invalid number");
                 return;
             }
+        }else{
+
+            goalInput.setError("goal is required");
+            return;
         }
 
         if (unit.equals("Select")) {
             Toast.makeText(this, "Unit is required", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         Habit habit;
         if ("EDIT".equals(mode) && habitId != null) {
