@@ -6,7 +6,7 @@
     android:layout_margin="12dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="@color/habit_bg_color">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,19 +25,19 @@
                 android:id="@+id/editButton"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:background="#faba0a"
-                android:src="@drawable/baseline_edit_24"
-                android:contentDescription="Edit"
-                app:tint="#FFFFFF" />
+                android:background="@color/primary_color"
+            android:src="@drawable/baseline_edit_24"
+            android:contentDescription="Edit"
+            app:tint="@color/text_secondary" />
 
             <ImageButton
                 android:id="@+id/deleteButton"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:background="#E53935"
-                android:src="@drawable/outline_delete_24"
-                android:contentDescription="Delete"
-                app:tint="#FFFFFF" />
+                android:background="@color/red_delete"
+            android:src="@drawable/outline_delete_24"
+            android:contentDescription="Delete"
+            app:tint="@color/text_secondary" />
         </LinearLayout>
 
         <!-- Foreground: card content -->
@@ -51,7 +51,7 @@
                 android:id="@+id/colorBar"
                 android:layout_width="8dp"
                 android:layout_height="match_parent"
-                android:background="#7E57C2" />
+                android:background="@color/purple_700" /> <!-- use your purple color -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                     android:text="Habit title"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A1A" />
+                    android:textColor="@color/text_primary" />
 
                 <TextView
                     android:id="@+id/habitDesc"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:text="Habit description"
                     android:textSize="14sp"
-                    android:textColor="#6B6B6B"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp" />
 
                 <LinearLayout
@@ -90,7 +90,7 @@
                         android:layout_weight="1"
                         android:text="Goal"
                         android:textSize="13sp"
-                        android:textColor="#8A8A8A" />
+                        android:textColor="@color/text_secondary" />
 
                     <TextView
                         android:id="@+id/Strak"
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:text="🔥 Streak"
                         android:textSize="13sp"
-                        android:textColor="#FF6D00" />
+                        android:textColor="@color/orange_streak" />
                 </LinearLayout>
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -107,8 +107,8 @@
                     android:layout_height="8dp"
                     android:layout_marginTop="12dp"
                     android:progress="40"
-                    app:indicatorColor="#7E57C2"
-                    app:trackColor="#E8E8E8"
+                    app:indicatorColor="@color/purple_700"
+                    app:trackColor="@color/track_gray"
                     app:trackCornerRadius="6dp"
                     app:trackThickness="8dp" />
             </LinearLayout>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_color"
     tools:context=".AddHabit">
 
     <ScrollView
-        android:layout_marginTop="30dp"
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="30dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,24 +30,22 @@
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Back"
-                android:textColor="#FFFFFF"
-                android:textAllCaps="false"
                 android:backgroundTint="#32A852"
-                app:cornerRadius="12dp"
-                app:iconGravity="textStart"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="10dp"
-                android:paddingBottom="10dp"/>
-
-            <!-- Emoji -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Emoji"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"/>
+                android:paddingEnd="16dp"
+                android:paddingBottom="10dp"
+                android:text="Back"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="12dp"
+                app:iconGravity="textStart" /> <!-- Emoji --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Emoji"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -58,16 +56,14 @@
                     android:id="@+id/emojiInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="2"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                    android:maxLength="2" />
+            </com.google.android.material.textfield.TextInputLayout> <!-- Title --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Title"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -78,16 +74,14 @@
                     android:id="@+id/titleInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Description -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Description"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout> <!-- Description --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Description"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -98,423 +92,485 @@
                     android:id="@+id/descInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:inputType="textMultiLine" />
+            </com.google.android.material.textfield.TextInputLayout> <!-- Colour --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Colour"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
-            <!-- Colour -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Colour"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Purple"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="0dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#6200EE"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Green"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#32A852"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Red"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#F51111"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Orange"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#EB8F34"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Blue"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#2962FF"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Yellow"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FFD600"
-                    android:foreground="?attr/selectableItemBackground"/>
-            </LinearLayout>
-
-            <!-- Second row of 6 additional colors -->
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
+            </LinearLayout> <!-- Second row of 6 additional colors -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Pink"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FF4081"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Cyan"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#00BCD4"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Lime"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#CDDC39"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/DeepOrange"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FF5722"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Indigo"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#3F51B5"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Brown"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#795548"
-                    android:foreground="?attr/selectableItemBackground"/>
-            </LinearLayout>
-            <!-- Third row of 6 colors -->
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
+            </LinearLayout> <!-- Third row of 6 colors -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Teal"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#009688"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/DeepPurple"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#673AB7"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Amber"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FFC107"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/LightBlue"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#03A9F4"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/PurpleDark"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#512DA8"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Gray"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#9E9E9E"
-                    android:foreground="?attr/selectableItemBackground"/>
-            </LinearLayout>
-
-            <!-- Fourth row of 6 colors -->
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
+            </LinearLayout> <!-- Fourth row of 6 colors -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/BlueGray"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#607D8B"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/LightGreen"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#8BC34A"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/OrangeDark"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FF6F00"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/RedDark"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#B71C1C"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/IndigoDark"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#1A237E"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/BrownDark"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#4E342E"
-                    android:foreground="?attr/selectableItemBackground"/>
-            </LinearLayout>
-            <!-- Fifth row of 6 colors -->
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
+            </LinearLayout> <!-- Fifth row of 6 colors -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Peach"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FFAB91"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Mint"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#A7FFEB"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Lavender"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#B39DDB"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Coral"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FF6E6E"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/SkyBlue"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#81D4FA"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Lemon"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="10dp"
-                    android:text=""
-                    app:cornerRadius="28dp"
                     android:backgroundTint="#FFF59D"
-                    android:foreground="?attr/selectableItemBackground"/>
-            </LinearLayout>
-            <!-- Habit Type -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Habit Type"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text=""
+                    app:cornerRadius="28dp" />
+            </LinearLayout> <!-- Habit Type --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Habit Type"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
             <Spinner
                 android:id="@+id/typeSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/habit_type"/>
-
-            <!-- Goal Value -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Goal Value"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
+                android:entries="@array/habit_type" /> <!-- Goal Value --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Goal Value"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:hint="Enter value">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/goalInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Spinner
                     android:id="@+id/unitSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/goal_units"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:entries="@array/goal_units" />
+            </LinearLayout> <!-- Task Days --> <!-- Task Days --> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Task Days"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
-            <!-- Task Days -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Task Days"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"/>
-
-            <Spinner
-                android:id="@+id/daysSpinner"
+            <LinearLayout
+                android:id="@+id/daysLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/task_days"/>
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <!-- Save Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/monBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="M"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tueBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="T"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/wedBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="W"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/thuBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="T"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/friBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="F"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/satBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="S"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/sunBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="S"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+            </LinearLayout> <!-- Save Button -->
             <Button
                 android:id="@+id/saveHabitBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Habit"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="#187d24"
-                android:textColor="#FFFFFF"/>
-
+                android:text="Save Habit"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
-
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

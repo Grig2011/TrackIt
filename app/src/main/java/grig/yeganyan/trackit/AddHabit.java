@@ -3,8 +3,10 @@ package grig.yeganyan.trackit;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 
 import java.util.Random;
 import java.util.UUID;
@@ -21,7 +24,6 @@ import grig.yeganyan.trackit.model.Habit;
 public class AddHabit extends AppCompatActivity {
 
     TextInputEditText emojiInput, titleInput, descInput, goalInput;
-    Spinner typeSpinner, unitSpinner, daysSpinner;
     Button saveHabitBtn;
     MaterialButton purpleBtn, greenBtn, redBtn, orangeBtn, blueBtn, yellowBtn,
             pinkBtn, cyanBtn, limeBtn, deepOrangeBtn, indigoBtn, brownBtn,
@@ -32,6 +34,12 @@ public class AddHabit extends AppCompatActivity {
     String colour;
     FirebaseFirestore db;
     String userId;
+
+    // Day buttons
+    MaterialButton monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, sunBtn;
+    MaterialButton[] dayButtons;
+    boolean[] selectedDays = new boolean[7]; // Mon-Sun
+    String[] weekDays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
 
     String mode = "ADD";
     String habitId = null;
@@ -55,9 +63,6 @@ public class AddHabit extends AppCompatActivity {
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
         goalInput = findViewById(R.id.goalInput);
-        typeSpinner = findViewById(R.id.typeSpinner);
-        unitSpinner = findViewById(R.id.unitSpinner);
-        daysSpinner = findViewById(R.id.daysSpinner);
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
 
         // --- COLOR BUTTONS ---
@@ -108,10 +113,66 @@ public class AddHabit extends AppCompatActivity {
             allColorButtons[i].setOnClickListener(v -> selectColor(colors[index], allColorButtons[index]));
         }
 
+        emojiInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString();
+                // Remove everything that is not an emoji
+                StringBuilder onlyEmoji = new StringBuilder();
+                int i = 0;
+                while (i < input.length()) {
+                    int codePoint = Character.codePointAt(input, i);
+                    if (Character.getType(codePoint) == Character.OTHER_SYMBOL) {
+                        onlyEmoji.append(Character.toChars(codePoint));
+                    }
+                    i += Character.charCount(codePoint);
+                }
+
+                String filtered = onlyEmoji.toString();
+                if (!filtered.equals(input)) {
+                    emojiInput.setText(filtered);
+                    emojiInput.setSelection(filtered.length()); // keep cursor at end
+                }
+            }
+        });
+
+
+
         db = FirebaseFirestore.getInstance();
 
         Button backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(v -> finish());
+
+        // --- DAY BUTTONS ---
+        monBtn = findViewById(R.id.monBtn);
+        tueBtn = findViewById(R.id.tueBtn);
+        wedBtn = findViewById(R.id.wedBtn);
+        thuBtn = findViewById(R.id.thuBtn);
+        friBtn = findViewById(R.id.friBtn);
+        satBtn = findViewById(R.id.satBtn);
+        sunBtn = findViewById(R.id.sunBtn);
+
+        dayButtons = new MaterialButton[]{monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, sunBtn};
+
+        for (int i = 0; i < dayButtons.length; i++) {
+            final int index = i;
+            dayButtons[i].setOnClickListener(v -> {
+                selectedDays[index] = !selectedDays[index];
+                if (selectedDays[index]) {
+                    dayButtons[index].setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#187D24")));
+                    dayButtons[index].setTextColor(android.graphics.Color.WHITE);
+                } else {
+                    dayButtons[index].setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#E0E0E0")));
+                    dayButtons[index].setTextColor(android.graphics.Color.BLACK);
+                }
+            });
+        }
 
         // --- HANDLE INTENT ---
         Intent intent = getIntent();
@@ -132,9 +193,8 @@ public class AddHabit extends AppCompatActivity {
                 String days = intent.getStringExtra("days");
 
                 // --- SPINNER SETUP ---
-                typeSpinner.post(() -> setSpinnerSelection(typeSpinner, type));
-                unitSpinner.post(() -> setSpinnerSelection(unitSpinner, unit));
-                daysSpinner.post(() -> setSpinnerSelection(daysSpinner, days));
+                setSpinnerSelection(findViewById(R.id.typeSpinner), type);
+                setSpinnerSelection(findViewById(R.id.unitSpinner), unit);
 
                 // --- COLOR BUTTON ---
                 if (colour != null) {
@@ -146,11 +206,23 @@ public class AddHabit extends AppCompatActivity {
                     }
                 }
 
+                // --- PRESELECT DAYS ---
+                if (days != null && !days.isEmpty()) {
+                    String[] daysArr = days.split(",");
+                    for (int i = 0; i < weekDays.length; i++) {
+                        for (String d : daysArr) {
+                            if (weekDays[i].equalsIgnoreCase(d.trim())) {
+                                selectedDays[i] = true;
+                                dayButtons[i].setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#187D24")));
+                                dayButtons[i].setTextColor(android.graphics.Color.WHITE);
+                            }
+                        }
+                    }
+                }
+
                 saveHabitBtn.setText("Update Habit");
             } else {
-                // ADD mode: populate from popular habit template
                 receiveHabitTemplate();
-                // Pick random color in ADD mode
                 Random random = new Random();
                 colour = colors[random.nextInt(colors.length)];
             }
@@ -171,9 +243,9 @@ public class AddHabit extends AppCompatActivity {
         String emoji = emojiInput.getText().toString().trim();
         String title = titleInput.getText().toString().trim();
         String desc = descInput.getText().toString().trim();
-        String type = typeSpinner.getSelectedItem().toString();
-        String unit = unitSpinner.getSelectedItem().toString();
-        String days = daysSpinner.getSelectedItem().toString();
+        String type = ((android.widget.Spinner)findViewById(R.id.typeSpinner)).getSelectedItem().toString();
+        String unit = ((android.widget.Spinner)findViewById(R.id.unitSpinner)).getSelectedItem().toString();
+
         int streak = 0;
 
         if (title.isEmpty()) {
@@ -189,9 +261,8 @@ public class AddHabit extends AppCompatActivity {
                 goalInput.setError("Invalid number");
                 return;
             }
-        }else{
-
-            goalInput.setError("goal is required");
+        } else {
+            goalInput.setError("Goal is required");
             return;
         }
 
@@ -200,6 +271,15 @@ public class AddHabit extends AppCompatActivity {
             return;
         }
 
+        // --- COMBINE SELECTED DAYS ---
+        StringBuilder daysBuilder = new StringBuilder();
+        for (int i = 0; i < selectedDays.length; i++) {
+            if (selectedDays[i]) {
+                if (daysBuilder.length() > 0) daysBuilder.append(",");
+                daysBuilder.append(weekDays[i]);
+            }
+        }
+        String days = daysBuilder.toString();
 
         Habit habit;
         if ("EDIT".equals(mode) && habitId != null) {
@@ -228,6 +308,17 @@ public class AddHabit extends AppCompatActivity {
         }
     }
 
+    private void setSpinnerSelection(android.widget.Spinner spinner, String value) {
+        if (value == null || spinner.getAdapter() == null) return;
+
+        for (int i = 0; i < spinner.getAdapter().getCount(); i++) {
+            if (spinner.getAdapter().getItem(i).toString().equalsIgnoreCase(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
     private void receiveHabitTemplate() {
         Intent intent = getIntent();
         if(intent == null) return;
@@ -238,16 +329,5 @@ public class AddHabit extends AppCompatActivity {
         if(emoji != null) emojiInput.setText(emoji);
         if(title != null) titleInput.setText(title);
         if(desc != null) descInput.setText(desc);
-    }
-
-    private void setSpinnerSelection(Spinner spinner, String value) {
-        if (value == null || spinner.getAdapter() == null) return;
-
-        for (int i = 0; i < spinner.getAdapter().getCount(); i++) {
-            if (spinner.getAdapter().getItem(i).toString().equalsIgnoreCase(value)) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
     }
 }

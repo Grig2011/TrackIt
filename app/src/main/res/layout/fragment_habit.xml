@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDE7F6"
+    android:background="@color/bg_color"
     android:padding="16dp">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:text="Popular Habits"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#4527A0"
+            android:textColor="@color/primary_color"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"/>
 
