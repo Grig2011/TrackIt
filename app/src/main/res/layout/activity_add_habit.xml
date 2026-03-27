@@ -434,50 +434,84 @@
             android:textColor="@color/text_primary"
             android:textSize="16sp" />
 
-            <Spinner
-                android:id="@+id/typeSpinner"
+            <LinearLayout
+                android:id="@+id/typeButtonsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/habit_type" /> <!-- Goal Value --> <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Goal Value"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp" />
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="2">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGood"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="Good"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBad"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="Bad"
+                    android:textColor="#000000"
+                    app:cornerRadius="24dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingVertical="4dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Enter value">
+                    android:hint="Enter value"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxCornerRadiusTopStart="6dp"
+                    app:boxCornerRadiusTopEnd="6dp"
+                    app:boxCornerRadiusBottomStart="6dp"
+                    app:boxCornerRadiusBottomEnd="6dp"
+                    app:boxStrokeColor="#6200EE">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/goalInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Spinner
                     android:id="@+id/unitSpinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:entries="@array/goal_units" />
-            </LinearLayout> <!-- Task Days --> <!-- Task Days --> <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Task Days"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp" />
+                    android:backgroundTint="#E0E0E0"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/goal_units"
+                    android:paddingHorizontal="12dp"/>
+            </LinearLayout>
+            <!-- Task Days --> <!-- Task Days -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Task Days"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/daysLayout"

@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:text="TrackIt"
             android:textSize="32sp"
+            android:layout_margin="10dp"
             android:textStyle="bold"
             android:textColor="#2e7d57"/>
 
@@ -31,9 +32,25 @@
             android:layout_height="wrap_content"
             android:text="Stay consistent, see progress"
             android:textSize="16sp"
+            android:layout_margin="10dp"
             android:textColor="@color/primary_color"
             android:layout_marginTop="4dp"/>
-
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search habits..."
+            android:padding="12dp"
+            android:layout_margin="10dp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:singleLine="true"
+            android:background="@drawable/search_edittext_bg"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"/>
     </LinearLayout>
 
     <!-- Habit list -->

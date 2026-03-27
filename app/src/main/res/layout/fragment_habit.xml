@@ -23,6 +23,22 @@
             android:textColor="@color/primary_color"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"/>
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search templates..."
+            android:padding="12dp"
+            android:layout_margin="10dp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:singleLine="true"
+            android:background="@drawable/search_edittext_bg"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"/>
 
         <!-- Habit Card Example -->
 
@@ -129,7 +145,7 @@
                             android:layout_height="wrap_content"
                             android:text="Journaling"
                             android:textSize="18sp"
-                            android:textColor="#6A1B9A"
+                            android:textColor="#f200ff"
                             android:textStyle="bold"/>
 
                         <TextView
@@ -138,7 +154,7 @@
                             android:layout_height="wrap_content"
                             android:text="Reflect on your day in 5 minutes"
                             android:textSize="14sp"
-                            android:textColor="#8E24AA"
+                            android:textColor="#d805e3"
                             android:layout_marginTop="4dp"/>
                     </LinearLayout>
 

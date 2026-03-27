@@ -1,17 +1,29 @@
 package grig.yeganyan.trackit;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HabitFragment extends Fragment {
+
+    private EditText searchInput;
+    private List<CardView> habitCards = new ArrayList<>();
+    private List<String> habitTitles = new ArrayList<>();
 
     public HabitFragment() {
         // Required empty constructor
@@ -23,10 +35,6 @@ public class HabitFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_habit, container, false);
 
-
-
-
-
         CardView card2 = view.findViewById(R.id.habitCard2);
         CardView card3 = view.findViewById(R.id.habitCard3);
         CardView card4 = view.findViewById(R.id.habitCard4);
@@ -37,8 +45,27 @@ public class HabitFragment extends Fragment {
         CardView card9 = view.findViewById(R.id.habitCard9);
         CardView card10 = view.findViewById(R.id.habitCard10);
 
+        // Add cards to list for filtering
+        habitCards.add(card2);
+        habitCards.add(card3);
+        habitCards.add(card4);
+        habitCards.add(card5);
+        habitCards.add(card6);
+        habitCards.add(card7);
+        habitCards.add(card8);
+        habitCards.add(card9);
+        habitCards.add(card10);
+        habitTitles.add("drink water");
+        habitTitles.add("read book");
+        habitTitles.add("evening walk");
+        habitTitles.add("morning stretch");
+        habitTitles.add("journaling");
+        habitTitles.add("daily coding");
+        habitTitles.add("sleep early");
+        habitTitles.add("healthy snack");
+        habitTitles.add("evening reflection");
 
-
+        // Click actions
         card2.setOnClickListener(v -> openAddHabit("💧", "Drink Water", "8 glasses daily"));
         card3.setOnClickListener(v -> openAddHabit("📖", "Read Book", "20 pages daily"));
         card4.setOnClickListener(v -> openAddHabit("🚶‍♂️", "Evening Walk", "30 min walk"));
@@ -49,6 +76,41 @@ public class HabitFragment extends Fragment {
         card9.setOnClickListener(v -> openAddHabit("🥗", "Healthy Snack", "Choose fruits or nuts instead of junk food"));
         card10.setOnClickListener(v -> openAddHabit("🌅", "Evening Reflection", "Spend 5 minutes reviewing your day"));
 
+        searchInput = view.findViewById(R.id.searchInput);
+
+        // Close keyboard when pressing Done
+        searchInput.setOnEditorActionListener((v, actionId, event) -> {
+
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                InputMethodManager imm = (InputMethodManager) requireContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(searchInput.getWindowToken(), 0);
+                }
+
+                searchInput.clearFocus();
+                return true;
+            }
+
+            return false;
+        });
+
+        // Search listener
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterHabits(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         return view;
     }
 
@@ -58,5 +120,22 @@ public class HabitFragment extends Fragment {
         intent.putExtra("title", title);
         intent.putExtra("desc", desc);
         startActivity(intent);
+    }
+
+    private void filterHabits(String text) {
+
+        text = text.toLowerCase();
+
+        for (int i = 0; i < habitCards.size(); i++) {
+
+            CardView card = habitCards.get(i);
+            String title = habitTitles.get(i);
+
+            if (title.contains(text)) {
+                card.setVisibility(View.VISIBLE);
+            } else {
+                card.setVisibility(View.GONE);
+            }
+        }
     }
 }

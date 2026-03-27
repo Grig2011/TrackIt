@@ -3,13 +3,19 @@ package grig.yeganyan.trackit;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.GridLayout;
+import android.widget.GridView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -31,6 +37,7 @@ public class ProfileFragment extends Fragment {
     Button logoutButton;
     SwitchMaterial themeSwitch;
     SharedPreferences prefs;
+    TextView profileAvatar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +69,20 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
+        if (user != null) {
+            db.collection("users")
+                    .document(user.getUid())
+                    .get()
+                    .addOnSuccessListener(document -> {
+                        if (document.exists()) {
+                            String avatar = document.getString("avatar");
+                            if (avatar != null) {
+                                profileAvatar.setText(avatar);
+                            }
+                        }
+                    });
+        }
+
 
         themeSwitch = view.findViewById(R.id.themeSwitch);
 
@@ -82,6 +103,12 @@ public class ProfileFragment extends Fragment {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
+
+        profileAvatar = view.findViewById(R.id.profileAvatar);
+        profileAvatar.setOnClickListener(v -> openEmojiSelectorDynamic()
+
+
+        );
 
         logoutButton = view.findViewById(R.id.btnLogout);
         logoutButton.setOnClickListener(v -> logoutUser());
@@ -144,5 +171,79 @@ public class ProfileFragment extends Fragment {
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Error deleting data: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
+    }
+    private void openEmojiSelectorDynamic() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        GridLayout grid = new GridLayout(getContext());
+        grid.setColumnCount(6);
+        grid.setRowCount(GridLayout.UNDEFINED);
+        grid.setAlignmentMode(GridLayout.ALIGN_BOUNDS);
+        grid.setUseDefaultMargins(true);
+        grid.setPadding(16, 16, 16, 16);
+
+        String[] emojis = {
+                // Smileys & People
+                "😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕",
+
+                // Animals & Nature
+                "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🪲","🪳","🦟","🦗","🕷️","🦂","🐢","🐍","🦎","🐙","🦑","🦐","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐓","🦃","🕊️","🦢","🦜","🦚","🦩","🐇","🦝","🦨","🦡","🐁","🐀","🐿️","🦔",
+
+                // Food & Drink
+                "🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶️","🫑","🌽","🥕","🫛","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🥞","🧇","🧀","🍖","🍗","🥩","🥓","🍔","🍟","🍕","🌭","🥪","🌮","🌯","🥙","🧆","🥚","🍳","🥘","🍲","🥣","🥗","🍿","🧈","🧂","🥫","🍱","🍣","🍛","🍚","🍙","🍘","🥠","🥟","🦪","🍤","🍙","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🥛","🍼","☕","🍵","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🧃","🧊","🥤","🧋",
+
+                // Activities & Objects
+                "⚽","🏀","🏈","⚾","🥎","🏐","🏉","🎾","🥏","🎳","🏏","🏑","🏒","🥍","🏓","🏸","🥊","🥋","🥅","⛳","🪁","🏹","🎣","🤿","🥌","🎿","⛷️","🏂","🪂","🏋️","🤼","🤸","⛹️","🤺","🤾","🏌️","🏇","🧘","🏄","🏊","🤽","🚴","🚵","🛹","🛷","🥇","🥈","🥉","🏆","🎖️","🏅","🎗️","🎫","🎟️","🎪","🤹","🎭","🎨","🖌️","🎬","🎤","🎧","🎼","🎹","🥁","🪘","🎷","🎺","🪗","🎸","🪕","🎻","📯","🎙️","🎚️","🎛️","🎲","🧩","🧸","🪀","🪁"
+        };
+
+        // Scrollable container
+        ScrollView scrollView = new ScrollView(getContext());
+        scrollView.addView(grid);
+        builder.setView(scrollView);
+
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        // Create dialog first
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true); // allow tap outside to dismiss
+        dialog.show();
+
+        // Add emojis AFTER dialog creation
+        for (String emoji : emojis) {
+            TextView tv = new TextView(getContext());
+            tv.setText(emoji);
+            tv.setTextSize(42); // balanced, readable size
+            tv.setGravity(Gravity.CENTER);
+
+            int size = (int) (64 * getResources().getDisplayMetrics().density); // 64dp
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = size;
+            params.height = size;
+            params.setMargins(8, 8, 8, 8);
+            tv.setLayoutParams(params);
+
+            tv.setOnClickListener(v -> {
+                profileAvatar.setText(emoji); // update UI
+
+                // Save selected emoji to Firebase
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("users")
+                            .document(user.getUid())
+                            .update("avatar", emoji) // "avatar" field in Firestore
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(getContext(), "Avatar updated!", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(getContext(), "Failed to update avatar", Toast.LENGTH_SHORT).show();
+                            });
+                }
+
+                dialog.dismiss(); // close emoji selector
+            });
+
+            grid.addView(tv);
+        }
     }
 }

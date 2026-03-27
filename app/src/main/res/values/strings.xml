@@ -15,6 +15,10 @@
         <item>ml</item>
         <item>cal</item>
         <item>g</item>
+        <item>day</item>
+        <item>hour</item>
+        <item>minute</item>
+        <item>sec</item>
     </string-array>
 
     <string-array name="task_days">

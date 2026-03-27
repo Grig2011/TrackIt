@@ -10,83 +10,82 @@
     app:cardElevation="8dp"
     android:backgroundTint="@color/habit_bg_color">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Task Title"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end"/>
-
-        <!-- Description -->
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Task description goes here..."
-            android:textColor="@color/text_primary"
-            android:textSize="14sp"
-            android:layout_marginTop="6dp"
-            android:maxLines="2"
-            android:ellipsize="end"/>
-
-        <!-- Bottom row: Time + Buttons -->
+        <!-- Background buttons on LEFT -->
         <LinearLayout
+            android:id="@+id/backgroundButtons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="start|center_vertical"
+            android:paddingStart="16dp">
+
+            <!-- Edit Button (circle, dark yellow) -->
+            <ImageButton
+                android:id="@+id/btnEditTask"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/circle_dark_yellow"
+                android:src="@android:drawable/ic_menu_edit"
+                app:tint="#FFFFFF"
+                android:contentDescription="Edit Task"/>
+
+            <!-- Delete Button (circle, red) -->
+            <ImageButton
+                android:id="@+id/btnDeleteTask"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/circle_red"
+                android:src="@drawable/outline_delete_24"
+                app:tint="#FFFFFF"
+                android:contentDescription="Delete Task"/>
+        </LinearLayout>
+
+        <!-- Foreground: card content -->
+        <LinearLayout
+            android:id="@+id/cardContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- Time -->
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Task Title"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Task description goes here..."
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+
+            <!-- Bottom row: Time -->
             <TextView
                 android:id="@+id/tvTime"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="12:00 PM"
                 android:textColor="@color/text_primary"
-                android:textSize="14sp"/>
-
-            <!-- Buttons -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:spacing="12dp">
-
-                <ImageButton
-                    android:id="@+id/btnEditTask"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="Edit Task"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:tint="#EFD803"
-                    android:padding="8dp"/>
-
-                <ImageButton
-                    android:id="@+id/btnDeleteTask"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_delete"
-                    android:contentDescription="Delete Task"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:tint="#F44336"
-                    android:padding="8dp"/>
-
-            </LinearLayout>
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 </androidx.cardview.widget.CardView>
