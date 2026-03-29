@@ -4,21 +4,25 @@
         android:id="@+id/nav_home"
         android:icon="@drawable/outline_add_home_24"
         android:title="Home" />
+
     <item
         android:id="@+id/nav_todo"
         android:icon="@drawable/baseline_list_24"
-        android:title="tasks" />
+        android:title="Tasks" />
 
-
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/outline_chat_24"
+        android:title="AI Coach" />
 
     <item
         android:id="@+id/nav_habit"
         android:icon="@drawable/outline_check_24"
         android:title="Habit" />
+
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/outline_account_circle_24"
         android:title="Profile" />
-
 
 </menu>

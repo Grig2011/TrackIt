@@ -49,6 +49,11 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")      // Authentication
     implementation("com.google.firebase:firebase-firestore")  // Firestore database
 
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
+    // Required for the Java "Future" way of handling background tasks
+    implementation("com.google.guava:guava:31.1-android")
+
     implementation(libs.activity)  // keep your existing libs
 
     // Testing

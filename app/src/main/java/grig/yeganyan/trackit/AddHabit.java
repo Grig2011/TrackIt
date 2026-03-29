@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import grig.yeganyan.trackit.model.Habit;
 public class AddHabit extends AppCompatActivity {
 
     TextInputEditText emojiInput, titleInput, descInput, goalInput;
+    Spinner unitSpinner;
     Button saveHabitBtn;
     MaterialButton purpleBtn, greenBtn, redBtn, orangeBtn, blueBtn, yellowBtn,
             pinkBtn, cyanBtn, limeBtn, deepOrangeBtn, indigoBtn, brownBtn,
@@ -67,13 +70,13 @@ public class AddHabit extends AppCompatActivity {
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
         goalInput = findViewById(R.id.goalInput);
+        unitSpinner = findViewById(R.id.unitSpinner); // Initialized from XML
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
 
         // --- TYPE BUTTONS ---
         btnGood = findViewById(R.id.btnGood);
         btnBad = findViewById(R.id.btnBad);
 
-        // Default selection
         selectTypeButton(btnGood);
 
         btnGood.setOnClickListener(v -> selectTypeButton(btnGood));
@@ -193,15 +196,21 @@ public class AddHabit extends AppCompatActivity {
                 descInput.setText(intent.getStringExtra("description"));
                 goalInput.setText(intent.getStringExtra("goal"));
 
+                // Set Spinner selection for unit
+                String unitValue = intent.getStringExtra("unit");
+                if (unitValue != null && unitSpinner.getAdapter() != null) {
+                    ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) unitSpinner.getAdapter();
+                    int spinnerPosition = adapter.getPosition(unitValue);
+                    if (spinnerPosition != -1) unitSpinner.setSelection(spinnerPosition);
+                }
+
                 colour = intent.getStringExtra("color");
                 habitType = intent.getStringExtra("type");
                 String days = intent.getStringExtra("days");
 
-                // --- TYPE BUTTON SELECTION ---
                 if ("Good".equalsIgnoreCase(habitType)) selectTypeButton(btnGood);
                 else selectTypeButton(btnBad);
 
-                // --- COLOR BUTTON ---
                 if (colour != null) {
                     for (int i = 0; i < colors.length; i++) {
                         if (colors[i].equalsIgnoreCase(colour)) {
@@ -211,7 +220,6 @@ public class AddHabit extends AppCompatActivity {
                     }
                 }
 
-                // --- PRESELECT DAYS ---
                 if (days != null && !days.isEmpty()) {
                     String[] daysArr = days.split(",");
                     for (int i = 0; i < weekDays.length; i++) {
@@ -265,7 +273,11 @@ public class AddHabit extends AppCompatActivity {
         String title = titleInput.getText().toString().trim();
         String desc = descInput.getText().toString().trim();
 
-        int streak = 0;
+        // FIX: Get the unit from the Spinner instead of passing null
+        String unit = "times";
+        if (unitSpinner.getSelectedItem() != null) {
+            unit = unitSpinner.getSelectedItem().toString();
+        }
 
         if (title.isEmpty()) {
             titleInput.setError("Title required");
@@ -285,7 +297,6 @@ public class AddHabit extends AppCompatActivity {
             return;
         }
 
-        // --- COMBINE SELECTED DAYS ---
         StringBuilder daysBuilder = new StringBuilder();
         for (int i = 0; i < selectedDays.length; i++) {
             if (selectedDays[i]) {
@@ -297,7 +308,8 @@ public class AddHabit extends AppCompatActivity {
 
         Habit habit;
         if ("EDIT".equals(mode) && habitId != null) {
-            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, null, days, streak);
+            // FIX: Pass 'unit' variable instead of null
+            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, 0);
             db.collection("users")
                     .document(userId)
                     .collection("habits")
@@ -309,7 +321,8 @@ public class AddHabit extends AppCompatActivity {
                     });
         } else {
             String newHabitId = UUID.randomUUID().toString();
-            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, null, days, streak);
+            // FIX: Pass 'unit' variable instead of null
+            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, 0);
             db.collection("users")
                     .document(userId)
                     .collection("habits")

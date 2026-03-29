@@ -81,7 +81,11 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_habit) {
                 selected = new HabitFragment();
                 fragmentName = "Habit";
-            } else if (id == R.id.nav_todo) {
+            } else if (id == R.id.nav_chat) {
+                selected = new ChatFragment();
+                fragmentName = "Chat";
+            }
+            else if (id == R.id.nav_todo) {
                 selected = new ToDoList();
                 fragmentName = "ToDo";
             }
