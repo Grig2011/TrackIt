@@ -20,12 +20,16 @@ import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import grig.yeganyan.trackit.BuildConfig;
 
 import grig.yeganyan.trackit.model.ChatMessage;
 
@@ -43,11 +47,10 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        // 1. UPDATED MODEL: "gemini-2.5-flash" is the current stable 2026 model.
-        // If this still 404s, use "gemini-3-flash-preview"
+
         GenerativeModel gm = new GenerativeModel(
                 "gemini-2.5-flash",
-                "AIzaSyBQMad0Gg0Rzyw5Yc-Ojn4o3-Aua0LVGSc"
+                BuildConfig.GEMINI_API_KEY
 
         );
         model = GenerativeModelFutures.from(gm);
@@ -69,6 +72,26 @@ public class ChatFragment extends Fragment {
             }
             return false;
         });
+
+        ChipGroup suggestionGroup = view.findViewById(R.id.suggestionChipGroup);
+
+        for (int i = 0; i < suggestionGroup.getChildCount(); i++) {
+            View child = suggestionGroup.getChildAt(i);
+            if (child instanceof Chip) {
+                Chip chip = (Chip) child;
+                chip.setOnClickListener(v -> {
+
+                    String prompt = chip.getText().toString();
+
+                    messageInput.setText(prompt);
+
+
+                    sendMessage();
+
+                });
+            }
+        }
+
 
         sendBtn.setOnClickListener(v -> sendMessage());
         return view;

@@ -1,3 +1,5 @@
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("com.android.application")       // Required for Android app
@@ -16,6 +18,19 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(FileInputStream(localPropertiesFile))
+        }
+        val apiKey = properties.getProperty("GEMINI_API_KEY") ?: ""
+
+        // This creates the variable inside BuildConfig
+        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+    }
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

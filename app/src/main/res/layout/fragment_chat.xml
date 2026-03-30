@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/inputCard"
+        app:layout_constraintBottom_toTopOf="@+id/suggestionsScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,9 +23,48 @@
         android:layout_height="30dp"
         android:layout_marginBottom="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/inputCard"
+        app:layout_constraintBottom_toTopOf="@+id/suggestionsScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <HorizontalScrollView
+        android:id="@+id/suggestionsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/inputCard">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/suggestionChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:chipSpacingHorizontal="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="How do I start?"
+                style="@style/Widget.Material3.Chip.Suggestion" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stop procrastination"
+                style="@style/Widget.Material3.Chip.Suggestion" />
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Build a workout habit"
+                style="@style/Widget.Material3.Chip.Suggestion" />
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/inputCard"
@@ -50,11 +89,8 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="Ask your AI coach..."
-
                 android:inputType="textCapSentences"
-
                 android:imeOptions="actionDone"
-
                 android:maxLines="4"
                 android:padding="12dp"
                 android:textSize="16sp" />
@@ -70,6 +106,7 @@
                 app:icon="@android:drawable/ic_menu_send"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
