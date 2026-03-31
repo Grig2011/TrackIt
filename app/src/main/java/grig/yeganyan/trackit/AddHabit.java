@@ -1,15 +1,23 @@
 package grig.yeganyan.trackit;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +26,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -28,6 +38,14 @@ public class AddHabit extends AppCompatActivity {
     TextInputEditText emojiInput, titleInput, descInput, goalInput;
     Spinner unitSpinner;
     Button saveHabitBtn;
+
+    // Time UI
+    TextView tvSelectedTime;
+    MaterialButton btnPickTime;
+    Calendar calendar = Calendar.getInstance();
+    String timeString = "Not set";
+    boolean isTimeSelected = false;
+
     MaterialButton purpleBtn, greenBtn, redBtn, orangeBtn, blueBtn, yellowBtn,
             pinkBtn, cyanBtn, limeBtn, deepOrangeBtn, indigoBtn, brownBtn,
             tealBtn, deepPurpleBtn, amberBtn, lightBlueBtn, purpleDarkBtn, grayBtn,
@@ -65,13 +83,19 @@ public class AddHabit extends AppCompatActivity {
             return;
         }
 
+        createNotificationChannel();
+
         // --- INIT UI ---
         emojiInput = findViewById(R.id.emojiInput);
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
         goalInput = findViewById(R.id.goalInput);
-        unitSpinner = findViewById(R.id.unitSpinner); // Initialized from XML
+        unitSpinner = findViewById(R.id.unitSpinner);
         saveHabitBtn = findViewById(R.id.saveHabitBtn);
+
+        tvSelectedTime = findViewById(R.id.tvSelectedTime);
+        btnPickTime = findViewById(R.id.btnPickTime);
+        btnPickTime.setOnClickListener(v -> openTimePicker());
 
         // --- TYPE BUTTONS ---
         btnGood = findViewById(R.id.btnGood);
@@ -196,7 +220,17 @@ public class AddHabit extends AppCompatActivity {
                 descInput.setText(intent.getStringExtra("description"));
                 goalInput.setText(intent.getStringExtra("goal"));
 
-                // Set Spinner selection for unit
+                timeString = intent.getStringExtra("time");
+                if (timeString != null) {
+                    tvSelectedTime.setText(timeString);
+                    isTimeSelected = true;
+                    try {
+                        String[] parts = timeString.split(":");
+                        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
+                        calendar.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
+                    } catch (Exception ignored) {}
+                }
+
                 String unitValue = intent.getStringExtra("unit");
                 if (unitValue != null && unitSpinner.getAdapter() != null) {
                     ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) unitSpinner.getAdapter();
@@ -244,6 +278,66 @@ public class AddHabit extends AppCompatActivity {
         saveHabitBtn.setOnClickListener(v -> saveHabit());
     }
 
+    private void openTimePicker() {
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                (view, hourOfDay, minuteOfHour) -> {
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    calendar.set(Calendar.MINUTE, minuteOfHour);
+                    calendar.set(Calendar.SECOND, 0);
+
+                    isTimeSelected = true;
+                    timeString = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minuteOfHour);
+                    tvSelectedTime.setText(timeString);
+                }, hour, minute, true);
+
+        timePickerDialog.show();
+    }
+
+    private void scheduleNotification(String habitTitle) {
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, HabitAlarmReceiver.class);
+        intent.putExtra("HABIT_NAME", habitTitle);
+
+        // We need to pass the same ID so the Receiver can reschedule it correctly
+        int id = (int) System.currentTimeMillis();
+        intent.putExtra("REQUEST_CODE", id);
+
+        PendingIntent pi = PendingIntent.getBroadcast(this, id, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Safety check: ensure we aren't setting a time that ALREADY passed
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        if (am != null) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "habit_channel",
+                    "Habit Reminders",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+
+            channel.setDescription("Channel for habit daily reminders");
+            channel.enableLights(true);
+            channel.setLightColor(Color.GREEN);
+            channel.enableVibration(true);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+    }
+
     private void selectColor(String selectedColor, MaterialButton clickedBtn) {
         colour = selectedColor;
         for (MaterialButton btn : allColorButtons) {
@@ -273,7 +367,6 @@ public class AddHabit extends AppCompatActivity {
         String title = titleInput.getText().toString().trim();
         String desc = descInput.getText().toString().trim();
 
-        // FIX: Get the unit from the Spinner instead of passing null
         String unit = "times";
         if (unitSpinner.getSelectedItem() != null) {
             unit = unitSpinner.getSelectedItem().toString();
@@ -308,27 +401,21 @@ public class AddHabit extends AppCompatActivity {
 
         Habit habit;
         if ("EDIT".equals(mode) && habitId != null) {
-            // FIX: Pass 'unit' variable instead of null
-            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, 0);
-            db.collection("users")
-                    .document(userId)
-                    .collection("habits")
-                    .document(habitId)
+            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString);
+            db.collection("users").document(userId).collection("habits").document(habitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
+                        if (isTimeSelected) scheduleNotification(title);
                         Toast.makeText(this, "Habit updated", Toast.LENGTH_SHORT).show();
                         finish();
                     });
         } else {
             String newHabitId = UUID.randomUUID().toString();
-            // FIX: Pass 'unit' variable instead of null
-            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, 0);
-            db.collection("users")
-                    .document(userId)
-                    .collection("habits")
-                    .document(newHabitId)
+            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString);
+            db.collection("users").document(userId).collection("habits").document(newHabitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
+                        if (isTimeSelected) scheduleNotification(title);
                         Toast.makeText(this, "Habit saved", Toast.LENGTH_SHORT).show();
                         finish();
                     });

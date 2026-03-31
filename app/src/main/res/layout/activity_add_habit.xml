@@ -596,7 +596,44 @@
                     android:text="S"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
-            </LinearLayout> <!-- Save Button -->
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Reminder Time"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPickTime"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#E0E0E0"
+                    android:text="Set Time"
+                    android:textColor="#000000"
+                    android:textAllCaps="false"
+                    app:cornerRadius="12dp" />
+
+                <TextView
+                    android:id="@+id/tvSelectedTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Not set"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
             <Button
                 android:id="@+id/saveHabitBtn"
                 android:layout_width="match_parent"
