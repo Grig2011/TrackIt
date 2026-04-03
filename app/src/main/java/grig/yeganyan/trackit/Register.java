@@ -19,7 +19,7 @@ import grig.yeganyan.trackit.model.User;
 
 public class Register extends AppCompatActivity {
 
-    private EditText etUsername, etEmail, etPassword;
+    private EditText etUsername, etEmail, etPassword,etConfPassword;
     private Button btnRegister;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -32,6 +32,7 @@ public class Register extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        etConfPassword = findViewById(R.id.etConfPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
         auth = FirebaseAuth.getInstance();
@@ -65,6 +66,11 @@ public class Register extends AppCompatActivity {
         if (password.isEmpty()) {
             etPassword.setError("Password required");
             etPassword.requestFocus();
+            return;
+        }
+        if(!password.equals(etConfPassword.getText().toString().trim())){
+            etConfPassword.setError("Wrong repeat");
+            etConfPassword.requestFocus();
             return;
         }
 
