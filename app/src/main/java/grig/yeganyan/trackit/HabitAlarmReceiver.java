@@ -1,53 +1,56 @@
 package grig.yeganyan.trackit;
 
-import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import java.util.Calendar;
-
-import grig.yeganyan.trackit.NotificationHelper;
+import android.os.Build;
+import androidx.core.app.NotificationCompat;
 
 public class HabitAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String habitName = intent.getStringExtra("HABIT_NAME");
-        int requestCode = intent.getIntExtra("REQUEST_CODE", 0);
+        String habitId = intent.getStringExtra("HABIT_ID");
+        int requestCode = intent.getIntExtra("REQUEST_CODE", (int) System.currentTimeMillis());
 
-        if (habitName == null) habitName = "Habit";
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "habit_channel";
 
-        // 1. Show the Notification (Corrected style: Just the name)
-        // We pass empty string for message to keep it clean
-        NotificationHelper.showNotification(context, habitName, "", requestCode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, "Habit Reminders", NotificationManager.IMPORTANCE_HIGH);
+            if (manager != null) manager.createNotificationChannel(channel);
+        }
 
-        // 2. Reschedule for tomorrow at the EXACT same time
-        scheduleNextDay(context, habitName, requestCode);
-    }
 
-    private void scheduleNextDay(Context context, String habitName, int requestCode) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent yesIntent = new Intent(context, HabitNotificationActionReciver.class);
+        yesIntent.setAction("ACTION_YES");
+        yesIntent.putExtra("HABIT_ID", habitId);
+        yesIntent.putExtra("NOTIFICATION_ID", requestCode);
+        PendingIntent yesPi = PendingIntent.getBroadcast(context, requestCode + 100, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        Intent newIntent = new Intent(context, HabitAlarmReceiver.class);
-        newIntent.putExtra("HABIT_NAME", habitName);
-        newIntent.putExtra("REQUEST_CODE", requestCode);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, requestCode, newIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        Intent noIntent = new Intent(context, HabitNotificationActionReciver.class);
+        noIntent.setAction("ACTION_NO");
+        noIntent.putExtra("HABIT_TITLE", habitName);
+        noIntent.putExtra("HABIT_ID", habitId);
+        noIntent.putExtra("NOTIFICATION_ID", requestCode);
+        PendingIntent noPi = PendingIntent.getBroadcast(context, requestCode + 200, noIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Move to exactly 24 hours from now
-        Calendar nextDay = Calendar.getInstance();
-        nextDay.add(Calendar.DAY_OF_YEAR, 1);
 
-        if (alarmManager != null) {
-            // setExactAndAllowWhileIdle is required for daily reliability on Oreo+
-            alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    nextDay.getTimeInMillis(),
-                    pendingIntent
-            );
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher) // Or your habit icon
+                .setContentTitle("Habit Reminder")
+                .setContentText("Did you: " + habitName + "?")
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .addAction(0, "Yes", yesPi)
+                .addAction(0, "No", noPi);
+
+        if (manager != null) {
+            manager.notify(requestCode, builder.build());
         }
     }
 }

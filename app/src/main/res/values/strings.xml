@@ -19,6 +19,7 @@
         <item>hour</item>
         <item>minute</item>
         <item>sec</item>
+        <item>Custom</item>
     </string-array>
 
     <string-array name="task_days">

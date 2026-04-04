@@ -74,14 +74,14 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        // Create user with FirebaseAuth
+
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = auth.getCurrentUser();
 
                         if (firebaseUser != null) {
-                            // Send verification email
+
                             firebaseUser.sendEmailVerification()
                                     .addOnCompleteListener(verifyTask -> {
                                         if (verifyTask.isSuccessful()) {
@@ -98,7 +98,7 @@ public class Register extends AppCompatActivity {
                                         }
                                     });
 
-                            // Save extra info in Firestore (without password)
+
                             User user = new User(username, email, null);
                             db.collection("users").document(firebaseUser.getUid())
                                     .set(user)
@@ -107,12 +107,12 @@ public class Register extends AppCompatActivity {
                                                 "Registered Successfully! Please verify your email before login.",
                                                 Toast.LENGTH_LONG).show();
 
-                                        // Save login state locally
+
                                         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                                         prefs.edit().putBoolean("registered", true).apply();
                                         prefs.edit().putString("userId", firebaseUser.getUid()).apply();
 
-                                        // Redirect to Login screen
+
                                         startActivity(new Intent(Register.this, Login.class));
                                         finish();
                                     })

@@ -1,11 +1,17 @@
 package grig.yeganyan.trackit;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,9 +40,8 @@ public class ToDoList extends Fragment {
     private ListenerRegistration listenerRegistration;
     private String currentUserId;
 
-    private View openedCard = null;
-    private ImageButton openedEdit = null;
-    private ImageButton openedDelete = null;
+    private View currentlyOpenedCard = null;
+    private View currentlyOpenedButtons = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,8 +50,9 @@ public class ToDoList extends Fragment {
         rvTasks = view.findViewById(R.id.rvTasks);
         rvTasks.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        SharedPreferences prefs = getContext().getSharedPreferences("MyAppPrefs", getContext().MODE_PRIVATE);
+        SharedPreferences prefs = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         currentUserId = prefs.getString("userId", null);
+
         if (currentUserId == null) {
             Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             return view;
@@ -72,7 +78,6 @@ public class ToDoList extends Fragment {
                 .orderBy("time")
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
-                        Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                         return;
                     }
                     taskList.clear();
@@ -123,13 +128,73 @@ public class ToDoList extends Fragment {
             holder.tvDescription.setText(task.getDescription());
             holder.tvTime.setText(task.getTime());
 
-            holder.btnEdit.setVisibility(View.GONE);
-            holder.btnDelete.setVisibility(View.GONE);
+            holder.cardContent.setTranslationX(0);
+            holder.buttonContainer.setAlpha(0f);
 
-            setupDragSwipe(holder.itemView.findViewById(R.id.cardContent), holder, task);
+            setupManualSwipe(holder);
 
             holder.btnDelete.setOnClickListener(v -> deleteTask(task));
             holder.btnEdit.setOnClickListener(v -> editTask(task));
+        }
+
+        private void setupManualSwipe(TaskViewHolder holder) {
+            View card = holder.cardContent;
+            View buttons = holder.buttonContainer;
+
+            card.setOnTouchListener(new View.OnTouchListener() {
+                float startX, initialTranslation;
+                boolean isMoving = false;
+                final int TOUCH_SLOP = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+                final float MAX_SWIPE = 350f;
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            startX = event.getRawX();
+                            initialTranslation = v.getTranslationX();
+                            return true;
+
+                        case MotionEvent.ACTION_MOVE:
+                            float deltaX = event.getRawX() - startX;
+                            if (!isMoving && Math.abs(deltaX) > TOUCH_SLOP) {
+                                isMoving = true;
+                                if (currentlyOpenedCard != null && currentlyOpenedCard != v) {
+                                    closeVisibleCard(currentlyOpenedCard, currentlyOpenedButtons);
+                                }
+                            }
+                            if (isMoving) {
+                                float newTranslate = Math.max(0, Math.min(initialTranslation + deltaX, MAX_SWIPE));
+                                v.setTranslationX(newTranslate);
+                                buttons.setAlpha(newTranslate / MAX_SWIPE);
+                                return true;
+                            }
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            if (isMoving) {
+                                isMoving = false;
+                                float currentX = v.getTranslationX();
+                                if (currentX > MAX_SWIPE * 0.4f) {
+                                    v.animate()
+                                            .translationX(MAX_SWIPE)
+                                            .setDuration(300)
+                                            .setInterpolator(new OvershootInterpolator(1.2f))
+                                            .start();
+                                    buttons.animate().alpha(1f).setDuration(200).start();
+                                    currentlyOpenedCard = v;
+                                    currentlyOpenedButtons = buttons;
+                                } else {
+                                    closeVisibleCard(v, buttons);
+                                }
+                                return true;
+                            }
+                            break;
+                    }
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -140,6 +205,7 @@ public class ToDoList extends Fragment {
         class TaskViewHolder extends RecyclerView.ViewHolder {
             TextView tvTitle, tvDescription, tvTime;
             ImageButton btnDelete, btnEdit;
+            View cardContent, buttonContainer;
 
             TaskViewHolder(View itemView) {
                 super(itemView);
@@ -148,91 +214,35 @@ public class ToDoList extends Fragment {
                 tvTime = itemView.findViewById(R.id.tvTime);
                 btnDelete = itemView.findViewById(R.id.btnDeleteTask);
                 btnEdit = itemView.findViewById(R.id.btnEditTask);
+                cardContent = itemView.findViewById(R.id.cardContent);
+                buttonContainer = itemView.findViewById(R.id.buttonContainer);
             }
-        }
-
-        private void setupDragSwipe(View cardContent, TaskViewHolder holder, Tasks task) {
-
-            cardContent.setOnTouchListener(new View.OnTouchListener() {
-
-                float startX;
-                float translation = 0;
-                float swipeDistance = 0;
-                final float TOUCH_SLOP = 12f;
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    if (swipeDistance == 0)
-                        swipeDistance = v.getWidth() * 0.35f;
-
-                    switch (event.getActionMasked()) {
-                        case MotionEvent.ACTION_DOWN:
-                            startX = event.getRawX() - translation;
-                            return true;
-
-                        case MotionEvent.ACTION_MOVE:
-                            float delta = event.getRawX() - startX;
-                            translation = Math.max(0, Math.min(delta, swipeDistance));
-                            v.setTranslationX(translation);
-
-                            float alpha = translation / swipeDistance;
-                            holder.btnEdit.setVisibility(View.VISIBLE);
-                            holder.btnDelete.setVisibility(View.VISIBLE);
-                            holder.btnEdit.setAlpha(alpha);
-                            holder.btnDelete.setAlpha(alpha);
-                            return true;
-
-                        case MotionEvent.ACTION_UP:
-                        case MotionEvent.ACTION_CANCEL:
-
-                            if (translation > swipeDistance * 0.25f) {
-                                // Open buttons
-                                if (openedCard != null && openedCard != v) closeCard(openedCard, openedEdit, openedDelete);
-                                v.animate().translationX(swipeDistance).setDuration(180).start();
-                                holder.btnEdit.setAlpha(1f);
-                                holder.btnDelete.setAlpha(1f);
-                                openedCard = v;
-                                openedEdit = holder.btnEdit;
-                                openedDelete = holder.btnDelete;
-                                translation = swipeDistance;
-                            } else {
-                                closeCard(v, holder.btnEdit, holder.btnDelete);
-                                translation = 0;
-                            }
-                            return true;
-                    }
-                    return false;
-                }
-            });
         }
     }
 
-    private void closeCard(View card, ImageButton edit, ImageButton delete) {
-        card.animate().translationX(0).setDuration(140).start();
-        edit.animate().alpha(0f).setDuration(120).withEndAction(() -> edit.setVisibility(View.GONE)).start();
-        delete.animate().alpha(0f).setDuration(120).withEndAction(() -> delete.setVisibility(View.GONE)).start();
-        if (card == openedCard) {
-            openedCard = null;
-            openedEdit = null;
-            openedDelete = null;
+    private void closeVisibleCard(View card, View buttons) {
+        if (card != null) card.animate().translationX(0).setDuration(250).start();
+        if (buttons != null) buttons.animate().alpha(0f).setDuration(200).start();
+        if (card == currentlyOpenedCard) {
+            currentlyOpenedCard = null;
+            currentlyOpenedButtons = null;
         }
     }
 
     private void deleteTask(Tasks task) {
         new androidx.appcompat.app.AlertDialog.Builder(getContext())
                 .setTitle("Confirm Deletion")
-                .setMessage("Do you really want to remove this task? This cannot be undone.")
+                .setMessage("Do you really want to remove this task?")
                 .setPositiveButton("Delete", (dialog, which) -> {
-                    taskList.remove(task);
-                    adapter.notifyDataSetChanged();
                     db.collection("users").document(currentUserId)
                             .collection("tasks").document(task.getId())
                             .delete()
-                            .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Task removed", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(getContext(), "Could not delete task", Toast.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> {
+                                cancelAlarm(task.getId());
+                                Toast.makeText(getContext(), "Task removed", Toast.LENGTH_SHORT).show();
+                            });
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 
@@ -246,5 +256,14 @@ public class ToDoList extends Fragment {
         args.putString("time", task.getTime());
         addTaskFragment.setArguments(args);
         addTaskFragment.show(getParentFragmentManager(), "edit_task");
+    }
+
+    private void cancelAlarm(String taskId) {
+        if (taskId == null) return;
+        Intent intent = new Intent(getContext(), TaskAlarmReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(getContext(), taskId.hashCode(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        if (am != null) am.cancel(pi);
     }
 }

@@ -1,6 +1,7 @@
 package grig.yeganyan.trackit;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,8 +13,10 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,7 +43,7 @@ public class AddHabit extends AppCompatActivity {
     Spinner unitSpinner;
     Button saveHabitBtn;
 
-    // Time UI
+
     TextView tvSelectedTime;
     MaterialButton btnPickTime;
     Calendar calendar = Calendar.getInstance();
@@ -56,15 +60,15 @@ public class AddHabit extends AppCompatActivity {
     FirebaseFirestore db;
     String userId;
 
-    // Day buttons
+
     MaterialButton monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, sunBtn;
     MaterialButton[] dayButtons;
-    boolean[] selectedDays = new boolean[7]; // Mon-Sun
+    boolean[] selectedDays = new boolean[7];
     String[] weekDays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
 
-    // Type buttons (Good/Bad)
+
     MaterialButton btnGood, btnBad;
-    String habitType = "Good"; // default
+    String habitType = "Good";
 
     String mode = "ADD";
     String habitId = null;
@@ -85,7 +89,7 @@ public class AddHabit extends AppCompatActivity {
 
         createNotificationChannel();
 
-        // --- INIT UI ---
+
         emojiInput = findViewById(R.id.emojiInput);
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
@@ -97,7 +101,7 @@ public class AddHabit extends AppCompatActivity {
         btnPickTime = findViewById(R.id.btnPickTime);
         btnPickTime.setOnClickListener(v -> openTimePicker());
 
-        // --- TYPE BUTTONS ---
+
         btnGood = findViewById(R.id.btnGood);
         btnBad = findViewById(R.id.btnBad);
 
@@ -106,7 +110,7 @@ public class AddHabit extends AppCompatActivity {
         btnGood.setOnClickListener(v -> selectTypeButton(btnGood));
         btnBad.setOnClickListener(v -> selectTypeButton(btnBad));
 
-        // --- COLOR BUTTONS ---
+
         MaterialButton[] buttons = new MaterialButton[]{
                 purpleBtn = findViewById(R.id.Purple),
                 greenBtn = findViewById(R.id.Green),
@@ -154,7 +158,7 @@ public class AddHabit extends AppCompatActivity {
             allColorButtons[i].setOnClickListener(v -> selectColor(colors[index], allColorButtons[index]));
         }
 
-        // --- EMOJI FILTER ---
+
         emojiInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -183,7 +187,7 @@ public class AddHabit extends AppCompatActivity {
         Button backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(v -> finish());
 
-        // --- DAY BUTTONS ---
+
         monBtn = findViewById(R.id.monBtn);
         tueBtn = findViewById(R.id.tueBtn);
         wedBtn = findViewById(R.id.wedBtn);
@@ -208,7 +212,7 @@ public class AddHabit extends AppCompatActivity {
             });
         }
 
-        // --- HANDLE INTENT ---
+
         Intent intent = getIntent();
         if (intent != null) {
             mode = intent.getStringExtra("MODE");
@@ -275,7 +279,17 @@ public class AddHabit extends AppCompatActivity {
             }
         }
 
-        saveHabitBtn.setOnClickListener(v -> saveHabit());
+        saveHabitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (notificationsAreEnabled()) {
+
+                        saveHabit();
+                    } else {
+                        showNotificationPermissionDialog();
+                    }
+                }
+        });
     }
 
     private void openTimePicker() {
@@ -299,16 +313,17 @@ public class AddHabit extends AppCompatActivity {
     private void scheduleNotification(String habitTitle) {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, HabitAlarmReceiver.class);
+
+
+        int notificationId = habitId.hashCode();
+
         intent.putExtra("HABIT_NAME", habitTitle);
+        intent.putExtra("HABIT_ID", habitId);
+        intent.putExtra("REQUEST_CODE", notificationId);
 
-        // We need to pass the same ID so the Receiver can reschedule it correctly
-        int id = (int) System.currentTimeMillis();
-        intent.putExtra("REQUEST_CODE", id);
-
-        PendingIntent pi = PendingIntent.getBroadcast(this, id, intent,
+        PendingIntent pi = PendingIntent.getBroadcast(this, notificationId, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Safety check: ensure we aren't setting a time that ALREADY passed
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
             calendar.add(Calendar.DATE, 1);
         }
@@ -372,6 +387,7 @@ public class AddHabit extends AppCompatActivity {
             unit = unitSpinner.getSelectedItem().toString();
         }
 
+
         if (title.isEmpty()) {
             titleInput.setError("Title required");
             return;
@@ -432,5 +448,23 @@ public class AddHabit extends AppCompatActivity {
         if(emoji != null) emojiInput.setText(emoji);
         if(title != null) titleInput.setText(title);
         if(desc != null) descInput.setText(desc);
+    }
+
+    private void showNotificationPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Notifications Disabled")
+                .setMessage("Your habit alarms won't work unless notifications are turned on. Would you like to enable them now?")
+                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+                    startActivity(intent);
+                })
+                .setNegativeButton("Later", null)
+                .show();
+    }
+
+    private boolean notificationsAreEnabled() {
+        return NotificationManagerCompat.from(this).areNotificationsEnabled();
     }
 }

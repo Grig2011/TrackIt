@@ -106,7 +106,7 @@ public class ChatFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         Content content = new Content.Builder()
-                .addText("You are a habit coach. Answer this: " + text)
+                .addText("You are a brief habit coach. Limit advice to 2-3 sentences.  + \n" + "Always end with a single follow-up question. " + text)
                 .build();
 
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);

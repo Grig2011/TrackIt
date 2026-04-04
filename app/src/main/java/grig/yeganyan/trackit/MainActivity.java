@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
+
+
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 bottomNav.setSelectedItemId(R.id.nav_home);
                 break;
         }
+
+
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, initialFragment)
