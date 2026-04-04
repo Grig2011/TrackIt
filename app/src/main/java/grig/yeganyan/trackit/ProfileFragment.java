@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,6 +39,7 @@ public class ProfileFragment extends Fragment {
     SwitchMaterial themeSwitch;
     SharedPreferences prefs;
     TextView profileAvatar;
+    MaterialButton btnCoachTone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +85,7 @@ public class ProfileFragment extends Fragment {
                     });
         }
 
-
+        btnCoachTone = view.findViewById(R.id.btnCoachTone);
         themeSwitch = view.findViewById(R.id.themeSwitch);
 
         prefs = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -104,11 +106,22 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
+
         profileAvatar = view.findViewById(R.id.profileAvatar);
         profileAvatar.setOnClickListener(v -> openEmojiSelectorDynamic()
 
 
         );
+
+        MaterialButton btnCoachTone = view.findViewById(R.id.btnCoachTone);
+
+        String savedToneName = getSavedCoachTone();
+        CoachTone currentTone = CoachTone.valueOf(savedToneName);
+        btnCoachTone.setText("Coach Personality: " + currentTone.displayName);
+
+        // Set the click listener
+        btnCoachTone.setOnClickListener(v -> showCoachToneDialog());
 
         logoutButton = view.findViewById(R.id.btnLogout);
         logoutButton.setOnClickListener(v -> logoutUser());
@@ -245,5 +258,42 @@ public class ProfileFragment extends Fragment {
 
             grid.addView(tv);
         }
+    }
+
+    private void showCoachToneDialog() {
+        // 1. Prepare the options for the dialog
+        CoachTone[] tones = CoachTone.values();
+        String[] toneNames = new String[tones.length];
+        for (int i = 0; i < tones.length; i++) {
+            toneNames[i] = tones[i].displayName;
+        }
+
+        // 2. Build the Material Dialog
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
+                .setTitle("Choose your Coach")
+                .setItems(toneNames, (dialog, which) -> {
+
+                    CoachTone selectedTone = tones[which];
+
+
+                    saveCoachPreference(selectedTone.name());
+
+
+                    btnCoachTone.setText("Coach Personality: " + selectedTone.displayName);
+
+
+                    Toast.makeText(getContext(), "Coach set to " + selectedTone.displayName, Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
+
+    private void saveCoachPreference(String toneName) {
+        SharedPreferences prefs = getActivity().getSharedPreferences("TrackItPrefs", Context.MODE_PRIVATE);
+        prefs.edit().putString("COACH_TONE", toneName).apply();
+    }
+
+    private String getSavedCoachTone() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("TrackItPrefs", Context.MODE_PRIVATE);
+        return prefs.getString("COACH_TONE", "DISCIPLINED"); // Default to Disciplined
     }
 }

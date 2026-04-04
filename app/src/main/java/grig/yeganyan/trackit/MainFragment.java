@@ -196,6 +196,8 @@ public class MainFragment extends Fragment {
             intent.putExtra("type", habit.getType());
             intent.putExtra("unit", habit.getUnit());
             intent.putExtra("days", habit.getDays());
+            intent.putExtra("time",habit.getTime());
+            intent.putExtra("currentStreak", habit.getStreak());
             v.getContext().startActivity(intent);
         });
 

@@ -381,6 +381,8 @@ public class AddHabit extends AppCompatActivity {
         String emoji = emojiInput.getText().toString().trim();
         String title = titleInput.getText().toString().trim();
         String desc = descInput.getText().toString().trim();
+        Intent intent = getIntent();
+        int currentStreak = intent.getIntExtra("currentStreak", 0);
 
         String unit = "times";
         if (unitSpinner.getSelectedItem() != null) {
@@ -416,8 +418,9 @@ public class AddHabit extends AppCompatActivity {
         String days = daysBuilder.toString();
 
         Habit habit;
+
         if ("EDIT".equals(mode) && habitId != null) {
-            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString);
+            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString,currentStreak);
             db.collection("users").document(userId).collection("habits").document(habitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
@@ -427,7 +430,7 @@ public class AddHabit extends AppCompatActivity {
                     });
         } else {
             String newHabitId = UUID.randomUUID().toString();
-            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString);
+            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString,currentStreak);
             db.collection("users").document(userId).collection("habits").document(newHabitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
@@ -444,6 +447,7 @@ public class AddHabit extends AppCompatActivity {
         String emoji = intent.getStringExtra("emoji");
         String title = intent.getStringExtra("title");
         String desc = intent.getStringExtra("desc");
+
 
         if(emoji != null) emojiInput.setText(emoji);
         if(title != null) titleInput.setText(title);
