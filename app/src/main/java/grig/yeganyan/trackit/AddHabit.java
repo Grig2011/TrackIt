@@ -43,7 +43,8 @@ public class AddHabit extends AppCompatActivity {
     Spinner unitSpinner;
     Button saveHabitBtn;
 
-
+    ArrayAdapter<String> unitAdapter;
+    java.util.List<String> unitList;
     TextView tvSelectedTime;
     MaterialButton btnPickTime;
     Calendar calendar = Calendar.getInstance();
@@ -64,7 +65,7 @@ public class AddHabit extends AppCompatActivity {
     MaterialButton monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, sunBtn;
     MaterialButton[] dayButtons;
     boolean[] selectedDays = new boolean[7];
-    String[] weekDays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+    String[] weekDays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
 
     MaterialButton btnGood, btnBad;
@@ -146,11 +147,11 @@ public class AddHabit extends AppCompatActivity {
         allColorButtons = buttons;
 
         String[] colors = {
-                "#6200EE","#32A852","#F51111","#EB8F34","#2962FF","#FFD600",
-                "#FF4081","#00BCD4","#CDDC39","#FF5722","#3F51B5","#795548",
-                "#009688","#673AB7","#FFC107","#03A9F4","#512DA8","#9E9E9E",
-                "#607D8B","#8BC34A","#FF6F00","#B71C1C","#1A237E","#4E342E",
-                "#FFAB91","#A7FFEB","#B39DDB","#FF6E6E","#81D4FA","#FFF59D"
+                "#6200EE", "#32A852", "#F51111", "#EB8F34", "#2962FF", "#FFD600",
+                "#FF4081", "#00BCD4", "#CDDC39", "#FF5722", "#3F51B5", "#795548",
+                "#009688", "#673AB7", "#FFC107", "#03A9F4", "#512DA8", "#9E9E9E",
+                "#607D8B", "#8BC34A", "#FF6F00", "#B71C1C", "#1A237E", "#4E342E",
+                "#FFAB91", "#A7FFEB", "#B39DDB", "#FF6E6E", "#81D4FA", "#FFF59D"
         };
 
         for (int i = 0; i < allColorButtons.length; i++) {
@@ -160,8 +161,14 @@ public class AddHabit extends AppCompatActivity {
 
 
         emojiInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 String input = editable.toString();
@@ -181,6 +188,32 @@ public class AddHabit extends AppCompatActivity {
                 }
             }
         });
+
+
+        unitSpinner = findViewById(R.id.unitSpinner);
+
+
+        unitList = new java.util.ArrayList<>(java.util.Arrays.asList(getResources().getStringArray(R.array.goal_units)));
+
+
+        unitAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, unitList);
+        unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitSpinner.setAdapter(unitAdapter);
+
+
+        unitSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String selected = unitList.get(position);
+                if ("Custom".equals(selected)) {
+                    openCustomDialog();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
 
         db = FirebaseFirestore.getInstance();
 
@@ -232,14 +265,28 @@ public class AddHabit extends AppCompatActivity {
                         String[] parts = timeString.split(":");
                         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(parts[0]));
                         calendar.set(Calendar.MINUTE, Integer.parseInt(parts[1]));
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
 
                 String unitValue = intent.getStringExtra("unit");
-                if (unitValue != null && unitSpinner.getAdapter() != null) {
-                    ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) unitSpinner.getAdapter();
-                    int spinnerPosition = adapter.getPosition(unitValue);
-                    if (spinnerPosition != -1) unitSpinner.setSelection(spinnerPosition);
+                if (unitValue != null) {
+                    int spinnerPosition = unitAdapter.getPosition(unitValue);
+
+
+                    if (spinnerPosition == -1) {
+                        int customIndex = unitList.indexOf("Custom");
+                        if (customIndex != -1) {
+                            unitList.add(customIndex, unitValue); // Add it before "Custom"
+                        } else {
+                            unitList.add(unitValue);
+                        }
+                        unitAdapter.notifyDataSetChanged();
+                        spinnerPosition = unitAdapter.getPosition(unitValue);
+                    }
+
+
+                    unitSpinner.setSelection(spinnerPosition);
                 }
 
                 colour = intent.getStringExtra("color");
@@ -271,6 +318,8 @@ public class AddHabit extends AppCompatActivity {
                     }
                 }
 
+
+
                 saveHabitBtn.setText("Update Habit");
             } else {
                 receiveHabitTemplate();
@@ -282,13 +331,13 @@ public class AddHabit extends AppCompatActivity {
         saveHabitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (notificationsAreEnabled()) {
+                if (notificationsAreEnabled()) {
 
-                        saveHabit();
-                    } else {
-                        showNotificationPermissionDialog();
-                    }
+                    saveHabit();
+                } else {
+                    showNotificationPermissionDialog();
                 }
+            }
         });
     }
 
@@ -415,12 +464,27 @@ public class AddHabit extends AppCompatActivity {
                 daysBuilder.append(weekDays[i]);
             }
         }
+        if(unit.equals("Select") || unit.equals("Custom")){
+            Toast.makeText(this,"unit must be correct",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String days = daysBuilder.toString();
+        if(days.isEmpty()){
+            Toast.makeText(this,"days are required",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(timeString.equalsIgnoreCase("Not set")){
+            Toast.makeText(this,"Time is required",Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Habit habit;
 
         if ("EDIT".equals(mode) && habitId != null) {
-            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString,currentStreak);
+
+
+            habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString, currentStreak);
             db.collection("users").document(userId).collection("habits").document(habitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
@@ -430,7 +494,7 @@ public class AddHabit extends AppCompatActivity {
                     });
         } else {
             String newHabitId = UUID.randomUUID().toString();
-            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString,currentStreak);
+            habit = new Habit(newHabitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString, currentStreak);
             db.collection("users").document(userId).collection("habits").document(newHabitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
@@ -443,15 +507,15 @@ public class AddHabit extends AppCompatActivity {
 
     private void receiveHabitTemplate() {
         Intent intent = getIntent();
-        if(intent == null) return;
+        if (intent == null) return;
         String emoji = intent.getStringExtra("emoji");
         String title = intent.getStringExtra("title");
         String desc = intent.getStringExtra("desc");
 
 
-        if(emoji != null) emojiInput.setText(emoji);
-        if(title != null) titleInput.setText(title);
-        if(desc != null) descInput.setText(desc);
+        if (emoji != null) emojiInput.setText(emoji);
+        if (title != null) titleInput.setText(title);
+        if (desc != null) descInput.setText(desc);
     }
 
     private void showNotificationPermissionDialog() {
@@ -470,5 +534,45 @@ public class AddHabit extends AppCompatActivity {
 
     private boolean notificationsAreEnabled() {
         return NotificationManagerCompat.from(this).areNotificationsEnabled();
+    }
+    private void openCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Custom Unit");
+
+
+        final TextInputEditText input = new TextInputEditText(this);
+        input.setHint("Enter unit (e.g., pages, laps)");
+
+
+        android.widget.FrameLayout container = new android.widget.FrameLayout(this);
+        android.widget.FrameLayout.LayoutParams params = new android.widget.FrameLayout.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(50, 20, 50, 0);
+        input.setLayoutParams(params);
+        container.addView(input);
+        builder.setView(container);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String customUnit = input.getText().toString().trim();
+            if (!customUnit.isEmpty()) {
+
+                int customIndex = unitList.indexOf("Custom");
+                unitList.add(customIndex, customUnit);
+
+
+                unitAdapter.notifyDataSetChanged();
+                unitSpinner.setSelection(customIndex);
+            } else {
+                unitSpinner.setSelection(0);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            unitSpinner.setSelection(0);
+            dialog.dismiss();
+        });
+
+        builder.show();
     }
 }
