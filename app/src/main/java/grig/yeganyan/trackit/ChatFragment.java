@@ -1,8 +1,11 @@
 package grig.yeganyan.trackit;
 
+import static grig.yeganyan.trackit.Services.HabitService.formatHabitsToString;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +32,17 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import grig.yeganyan.trackit.Services.HabitCallback;
+import grig.yeganyan.trackit.Services.HabitService;
 import grig.yeganyan.trackit.model.ChatMessage;
+import grig.yeganyan.trackit.model.Habit;
 
 public class ChatFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -44,44 +52,14 @@ public class ChatFragment extends Fragment {
     private ChatAdapter adapter;
     private List<ChatMessage> messageList = new ArrayList<>();
     private GenerativeModelFutures model;
+    private HabitService habitService;
+    private String normalizedString = "Less Alcohol";
+    private String personalityInstruction;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-
-
-        SharedPreferences prefs = requireActivity().getSharedPreferences("TrackItPrefs", Context.MODE_PRIVATE);
-        String savedToneName = prefs.getString("COACH_TONE", "DISCIPLINED");
-
-        String personalityInstruction;
-        try {
-            personalityInstruction = CoachTone.valueOf(savedToneName).systemInstruction;
-        } catch (Exception e) {
-            personalityInstruction = CoachTone.DISCIPLINED.systemInstruction;
-        }
-
-
-        String finalSystemPrompt = "You are the official TrackIt app coach. " + personalityInstruction +
-                " Keep responses brief (2-3 sentences) and always end with a single follow-up question.";
-
-
-        Content systemInstruction = new Content("system",
-                Collections.singletonList(new TextPart(finalSystemPrompt)));
-
-
-        GenerativeModel gm = new GenerativeModel(
-                "gemini-2.5-flash",
-                BuildConfig.GEMINI_API_KEY,
-                new GenerationConfig.Builder().build(),
-                null,
-                new RequestOptions(),
-                null,
-                null,
-                systemInstruction
-        );
-        model = GenerativeModelFutures.from(gm);
-
 
         recyclerView = view.findViewById(R.id.chatRecyclerView);
         messageInput = view.findViewById(R.id.messageInput);
@@ -92,6 +70,28 @@ public class ChatFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        SharedPreferences prefs = requireActivity().getSharedPreferences("TrackItPrefs", Context.MODE_PRIVATE);
+        String savedToneName = prefs.getString("COACH_TONE", "DISCIPLINED");
+
+        try {
+            personalityInstruction = CoachTone.valueOf(savedToneName).systemInstruction;
+        } catch (Exception e) {
+            personalityInstruction = CoachTone.DISCIPLINED.systemInstruction;
+        }
+
+        habitService = new HabitService();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String userId = user.getUid();
+            habitService.getUsersAllHabits(userId, new HabitCallback() {
+                @Override
+                public void onCallback(List<Habit> habitList) {
+                    normalizedString = formatHabitsToString(habitList);
+                    initializeGemini(normalizedString);
+                }
+            });
+        }
 
         ChipGroup suggestionGroup = view.findViewById(R.id.suggestionChipGroup);
         if (suggestionGroup != null) {
@@ -107,17 +107,38 @@ public class ChatFragment extends Fragment {
         }
 
         sendBtn.setOnClickListener(v -> sendMessage());
+
         return view;
+    }
+
+    private void initializeGemini(String habits) {
+        String finalSystemPrompt = "You are the official TrackIt app coach. " + personalityInstruction +
+                " Keep responses brief (2-3 sentences) and always end with a single follow-up question. " +
+                "Here are your client's habits: " + habits;
+
+        Content systemInstruction = new Content("system",
+                Collections.singletonList(new TextPart(finalSystemPrompt)));
+
+        GenerativeModel gm = new GenerativeModel(
+                "gemini-2.5-flash",
+                BuildConfig.GEMINI_API_KEY,
+                new GenerationConfig.Builder().build(),
+                null,
+                new RequestOptions(),
+                null,
+                null,
+                systemInstruction
+        );
+        model = GenerativeModelFutures.from(gm);
     }
 
     private void sendMessage() {
         String userText = messageInput.getText().toString().trim();
-        if (userText.isEmpty()) return;
+        if (userText.isEmpty() || model == null) return;
 
         addMessageToUI(userText, ChatMessage.ROLE_USER);
         messageInput.setText("");
         progressBar.setVisibility(View.VISIBLE);
-
 
         Content userContent = new Content("user",
                 Collections.singletonList(new TextPart(userText)));
