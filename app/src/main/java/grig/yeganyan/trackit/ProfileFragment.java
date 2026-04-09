@@ -12,15 +12,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -41,12 +44,49 @@ public class ProfileFragment extends Fragment {
     TextView profileAvatar;
     MaterialButton btnCoachTone;
 
+    private boolean isUserAction = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+
+        Spinner spinner = view.findViewById(R.id.langSpinner);
+
+
+        SharedPreferences prefs = requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        String currentLang = prefs.getString("My_Lang", "en");
+
+
+        if (currentLang.equals("hy")) spinner.setSelection(1);
+        else if (currentLang.equals("ru")) spinner.setSelection(2);
+        else spinner.setSelection(0);
+
+        spinner.setOnTouchListener((v, event) -> {
+            isUserAction = true;
+            return false;
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!isUserAction) return;
+
+                String selectedLang;
+                switch (position) {
+                    case 1: selectedLang = "hy"; break;
+                    case 2: selectedLang = "ru"; break;
+                    default: selectedLang = "en"; break;
+                }
+
+                changeLanguage(selectedLang);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
@@ -93,9 +133,10 @@ public class ProfileFragment extends Fragment {
         boolean darkMode = prefs.getBoolean("darkMode", false);
         themeSwitch.setChecked(darkMode);
 
+        SharedPreferences finalPrefs = prefs;
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-            SharedPreferences.Editor editor = prefs.edit();
+            SharedPreferences.Editor editor = finalPrefs.edit();
             editor.putBoolean("darkMode", isChecked);
             editor.apply();
 
@@ -120,7 +161,7 @@ public class ProfileFragment extends Fragment {
         CoachTone currentTone = CoachTone.valueOf(savedToneName);
         btnCoachTone.setText("Coach Personality: " + currentTone.displayName);
 
-        // Set the click listener
+
         btnCoachTone.setOnClickListener(v -> showCoachToneDialog());
 
         logoutButton = view.findViewById(R.id.btnLogout);
@@ -133,8 +174,8 @@ public class ProfileFragment extends Fragment {
         FirebaseAuth.getInstance().signOut();
 
         SharedPreferences prefs = getActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        prefs.edit().putBoolean("registered", false).apply(); // reset registration status
-        prefs.edit().putString("userId", "").apply(); // clear saved userId
+        prefs.edit().putBoolean("registered", false).apply();
+        prefs.edit().putString("userId", "").apply();
 
         Intent intent = new Intent(getActivity(), LauncherActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -168,12 +209,12 @@ public class ProfileFragment extends Fragment {
         db.collection("users").document(userId)
                 .delete()
                 .addOnCompleteListener(task -> {
-                    // 2. Delete Firebase Authentication account
+
                     user.delete()
                             .addOnCompleteListener(deleteTask -> {
                                 if (deleteTask.isSuccessful()) {
                                     Toast.makeText(getContext(), "Account deleted permanently", Toast.LENGTH_LONG).show();
-                                    // Redirect to login screen or finish activity
+
                                     startActivity(new Intent(getContext(), Login.class));
                                     getActivity().finish();
                                 } else {
@@ -209,26 +250,26 @@ public class ProfileFragment extends Fragment {
                 "⚽","🏀","🏈","⚾","🥎","🏐","🏉","🎾","🥏","🎳","🏏","🏑","🏒","🥍","🏓","🏸","🥊","🥋","🥅","⛳","🪁","🏹","🎣","🤿","🥌","🎿","⛷️","🏂","🪂","🏋️","🤼","🤸","⛹️","🤺","🤾","🏌️","🏇","🧘","🏄","🏊","🤽","🚴","🚵","🛹","🛷","🥇","🥈","🥉","🏆","🎖️","🏅","🎗️","🎫","🎟️","🎪","🤹","🎭","🎨","🖌️","🎬","🎤","🎧","🎼","🎹","🥁","🪘","🎷","🎺","🪗","🎸","🪕","🎻","📯","🎙️","🎚️","🎛️","🎲","🧩","🧸","🪀","🪁"
         };
 
-        // Scrollable container
+
         ScrollView scrollView = new ScrollView(getContext());
         scrollView.addView(grid);
         builder.setView(scrollView);
 
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
 
-        // Create dialog first
+
         AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true); // allow tap outside to dismiss
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
 
-        // Add emojis AFTER dialog creation
+
         for (String emoji : emojis) {
             TextView tv = new TextView(getContext());
             tv.setText(emoji);
-            tv.setTextSize(42); // balanced, readable size
+            tv.setTextSize(42);
             tv.setGravity(Gravity.CENTER);
 
-            int size = (int) (64 * getResources().getDisplayMetrics().density); // 64dp
+            int size = (int) (64 * getResources().getDisplayMetrics().density);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = size;
             params.height = size;
@@ -236,15 +277,15 @@ public class ProfileFragment extends Fragment {
             tv.setLayoutParams(params);
 
             tv.setOnClickListener(v -> {
-                profileAvatar.setText(emoji); // update UI
+                profileAvatar.setText(emoji);
 
-                // Save selected emoji to Firebase
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("users")
                             .document(user.getUid())
-                            .update("avatar", emoji) // "avatar" field in Firestore
+                            .update("avatar", emoji)
                             .addOnSuccessListener(aVoid -> {
                                 Toast.makeText(getContext(), "Avatar updated!", Toast.LENGTH_SHORT).show();
                             })
@@ -253,7 +294,7 @@ public class ProfileFragment extends Fragment {
                             });
                 }
 
-                dialog.dismiss(); // close emoji selector
+                dialog.dismiss();
             });
 
             grid.addView(tv);
@@ -261,14 +302,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showCoachToneDialog() {
-        // 1. Prepare the options for the dialog
+
         CoachTone[] tones = CoachTone.values();
         String[] toneNames = new String[tones.length];
         for (int i = 0; i < tones.length; i++) {
             toneNames[i] = tones[i].displayName;
         }
 
-        // 2. Build the Material Dialog
+
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
                 .setTitle("Choose your Coach")
                 .setItems(toneNames, (dialog, which) -> {
@@ -294,6 +335,15 @@ public class ProfileFragment extends Fragment {
 
     private String getSavedCoachTone() {
         SharedPreferences prefs = getActivity().getSharedPreferences("TrackItPrefs", Context.MODE_PRIVATE);
-        return prefs.getString("COACH_TONE", "DISCIPLINED"); // Default to Disciplined
+        return prefs.getString("COACH_TONE", "DISCIPLINED");
+    }
+
+    private void changeLanguage(String langCode) {
+
+        SharedPreferences prefs = requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        prefs.edit().putString("My_Lang", langCode).apply();
+
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(langCode);
+        AppCompatDelegate.setApplicationLocales(appLocale);
     }
 }

@@ -27,7 +27,7 @@
             android:id="@+id/profileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guest"
+            android:text="@string/guest"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
@@ -37,7 +37,7 @@
             android:id="@+id/profileEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="no Email"
+            android:text="@string/no_email"
             android:textSize="14sp"
             android:textColor="?android:attr/textColorSecondary"
             android:layout_marginTop="2dp"/>
@@ -46,7 +46,7 @@
             android:id="@+id/profileBio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="📌 Keep track of your habits, stay motivated, and grow every day!"
+            android:text="@string/profile_bio"
             android:textSize="13sp"
             android:textColor="?android:attr/textColorSecondary"
             android:layout_marginTop="20dp"
@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PREFERENCES"
+            android:text="@string/preferences"
             android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
@@ -68,38 +68,48 @@
             android:id="@+id/themeSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dark Mode"
+            android:text="@string/dark_mode"
             android:paddingVertical="12dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI COACH"
+            android:text="@string/ai_coach"
             android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
             android:layout_marginTop="24dp"
             android:letterSpacing="0.1"/>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchAiInsights"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Smart Habit Insights"
-            android:paddingVertical="12dp"/>
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCoachTone"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Coach Personality: Disciplined"
+            android:text="@string/coach_personality"
             android:gravity="start"
             android:paddingStart="0dp"
             android:textAllCaps="false"
             android:textColor="?android:attr/textColorPrimary"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_language"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            android:layout_marginTop="24dp"
+            android:letterSpacing="0.1"/>
 
+        <Spinner
+            android:id="@+id/langSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/language_options"
+            android:paddingVertical="12dp"/>
 
         <View
             android:layout_width="match_parent"
@@ -113,7 +123,7 @@
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"
+            android:text="@string/logout"
             android:layout_marginTop="16dp"
             android:textColor="?attr/colorPrimary"
             android:textAllCaps="false"/>
@@ -123,7 +133,7 @@
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete Account"
+            android:text="@string/delete_account"
             android:layout_marginTop="8dp"
             android:textColor="#BA1A1A"
             android:textAllCaps="false"

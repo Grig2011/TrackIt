@@ -1,8 +1,52 @@
 <resources>
     <string name="app_name">TrackIt</string>
-    <string-array name="habit_type">
-        <item>Good</item>
-        <item>Bad</item>
+
+    <string name="guest">Guest</string>
+    <string name="no_email">No Email</string>
+    <string name="profile_bio">📌 Keep track of your habits, stay motivated, and grow every day!</string>
+    <string name="preferences">PREFERENCES</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="ai_coach">AI COACH</string>
+    <string name="smart_insights">Smart Habit Insights</string>
+    <string name="coach_personality">Coach Personality: %1$s</string>
+    <string name="select_language">Select Language:</string>
+    <string name="logout">Logout</string>
+    <string name="delete_account">Delete Account</string>
+
+    <string name="btn_back">Back</string>
+    <string name="btn_save_habit">Save Habit</string>
+    <string name="btn_update_habit">Update Habit</string>
+    <string name="label_emoji">Emoji</string>
+    <string name="label_title">Title</string>
+    <string name="label_description">Description</string>
+    <string name="label_colour">Colour</string>
+    <string name="label_habit_type">Habit Type</string>
+    <string name="label_task_days">Task Days</string>
+    <string name="label_reminder_time">Reminder Time</string>
+    <string name="hint_enter_emoji">Enter an emoji</string>
+    <string name="hint_habit_title">Habit Title</string>
+    <string name="hint_habit_description">Habit Description</string>
+    <string name="hint_enter_value">Enter value</string>
+    <string name="type_good">Good</string>
+    <string name="type_bad">Bad</string>
+    <string name="time_not_set">Not set</string>
+    <string name="btn_set_time">Set Time</string>
+
+    <string name="err_user_not_found">User not found. Please login again.</string>
+    <string name="err_title_req">Title required</string>
+    <string name="err_goal_req">Goal is required</string>
+    <string name="err_invalid_num">Invalid number</string>
+    <string name="err_unit_invalid">Unit must be valid</string>
+    <string name="err_days_req">Days are required</string>
+    <string name="err_time_req">Time is required</string>
+    <string name="msg_habit_saved">Habit saved!</string>
+    <string name="msg_habit_updated">Habit updated!</string>
+    <string name="msg_avatar_updated">Avatar updated!</string>
+
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Armenian (Հայերեն)</item>
+        <item>Russian (Русский)</item>
     </string-array>
 
     <string-array name="goal_units">
@@ -22,20 +66,56 @@
         <item>Custom</item>
     </string-array>
 
-    <string-array name="task_days">
-        <item>Everyday</item>
-        <item>Mon-Fri</item>
-        <item>Mon,Wed,Fri</item>
-        <item>Custom</item>
-    </string-array>
-    <string name="your_habits">Your Habits</string>
-    <string name="morning_exercise">Morning Exercise</string>
-    <string name="morning_exercise_desc">30 minutes of exercise</string>
-    <string name="habit_streak_5">🔥 5-day streak</string>
-    <string name="theme_button_desc">Toggle Theme</string>
-    <string name="habit_icon_desc">Habit Icon</string>
-    <string name="add_habit_desc">Add Habit</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="day_mon">M</string>
+    <string name="day_tue">T</string>
+    <string name="day_wed">W</string>
+    <string name="day_thu">T</string>
+    <string name="day_fri">F</string>
+    <string name="day_sat">S</string>
+    <string name="day_sun">S</string>
+
+    <string name="task_hint_title">Task Title</string>
+    <string name="task_hint_description">Task Description</string>
+    <string name="task_btn_add">Add Task</string>
+
+    <string name="header_popular_habits">Popular Habits</string>
+    <string name="hint_search_templates">Search templates...</string>
+
+    <string name="temp_title_stretch">Morning Stretch</string>
+    <string name="temp_desc_stretch">Wake up your body in 10 minutes</string>
+
+    <string name="temp_title_journal">Journaling</string>
+    <string name="temp_desc_journal">Reflect on your day in 5 minutes</string>
+
+    <string name="temp_title_coding">Daily Coding</string>
+    <string name="temp_desc_coding">Solve a coding problem every day</string>
+
+    <string name="temp_title_sleep">Sleep Early</string>
+    <string name="temp_desc_sleep">Set a bedtime and stick to it</string>
+
+    <string name="temp_title_snack">Healthy Snack</string>
+    <string name="temp_desc_snack">Choose fruits or nuts instead of junk food</string>
+
+    <string name="temp_title_reflection">Evening Reflection</string>
+    <string name="temp_desc_reflection">Spend 5 minutes reviewing your day</string>
+
+    <string name="temp_title_water">Drink Water</string>
+    <string name="temp_desc_water">8 glasses daily</string>
+
+    <string name="temp_title_read">Read Book</string>
+    <string name="temp_desc_read">20 pages daily</string>
+
+    <string name="temp_title_walk">Evening Walk</string>
+    <string name="temp_desc_walk">30 min walk</string>
+
+    <string name="header_subtitle">Stay consistent, see progress</string>
+    <string name="hint_search_habits">Search habits...</string>
+
+    <string name="header_todo_list">My To-Do List</string>
+    <string name="desc_add_task">Add Task</string>
+
+    <string name="ai_prompt_morning_routine">Design a 15-min morning routine</string>
+    <string name="ai_prompt_discipline">How to stay disciplined today?</string>
+    <string name="ai_prompt_habit_stacking">Explain habit stacking to me</string>
 
 </resources>

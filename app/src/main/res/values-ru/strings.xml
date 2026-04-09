@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">TrackIt</string>
+
+    <string name="guest">Гость</string>
+    <string name="no_email">Нет Email</string>
+    <string name="profile_bio">📌 Отслеживайте свои привычки, сохраняйте мотивацию и растите каждый день!</string>
+    <string name="preferences">НАСТРОЙКИ</string>
+    <string name="dark_mode">Темная тема</string>
+    <string name="ai_coach">ИИ ТРЕНЕР</string>
+    <string name="smart_insights">Умные советы</string>
+    <string name="coach_personality">Характер тренера: %1$s</string>
+    <string name="select_language">Выберите язык:</string>
+    <string name="logout">Выйти</string>
+    <string name="delete_account">Удалить аккаунт</string>
+
+    <string name="btn_back">Назад</string>
+    <string name="btn_save_habit">Сохранить</string>
+    <string name="btn_update_habit">Обновить</string>
+    <string name="label_emoji">Эмодзи</string>
+    <string name="label_title">Название</string>
+    <string name="label_description">Описание</string>
+    <string name="label_colour">Цвет</string>
+    <string name="label_habit_type">Тип привычки</string>
+    <string name="label_task_days">Дни</string>
+    <string name="label_reminder_time">Время напоминания</string>
+    <string name="hint_enter_emoji">Введите эмодзи</string>
+    <string name="hint_habit_title">Название привычки</string>
+    <string name="hint_habit_description">Описание привычки</string>
+    <string name="hint_enter_value">Значение</string>
+    <string name="type_good">Хорошая</string>
+    <string name="type_bad">Плохая</string>
+    <string name="time_not_set">Не установлено</string>
+    <string name="btn_set_time">Выбрать время</string>
+
+    <string name="err_user_not_found">Пользователь не найден. Войдите снова.</string>
+    <string name="err_title_req">Название обязательно</string>
+    <string name="err_goal_req">Цель обязательна</string>
+    <string name="err_invalid_num">Неверное число</string>
+    <string name="err_unit_invalid">Выберите единицу измерения</string>
+    <string name="err_days_req">Дни обязательны</string>
+    <string name="err_time_req">Время обязательно</string>
+    <string name="msg_habit_saved">Привычка сохранена!</string>
+    <string name="msg_habit_updated">Привычка обновлена!</string>
+    <string name="msg_avatar_updated">Аватар обновлен!</string>
+
+    <string name="day_mon">П</string>
+    <string name="day_tue">В</string>
+    <string name="day_wed">С</string>
+    <string name="day_thu">Ч</string>
+    <string name="day_fri">П</string>
+    <string name="day_sat">С</string>
+    <string name="day_sun">В</string>
+
+    <string name="task_hint_title">Название задачи</string>
+    <string name="task_hint_description">Описание задачи</string>
+    <string name="task_btn_add">Добавить задачу</string>
+
+    <string name="header_popular_habits">Популярные привычки</string>
+    <string name="hint_search_templates">Поиск шаблонов...</string>
+    <string name="temp_title_stretch">Утренняя разминка</string>
+    <string name="temp_desc_stretch">Разбудите свое тело за 10 минут</string>
+    <string name="temp_title_journal">Ведение дневника</string>
+    <string name="temp_desc_journal">Подведите итоги дня за 5 минут</string>
+    <string name="temp_title_coding">Программирование</string>
+    <string name="temp_desc_coding">Решайте задачу каждый день</string>
+    <string name="temp_title_sleep">Ранний сон</string>
+    <string name="temp_desc_sleep">Ложитесь спать вовремя</string>
+    <string name="temp_title_snack">Полезный перекус</string>
+    <string name="temp_desc_snack">Выбирайте фрукты вместо фастфуда</string>
+    <string name="temp_title_reflection">Вечерняя рефлексия</string>
+    <string name="temp_desc_reflection">5 минут на анализ прошедшего дня</string>
+    <string name="temp_title_water">Пить воду</string>
+    <string name="temp_desc_water">8 стаканов в день</string>
+    <string name="temp_title_read">Чтение книг</string>
+    <string name="temp_desc_read">20 страниц в день</string>
+    <string name="temp_title_walk">Вечерняя прогулка</string>
+    <string name="temp_desc_walk">30 минут прогулки</string>
+
+    <string name="header_subtitle">Будьте последовательны, видите прогресс</string>
+    <string name="hint_search_habits">Поиск привычек...</string>
+
+    <string name="header_todo_list">Мой список дел</string>
+    <string name="desc_add_task">Добавить задачу</string>
+
+    <string name="ai_prompt_morning_routine">Создать 15-минутное утреннее расписание</string>
+    <string name="ai_prompt_discipline">Как оставаться дисциплинированным сегодня?</string>
+    <string name="ai_prompt_habit_stacking">Объясни мне метод «цепочки привычек»</string>
+</resources>

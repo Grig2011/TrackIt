@@ -46,7 +46,7 @@ public class HabitService {
 
             sb.append(h.getTitle()).append(",")
                     .append(h.getDescription()).append(",")
-                    .append("Streak").append(h.getStreak());
+                    .append("Streak").append(h.getStreak()).append(",").append("Habit type").append(h.getType());
 
 
             if (i < habitList.size() - 1) {
@@ -56,6 +56,8 @@ public class HabitService {
 
         return sb.toString();
     }
+
+
 
 
 }

@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">TrackIt</string>
+
+    <string name="guest">Հյուր</string>
+    <string name="no_email">Էլ. փոստը բացակայում է</string>
+    <string name="profile_bio">📌 Հետևեք ձեր սովորություններին, մնացեք մոտիվացված և աճեք ամեն օր:</string>
+    <string name="preferences">ՆԱԽԱՊԱՏՎՈՒԹՅՈՒՆՆԵՐ</string>
+    <string name="dark_mode">Մութ ռեժիմ</string>
+    <string name="ai_coach">AI ՄԱՐԶԻՉ</string>
+    <string name="smart_insights">Խելացի վերլուծություն</string>
+    <string name="coach_personality">Մարզչի տեսակը: %1$s</string>
+    <string name="select_language">Ընտրել լեզուն:</string>
+    <string name="logout">Դուրս գալ</string>
+    <string name="delete_account">Ջնջել հաշիվը</string>
+
+    <string name="btn_back">Հետ</string>
+    <string name="btn_save_habit">Պահպանել</string>
+    <string name="btn_update_habit">Թարմացնել</string>
+    <string name="label_emoji">Էմոջի</string>
+    <string name="label_title">Վերնագիր</string>
+    <string name="label_description">Նկարագրություն</string>
+    <string name="label_colour">Գույն</string>
+    <string name="label_habit_type">Տեսակը</string>
+    <string name="label_task_days">Օրերը</string>
+    <string name="label_reminder_time">Հիշեցման ժամը</string>
+    <string name="hint_enter_emoji">Մուտքագրեք էմոջի</string>
+    <string name="hint_habit_title">Անվանումը</string>
+    <string name="hint_habit_description">Նկարագրությունը</string>
+    <string name="hint_enter_value">Արժեքը</string>
+    <string name="type_good">Լավ</string>
+    <string name="type_bad">Վատ</string>
+    <string name="time_not_set">Սահմանված չէ</string>
+    <string name="btn_set_time">Ընտրել ժամը</string>
+
+    <string name="err_user_not_found">Օգտատերը չի գտնվել: Նորից մուտք գործեք:</string>
+    <string name="err_title_req">Վերնագիրը պարտադիր է</string>
+    <string name="err_goal_req">Նպատակը պարտադիր է</string>
+    <string name="err_invalid_num">Սխալ թիվ</string>
+    <string name="err_unit_invalid">Ընտրեք չափման միավորը</string>
+    <string name="err_days_req">Օրերը պարտադիր են</string>
+    <string name="err_time_req">Ժամը պարտադիր է</string>
+    <string name="msg_habit_saved">Սովորությունը պահպանված է:</string>
+    <string name="msg_habit_updated">Սովորությունը թարմացված է:</string>
+    <string name="msg_avatar_updated">Նկարը թարմացված է:</string>
+
+    <string name="day_mon">Ե</string>
+    <string name="day_tue">Ե</string>
+    <string name="day_wed">Չ</string>
+    <string name="day_thu">Հ</string>
+    <string name="day_fri">Ու</string>
+    <string name="day_sat">Շ</string>
+    <string name="day_sun">Կ</string>
+
+    <string name="task_hint_title">Առաջադրանքի վերնագիր</string>
+    <string name="task_hint_description">Առաջադրանքի նկարագրություն</string>
+    <string name="task_btn_add">Ավելացնել առաջադրանք</string>
+
+    <string name="header_popular_habits">Հանրաճանաչ սովորություններ</string>
+    <string name="hint_search_templates">Փնտրել...</string>
+    <string name="temp_title_stretch">Առավոտյան մարզանք</string>
+    <string name="temp_desc_stretch">Արթնացրեք ձեր մարմինը 10 րոպեում</string>
+    <string name="temp_title_journal">Օրագիր</string>
+    <string name="temp_desc_journal">Վերլուծեք ձեր օրը 5 րոպեում</string>
+    <string name="temp_title_coding">Ծրագրավորում</string>
+    <string name="temp_desc_coding">Լուծեք մեկ խնդիր ամեն օր</string>
+    <string name="temp_title_sleep">Շուտ քնել</string>
+    <string name="temp_desc_sleep">Քնեք ժամանակին</string>
+    <string name="temp_title_snack">Առողջ սնունդ</string>
+    <string name="temp_desc_snack">Ընտրեք մրգեր կամ ընկուզեղեն</string>
+    <string name="temp_title_reflection">Երեկոյան անդրադարձ</string>
+    <string name="temp_desc_reflection">5 րոպե ամփոփեք ձեր օրը</string>
+    <string name="temp_title_water">Ջուր խմել</string>
+    <string name="temp_desc_water">Օրական 8 բաժակ</string>
+    <string name="temp_title_read">Գիրք կարդալ</string>
+    <string name="temp_desc_read">Օրական 20 էջ</string>
+    <string name="temp_title_walk">Երեկոյան քայլք</string>
+    <string name="temp_desc_walk">30 րոպե քայլք</string>
+
+    <string name="header_subtitle">Եղեք հետևողական, տեսեք առաջընթացը</string>
+    <string name="hint_search_habits">Փնտրել սովորությունները...</string>
+
+    <string name="header_todo_list">Իմ անելիքների ցանկը</string>
+    <string name="desc_add_task">Ավելացնել առաջադրանք</string>
+
+    <string name="ai_prompt_morning_routine">Ստեղծել 15 րոպեանոց առավոտյան ծրագիր</string>
+    <string name="ai_prompt_discipline">Ինչպե՞ս մնալ կարգապահ այսօր</string>
+    <string name="ai_prompt_habit_stacking">Բացատրիր սովորությունների շղթայման մեթոդը</string>
+</resources>

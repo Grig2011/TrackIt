@@ -8,11 +8,10 @@
     android:background="@color/bg_color"
     android:gravity="center_horizontal">
 
-    <!-- Title -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Task Title"
+        android:hint="@string/task_hint_title"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -25,12 +24,11 @@
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Description -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:hint="Task Description"
+        android:hint="@string/task_hint_description"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -44,12 +42,11 @@
             android:minLines="2"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Time -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:hint="Time"
+        android:hint="@string/label_reminder_time"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -68,13 +65,12 @@
             android:drawablePadding="8dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Add Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddTask"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
-        android:text="Add Task"
+        android:text="@string/task_btn_add"
         android:textSize="16sp"
         android:textAllCaps="false"
         app:cornerRadius="20dp"
