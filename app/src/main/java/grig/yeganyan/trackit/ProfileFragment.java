@@ -32,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+
 import grig.yeganyan.trackit.Login;
 import grig.yeganyan.trackit.model.User;
 
@@ -44,6 +46,7 @@ public class ProfileFragment extends Fragment {
     TextView profileAvatar;
     MaterialButton btnCoachTone;
 
+    TextView profileBio;
     private boolean isUserAction = false;
 
     @Override
@@ -87,6 +90,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        TextView profileBio = view.findViewById(R.id.profileBio);
+        setDailyMotivation(profileBio);
 
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
@@ -339,11 +345,36 @@ public class ProfileFragment extends Fragment {
     }
 
     private void changeLanguage(String langCode) {
+        View overlay = requireActivity().findViewById(R.id.loadingOverlay);
+        overlay.setVisibility(View.VISIBLE);
+        overlay.setAlpha(0f);
 
-        SharedPreferences prefs = requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        prefs.edit().putString("My_Lang", langCode).apply();
 
-        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(langCode);
-        AppCompatDelegate.setApplicationLocales(appLocale);
+        overlay.animate().alpha(1f).setDuration(300).withEndAction(() -> {
+
+
+            SharedPreferences prefs = requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+            prefs.edit().putString("My_Lang", langCode).apply();
+
+
+            LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(langCode);
+            AppCompatDelegate.setApplicationLocales(appLocale);
+
+
+            requireActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        }).start();
+    }
+    private void setDailyMotivation(TextView textView) {
+        String[] quotes = getResources().getStringArray(R.array.daily_quotes);
+
+
+        Calendar calendar = Calendar.getInstance();
+        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+
+
+        int quoteIndex = dayOfYear % quotes.length;
+
+        textView.setText(quotes[quoteIndex]);
     }
 }

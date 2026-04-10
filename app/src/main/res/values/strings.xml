@@ -118,4 +118,47 @@
     <string name="ai_prompt_discipline">How to stay disciplined today?</string>
     <string name="ai_prompt_habit_stacking">Explain habit stacking to me</string>
 
+    <string-array name="daily_quotes">
+        <item>Believe in yourself and all that you are.</item>
+        <item>The only way to do great work is to love what you do.</item>
+        <item>Success is not final, failure is not fatal.</item>
+        <item>Don’t watch the clock; do what it does. Keep going.</item>
+        <item>Everything you’ve ever wanted is on the other side of fear.</item>
+        <item>Hardships often prepare ordinary people for an extraordinary destiny.</item>
+        <item>Dream big and dare to fail.</item>
+        <item>Your limitation—it’s only your imagination.</item>
+        <item>Push yourself, because no one else is going to do it for you.</item>
+        <item>Great things never come from comfort zones.</item>
+        <item>Dream it. Wish it. Do it.</item>
+        <item>Success doesn’t just find you. You have to go out and get it.</item>
+        <item>The harder you work for something, the greater you’ll feel when you achieve it.</item>
+        <item>Wake up with determination. Go to bed with satisfaction.</item>
+        <item>Do something today that your future self will thank you for.</item>
+        <item>Little things make big days.</item>
+        <item>It’s going to be hard, but hard does not mean impossible.</item>
+        <item>Don’t stop when you’re tired. Stop when you’re done.</item>
+        <item>Skill is only developed by hours and hours of work.</item>
+        <item>The key to success is to focus on goals, not obstacles.</item>
+        <item>Believe you can and you\'re halfway there.</item>
+        <item>Change your thoughts and you change your world.</item>
+        <item>It always seems impossible until it’s done.</item>
+        <item>Start where you are. Use what you have. Do what you can.</item>
+        <item>Quality is not an act, it is a habit.</item>
+        <item>Keep your eyes on the stars, and your feet on the ground.</item>
+        <item>Go confidently in the direction of your dreams.</item>
+        <item>Action is the foundational key to all success.</item>
+        <item>The best way to predict the future is to create it.</item>
+        <item>Be so good they can’t ignore you.</item>
+        <item>Stay hungry. Stay foolish.</item>
+        <item>Don’t wait for opportunity. Create it.</item>
+        <item>Work hard in silence, let your success be your noise.</item>
+        <item>Your time is limited, so don’t waste it living someone else’s life.</item>
+        <item>If you want to fly, give up everything that weighs you down.</item>
+        <item>The secret of getting ahead is getting started.</item>
+        <item>Small progress is still progress.</item>
+        <item>Doubt kills more dreams than failure ever will.</item>
+        <item>Focus on being productive instead of busy.</item>
+        <item>The journey of a thousand miles begins with one step.</item>
+    </string-array>
+
 </resources>

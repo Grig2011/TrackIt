@@ -1,15 +1,15 @@
 package grig.yeganyan.trackit.model;
 
 public class ChatMessage {
-    // Constants to avoid typos later
+
     public static final String ROLE_USER = "user";
     public static final String ROLE_AI = "model";
 
     private String text;
-    private String role; // Stores either "user" or "model"
+    private String role;
     private long timestamp;
 
-    // Required empty constructor for Firebase (if you decide to save chats later)
+
     public ChatMessage() {
     }
 
@@ -19,8 +19,7 @@ public class ChatMessage {
         this.timestamp = System.currentTimeMillis();
     }
 
-    // --- GETTERS ---
-    // These are used by the Adapter to display the data
+
 
     public String getText() {
         return text;
@@ -34,7 +33,7 @@ public class ChatMessage {
         return timestamp;
     }
 
-    // --- SETTERS ---
+
 
     public void setText(String text) {
         this.text = text;

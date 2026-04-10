@@ -140,5 +140,20 @@
             android:alpha="0.6"
             android:textSize="12sp"/>
 
+        <FrameLayout
+            android:id="@+id/loadingOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:windowBackground"
+            android:visibility="gone"
+            android:elevation="100dp">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
     </LinearLayout>
+
+
 </ScrollView>
