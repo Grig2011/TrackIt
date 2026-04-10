@@ -8,7 +8,7 @@
     android:background="@color/bg_color"
     android:layout_height="match_parent">
 
-    <!-- Fragment container -->
+
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:background="@color/bg_color"
         android:layout_weight="1"/>
 
-    <!-- Floating Action Button -->
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

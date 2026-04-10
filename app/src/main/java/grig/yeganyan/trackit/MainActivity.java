@@ -2,6 +2,9 @@ package grig.yeganyan.trackit;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -40,11 +43,24 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
-        // Restore last fragment if exists
+
         String lastFragment = prefs.getString(KEY_CURRENT_FRAGMENT, "");
         Fragment initialFragment;
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new MainFragment())
+                    .commit();
+
+
+            bottomNav.setSelectedItemId(R.id.nav_home);
+        }
+
         switch (lastFragment) {
+            case "Home":
+                initialFragment = new MainFragment();
+                bottomNav.setSelectedItemId(R.id.nav_home);
+                break;
             case "Profile":
                 initialFragment = new ProfileFragment();
                 bottomNav.setSelectedItemId(R.id.nav_profile);
@@ -57,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 initialFragment = new ToDoList();
                 bottomNav.setSelectedItemId(R.id.nav_todo);
                 break;
-            case "Home":
+
             default:
                 initialFragment = new MainFragment();
                 bottomNav.setSelectedItemId(R.id.nav_home);
@@ -107,5 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+
     }
 }

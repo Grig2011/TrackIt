@@ -161,4 +161,24 @@
         <item>The journey of a thousand miles begins with one step.</item>
     </string-array>
 
+    <string name="logout_title">Pause your journey?</string>
+    <string name="logout_message">You’ve been doing great! We’ll miss seeing you crush your habits.</string>
+    <string name="logout_confirm">Logout</string>
+    <string name="logout_cancel">Stay Active</string>
+
+    <string name="delete_acc_title">Delete Account</string>
+    <string name="delete_acc_msg">⚠️ Warning! Deleting your account is permanent.\n\nAll your habits and data will be lost forever. You will not be able to recover it.\n\nAre you sure?</string>
+    <string name="delete_acc_confirm">Delete Forever</string>
+    <string name="delete_acc_cancel">Keep Account</string>
+
+    <string name="tone_disciplined">Disciplined</string>
+    <string name="tone_gentle">Gentle</string>
+    <string name="tone_analytical">Analytical</string>
+    <string name="tone_competitive">Competitive</string>
+    <string name="tone_stoic">Stoic </string>
+    <string name="tone_witty">Witty</string>
+
+    <string name="coach_dialog_title">Choose your Coach</string>
+    <string name="coach_prefix">Coach Personality: </string>
+
 </resources>

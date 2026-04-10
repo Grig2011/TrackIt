@@ -8,12 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ScrollView;
@@ -28,6 +31,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -97,7 +102,7 @@ public class ProfileFragment extends Fragment {
         profileName = view.findViewById(R.id.profileName);
         profileEmail = view.findViewById(R.id.profileEmail);
         Button deleteButton = view.findViewById(R.id.btndelete);
-        deleteButton.setOnClickListener(v -> showDeleteConfirmation());
+        deleteButton.setOnClickListener(v -> showPasswordConfirmationDialog());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -165,13 +170,20 @@ public class ProfileFragment extends Fragment {
 
         String savedToneName = getSavedCoachTone();
         CoachTone currentTone = CoachTone.valueOf(savedToneName);
-        btnCoachTone.setText("Coach Personality: " + currentTone.displayName);
+
+        String prefix = getString(R.string.coach_prefix);
+
+
+        String toneName = getString(currentTone.nameResId);
+
+
+        btnCoachTone.setText(prefix + toneName);
 
 
         btnCoachTone.setOnClickListener(v -> showCoachToneDialog());
 
         logoutButton = view.findViewById(R.id.btnLogout);
-        logoutButton.setOnClickListener(v -> logoutUser());
+        logoutButton.setOnClickListener(v -> showLogoutConfirmation());
 
         return view;
     }
@@ -192,15 +204,32 @@ public class ProfileFragment extends Fragment {
         }
     }
     private void showDeleteConfirmation() {
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.delete_acc_title))
+                .setMessage(getString(R.string.delete_acc_msg))
+
+
+                .setNegativeButton(getString(R.string.delete_acc_cancel), (dialog, which) -> {
+                    dialog.dismiss();
+                })
+
+                .setPositiveButton(getString(R.string.delete_acc_confirm), (dialog, which) -> {
+                    deleteUserAccount();
+                })
+                .show();
+    }
+
+    private void showLogoutConfirmation() {
         new androidx.appcompat.app.AlertDialog.Builder(getContext())
-                .setTitle("Delete Account")
-                .setMessage("⚠️ Warning! Deleting your account is permanent.\n\n" +
-                        "All your habits, tasks, and personal data will be lost forever.\n" +
-                        "You will not be able to recover your account.\n\n" +
-                        "Are you sure you want to continue?")
-                .setPositiveButton("Delete", (dialog, which) -> deleteUserAccount())
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .setCancelable(true)
+                .setTitle(getString(R.string.logout_title))
+                .setMessage(getString(R.string.logout_message))
+
+                .setNegativeButton(getString(R.string.logout_cancel), (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setPositiveButton(getString(R.string.logout_confirm), (dialog, which) -> {
+                    logoutUser();
+                })
                 .show();
     }
     private void deleteUserAccount() {
@@ -269,6 +298,7 @@ public class ProfileFragment extends Fragment {
         dialog.show();
 
 
+
         for (String emoji : emojis) {
             TextView tv = new TextView(getContext());
             tv.setText(emoji);
@@ -312,12 +342,12 @@ public class ProfileFragment extends Fragment {
         CoachTone[] tones = CoachTone.values();
         String[] toneNames = new String[tones.length];
         for (int i = 0; i < tones.length; i++) {
-            toneNames[i] = tones[i].displayName;
+            toneNames[i] = getString(tones[i].nameResId);
         }
 
 
         new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
-                .setTitle("Choose your Coach")
+                .setTitle(getString(R.string.coach_dialog_title))
                 .setItems(toneNames, (dialog, which) -> {
 
                     CoachTone selectedTone = tones[which];
@@ -326,10 +356,10 @@ public class ProfileFragment extends Fragment {
                     saveCoachPreference(selectedTone.name());
 
 
-                    btnCoachTone.setText("Coach Personality: " + selectedTone.displayName);
+                    btnCoachTone.setText(getString(R.string.coach_prefix) + getString(selectedTone.nameResId));
 
 
-                    Toast.makeText(getContext(), "Coach set to " + selectedTone.displayName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Coach set to " + getString(selectedTone.nameResId), Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }
@@ -376,5 +406,59 @@ public class ProfileFragment extends Fragment {
         int quoteIndex = dayOfYear % quotes.length;
 
         textView.setText(quotes[quoteIndex]);
+    }
+
+    private void showPasswordConfirmationDialog() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || user.getEmail() == null) {
+            Toast.makeText(getContext(), "Error finding user email.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        final EditText passwordInput = new EditText(requireContext());
+        passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordInput.setHint("Enter your password");
+
+
+        FrameLayout container = new FrameLayout(requireContext());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(60, 0, 60, 0); // Left, Top, Right, Bottom margins
+        passwordInput.setLayoutParams(params);
+        container.addView(passwordInput);
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Verify Identity")
+                .setMessage("Please enter your password to continue.")
+                .setView(container)
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("Verify", (dialog, which) -> {
+                    String password = passwordInput.getText().toString().trim();
+                    if (password.isEmpty()) {
+                        Toast.makeText(getContext(), "Password cannot be empty", Toast.LENGTH_SHORT).show();
+                    } else {
+                        reauthenticateUser(user, password);
+                    }
+                })
+                .show();
+    }
+
+    private void reauthenticateUser(FirebaseUser user, String password) {
+
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        showDeleteConfirmation();
+                    } else {
+
+                        Toast.makeText(getContext(), "Incorrect password. Please try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

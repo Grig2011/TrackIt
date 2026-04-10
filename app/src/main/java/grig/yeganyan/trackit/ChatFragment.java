@@ -38,6 +38,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import grig.yeganyan.trackit.Services.HabitCallback;
 import grig.yeganyan.trackit.Services.HabitService;
@@ -112,9 +113,16 @@ public class ChatFragment extends Fragment {
     }
 
     private void initializeGemini(String habits) {
+
+        String currentLangCode = Locale.getDefault().getLanguage();
+        String languageName = "English";
+
+        if (currentLangCode.equals("hy")) languageName = "Armenian";
+        else if (currentLangCode.equals("ru")) languageName = "Russian";
+
         String finalSystemPrompt = "You are the official TrackIt app coach. " + personalityInstruction +
                 " Keep responses brief (2-3 sentences) and always end with a single follow-up question. " +
-                "Here are your client's habits: " + habits;
+                "Here are your client's habits: " + habits+"CRITICAL: You MUST respond ONLY in " + languageName;
 
         Content systemInstruction = new Content("system",
                 Collections.singletonList(new TextPart(finalSystemPrompt)));

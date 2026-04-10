@@ -128,4 +128,24 @@
         <item>Сосредоточьтесь на продуктивности, а не на занятости.</item>
         <item>Путь в тысячу миль начинается с одного шага.</item>
     </string-array>
+
+    <string name="logout_title">Приостановить путь?</string>
+    <string name="logout_message">Вы отлично справляетесь! Мы будем ждать вас, чтобы вместе достигать новых целей.</string>
+    <string name="logout_confirm">Выйти</string>
+    <string name="logout_cancel">Остаться</string>
+
+    <string name="delete_acc_title">Удалить аккаунт</string>
+    <string name="delete_acc_msg">⚠️ Внимание! Удаление аккаунта необратимо.\n\nВсе ваши привычки и данные будут потеряны навсегда. Вы не сможете их восстановить.\n\nВы уверены?</string>
+    <string name="delete_acc_confirm">Удалить навсегда</string>
+    <string name="delete_acc_cancel">Оставить</string>
+
+    <string name="tone_disciplined">Дисциплинированный</string>
+    <string name="tone_gentle">Мягкий</string>
+    <string name="tone_analytical">Аналитический</string>
+    <string name="tone_competitive">Конкурентный</string>
+    <string name="tone_stoic">Философ</string>
+    <string name="tone_witty">Остроумный</string>
+
+    <string name="coach_dialog_title">Выберите наставника</string>
+    <string name="coach_prefix">Личность наставника: </string>
 </resources>

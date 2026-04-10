@@ -128,4 +128,24 @@
         <item>Կենտրոնացիր արդյունավետ լինելու վրա, այլ ոչ թե ուղղակի զբաղված:</item>
         <item>Հազար մղոնանոց ճանապարհը սկսվում է մեկ քայլից:</item>
     </string-array>
+
+    <string name="logout_title">Դադարեցնե՞լ ուղին:</string>
+    <string name="logout_message">Դուք հիանալի եք առաջ գնում: Մենք կսպասենք ձեզ՝ նոր սովորությունները հաղթահարելու համար:</string>
+    <string name="logout_confirm">Դուրս գալ</string>
+    <string name="logout_cancel">Մնալ</string>
+
+    <string name="delete_acc_title">Ջնջել հաշիվը</string>
+    <string name="delete_acc_msg">⚠️ Ուշադրություն. Հաշվի ջնջումն անդառնալի է:\n\nՁեր բոլոր սովորությունները և տվյալները կվերանան ընդմիշտ: Դուք չեք կարողանա վերականգնել դրանք:\n\nՀամոզվա՞ծ եք:</string>
+    <string name="delete_acc_confirm">Ջնջել</string>
+    <string name="delete_acc_cancel">Չեղարկել</string>
+
+    <string name="tone_disciplined">Կարգապահ</string>
+    <string name="tone_gentle">Մեղմ</string>
+    <string name="tone_analytical">Վերլուծական</string>
+    <string name="tone_competitive">Մրցակցային</string>
+    <string name="tone_stoic">Փիլիսոփա</string>
+    <string name="tone_witty">Հումորային</string>
+
+    <string name="coach_dialog_title">Ընտրեք ձեր մարզիչին</string>
+    <string name="coach_prefix">Մարզիչի տեսակը՝ </string>
 </resources>

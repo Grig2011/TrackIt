@@ -69,7 +69,10 @@ dependencies {
     // Required for the Java "Future" way of handling background tasks
     implementation("com.google.guava:guava:31.1-android")
 
-    implementation(libs.activity)  // keep your existing libs
+    implementation(libs.activity)
+
+
+    implementation(libs.emoji2.emojipicker)
 
     // Testing
     testImplementation("junit:junit:4.13.2")

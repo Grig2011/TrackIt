@@ -15,7 +15,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.emoji2.emojipicker.EmojiPickerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -79,6 +82,19 @@ public class AddHabit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
 
+         emojiInput = findViewById(R.id.habitEmojiInput);
+        EmojiPickerView picker = findViewById(R.id.emoji_picker);
+
+        emojiInput.setOnClickListener(v -> {
+            picker.setVisibility(picker.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        });
+
+        picker.setOnEmojiPickedListener(item -> {
+            emojiInput.setText(item.getEmoji());
+            picker.setVisibility(View.GONE);
+        });
+
+
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         userId = prefs.getString("userId", null);
 
@@ -91,7 +107,7 @@ public class AddHabit extends AppCompatActivity {
         createNotificationChannel();
 
 
-        emojiInput = findViewById(R.id.emojiInput);
+        emojiInput = findViewById(R.id.habitEmojiInput);
         titleInput = findViewById(R.id.titleInput);
         descInput = findViewById(R.id.descInput);
         goalInput = findViewById(R.id.goalInput);
