@@ -65,16 +65,16 @@ public class HabitFragment extends Fragment {
         habitTitles.add("healthy snack");
         habitTitles.add("evening reflection");
 
-        // Click actions
-        card2.setOnClickListener(v -> openAddHabit("💧", "Drink Water", "8 glasses daily"));
-        card3.setOnClickListener(v -> openAddHabit("📖", "Read Book", "20 pages daily"));
-        card4.setOnClickListener(v -> openAddHabit("🚶‍♂️", "Evening Walk", "30 min walk"));
-        card5.setOnClickListener(v -> openAddHabit("🤸‍♂️", "Morning Stretch", "Wake up your body in 10 minutes"));
-        card6.setOnClickListener(v -> openAddHabit("📝", "Journaling", "Reflect on your day in 5 minutes"));
-        card7.setOnClickListener(v -> openAddHabit("💻", "Daily Coding", "Solve a coding problem every day"));
-        card8.setOnClickListener(v -> openAddHabit("🌙", "Sleep Early", "Set a bedtime and stick to it"));
-        card9.setOnClickListener(v -> openAddHabit("🥗", "Healthy Snack", "Choose fruits or nuts instead of junk food"));
-        card10.setOnClickListener(v -> openAddHabit("🌅", "Evening Reflection", "Spend 5 minutes reviewing your day"));
+
+        card2.setOnClickListener(v -> openAddHabit("💧", getString(R.string.temp_title_water), getString(R.string.temp_desc_water)));
+        card3.setOnClickListener(v -> openAddHabit("📖", getString(R.string.temp_title_read), getString(R.string.temp_desc_read)));
+        card4.setOnClickListener(v -> openAddHabit("🚶‍", getString(R.string.temp_title_walk), getString(R.string.temp_desc_walk)));
+        card5.setOnClickListener(v -> openAddHabit("🤸‍️️", getString(R.string.temp_title_stretch), getString(R.string.temp_desc_stretch)));
+        card6.setOnClickListener(v -> openAddHabit("📝", getString(R.string.temp_title_journal), getString(R.string.temp_desc_journal)));
+        card7.setOnClickListener(v -> openAddHabit("💻", getString(R.string.temp_title_coding), getString(R.string.temp_desc_coding)));
+        card8.setOnClickListener(v -> openAddHabit("🌙", getString(R.string.temp_title_sleep), getString(R.string.temp_desc_sleep)));
+        card9.setOnClickListener(v -> openAddHabit("🥗", getString(R.string.temp_title_snack), getString(R.string.temp_desc_snack)));
+        card10.setOnClickListener(v -> openAddHabit("🌅", getString(R.string.temp_title_reflection), getString(R.string.temp_desc_reflection)));
 
         searchInput = view.findViewById(R.id.searchInput);
 
@@ -97,7 +97,7 @@ public class HabitFragment extends Fragment {
             return false;
         });
 
-        // Search listener
+
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
