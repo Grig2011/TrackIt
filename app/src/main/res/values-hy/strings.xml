@@ -148,4 +148,6 @@
 
     <string name="coach_dialog_title">Ընտրեք ձեր մարզիչին</string>
     <string name="coach_prefix">Մարզիչի տեսակը՝ </string>
+
+    <string name="title_settings">Կարգավորումներ</string>
 </resources>

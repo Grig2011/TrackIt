@@ -181,4 +181,8 @@
     <string name="coach_dialog_title">Choose your Coach</string>
     <string name="coach_prefix">Coach Personality: </string>
 
+    <string name="title_settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

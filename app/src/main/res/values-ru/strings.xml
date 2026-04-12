@@ -148,4 +148,6 @@
 
     <string name="coach_dialog_title">Выберите наставника</string>
     <string name="coach_prefix">Личность наставника: </string>
+
+    <string name="title_settings">Настройки</string>
 </resources>

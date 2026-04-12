@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,11 +31,13 @@ import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -45,7 +48,7 @@ import grig.yeganyan.trackit.model.User;
 public class ProfileFragment extends Fragment {
 
     TextView profileName, profileEmail;
-    Button logoutButton;
+    Button logoutButton,btnSettings;
     SwitchMaterial themeSwitch;
     SharedPreferences prefs;
     TextView profileAvatar;
@@ -184,6 +187,9 @@ public class ProfileFragment extends Fragment {
 
         logoutButton = view.findViewById(R.id.btnLogout);
         logoutButton.setOnClickListener(v -> showLogoutConfirmation());
+
+        btnSettings = view.findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(v -> ShowPasswordForSettings());
 
         return view;
     }
@@ -426,7 +432,7 @@ public class ProfileFragment extends Fragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(60, 0, 60, 0); // Left, Top, Right, Bottom margins
+        params.setMargins(60, 0, 60, 0);
         passwordInput.setLayoutParams(params);
         container.addView(passwordInput);
 
@@ -461,4 +467,139 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+
+    private void ShowPasswordForSettings() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || user.getEmail() == null) {
+            Toast.makeText(getContext(), "Error finding user email.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        final EditText passwordInput = new EditText(requireContext());
+        passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordInput.setHint("Enter your password");
+
+
+        FrameLayout container = new FrameLayout(requireContext());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(60, 0, 60, 0);
+        passwordInput.setLayoutParams(params);
+        container.addView(passwordInput);
+
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Verify Identity")
+                .setMessage("Please enter your password to continue.")
+                .setView(container)
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("Verify", (dialog, which) -> {
+                    String password = passwordInput.getText().toString().trim();
+                    if (password.isEmpty()) {
+                        Toast.makeText(getContext(), "Password cannot be empty", Toast.LENGTH_SHORT).show();
+                    } else {
+                        reauthenticateUserForSettings(user, password);
+                    }
+                })
+                .show();
+    }
+
+    private void reauthenticateUserForSettings(FirebaseUser user, String password) {
+
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        showSettingsDialog();
+                    } else {
+
+                        Toast.makeText(getContext(), "Incorrect password. Please try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+    private void showSettingsDialog() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(getString(R.string.title_settings));
+
+
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(60, 20, 60, 20);
+
+
+        final EditText inputUsername = new EditText(requireContext());
+        inputUsername.setHint("Username");
+
+        inputUsername.setText(user.getDisplayName());
+        layout.addView(inputUsername);
+
+
+        final EditText inputEmail = new EditText(requireContext());
+        inputEmail.setHint("Email");
+
+        inputEmail.setText(user.getEmail());
+        layout.addView(inputEmail);
+
+
+        final EditText inputPassword = new EditText(requireContext());
+        inputPassword.setHint("New Password (leave blank to keep current)");
+        inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        layout.addView(inputPassword);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Update", (dialog, which) -> {
+            String newName = inputUsername.getText().toString().trim();
+            String newEmail = inputEmail.getText().toString().trim();
+            String newPass = inputPassword.getText().toString().trim();
+
+            processProfileUpdate(user, newName, newEmail, newPass);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void processProfileUpdate(FirebaseUser user, String name, String email, String password) {
+        Context context = requireContext();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // 1. Update Firebase Auth Display Name
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+        user.updateProfile(profileUpdates).addOnSuccessListener(aVoid -> {
+            // 2. IMPORTANT: Update Firestore so the name change is permanent
+            db.collection("users")
+                    .document(user.getUid())
+                    .update("username", name) // This fixes the "switching back" issue
+                    .addOnSuccessListener(unused -> {
+                        profileName.setText(name);
+                        Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
+                    });
+        });
+
+        // 3. Update Email if changed
+        if (!email.equals(user.getEmail())) {
+            user.updateEmail(email).addOnSuccessListener(aVoid -> {
+                profileEmail.setText(email);
+            });
+        }
+
+        // 4. Update Password if not empty
+        if (!password.isEmpty()) {
+            user.updatePassword(password).addOnSuccessListener(aVoid -> {
+                Toast.makeText(context, "Password updated", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+
 }

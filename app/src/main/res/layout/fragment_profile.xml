@@ -119,6 +119,16 @@
             android:alpha="0.1"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSettings"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_settings"
+            android:layout_marginTop="16dp"
+            android:textColor="?attr/colorPrimary"
+            android:textAllCaps="false"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"

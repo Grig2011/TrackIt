@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.activity)
 
 
+
     implementation(libs.emoji2.emojipicker)
 
     // Testing
