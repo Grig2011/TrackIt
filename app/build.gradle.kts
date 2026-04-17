@@ -65,6 +65,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")  // Firestore database
 
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     // Required for the Java "Future" way of handling background tasks
     implementation("com.google.guava:guava:31.1-android")
