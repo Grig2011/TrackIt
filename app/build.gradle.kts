@@ -31,6 +31,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 
     buildTypes {
@@ -75,6 +76,8 @@ dependencies {
 
 
     implementation(libs.emoji2.emojipicker)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 
     // Testing
     testImplementation("junit:junit:4.13.2")

@@ -1,5 +1,6 @@
 package grig.yeganyan.trackit;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -39,6 +42,15 @@ public class MainFragment extends Fragment {
     private LinearLayout habitsContainer;
     private String userId;
     private EditText searchInput;
+
+    private final ActivityResultLauncher<Intent> habitLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -199,6 +211,17 @@ public class MainFragment extends Fragment {
             intent.putExtra("time",habit.getTime());
             intent.putExtra("currentStreak", habit.getStreak());
             v.getContext().startActivity(intent);
+        });
+        title.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), HabitdetailActivity.class);
+            intent.putExtra("habit_name", "Walk");
+            intent.putExtra("habit_emoji", "🌲");
+            intent.putExtra("habit_goal", 1000.0);
+            intent.putExtra("habit_unit", "steps");
+            intent.putExtra("current_value", 0.0);
+            intent.putExtra("streak_count", 3);
+
+            startActivity(intent);
         });
 
         habitsContainer.addView(card);
