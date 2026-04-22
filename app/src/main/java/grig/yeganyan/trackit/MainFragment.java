@@ -43,15 +43,37 @@ public class MainFragment extends Fragment {
     private String userId;
     private EditText searchInput;
 
+    private String currentEditingHabitId;
+
     private final ActivityResultLauncher<Intent> habitLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     Intent data = result.getData();
+                    double updatedValue = data.getDoubleExtra("updated_value", 0);
+                    int streakCount = data.getIntExtra("streak_count", 0);
+                    int progress = data.getIntExtra("progress", 0);
+                    String lastDate = data.getStringExtra("last_completed_date");
+
+                    if (currentEditingHabitId != null) {
+                        FirebaseFirestore.getInstance()
+                                .collection("users")
+                                .document(userId)
+                                .collection("habits")
+                                .document(currentEditingHabitId)
+                                .update(
+                                        "streak", streakCount,
+                                        "progress", progress,
+                                        "currentValue", updatedValue,
+                                        "lastCompletedDate", lastDate
+                                )
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getContext(), "Habit Updated!", Toast.LENGTH_SHORT).show();
+                                });
+                    }
                 }
             }
     );
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -163,19 +185,22 @@ public class MainFragment extends Fragment {
             progress.setTrackColor(Color.parseColor("#D1C4E9"));
         }
 
-        int prog = habit.getGoal() > 0 ? (int) Math.min((habit.getStreak() / habit.getGoal()) * 100, 100) : 0;
+        double current = habit.getCurrentValue();
+        double goalVal = habit.getGoal();
+
+        int prog = goalVal > 0 ? (int) Math.min((current / goalVal) * 100, 100) : 0;
         progress.setProgress(prog);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Hide buttons initially
+
         editButton.setVisibility(View.GONE);
         deleteButton.setVisibility(View.GONE);
 
-        // True drag-to-reveal like ToDoList
-        setupDragSwipe(cardContent, editButton, deleteButton);
 
-        // Delete action
+        setupDragSwipe(cardContent, editButton, deleteButton, habit);
+
+
         deleteButton.setOnClickListener(v -> new AlertDialog.Builder(v.getContext())
                 .setTitle("Delete Habit")
                 .setMessage("Are you sure you want to delete this habit?")
@@ -195,7 +220,6 @@ public class MainFragment extends Fragment {
                 .show()
         );
 
-        // Edit action
         editButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddHabit.class);
             intent.putExtra("MODE", "EDIT");
@@ -212,22 +236,25 @@ public class MainFragment extends Fragment {
             intent.putExtra("currentStreak", habit.getStreak());
             v.getContext().startActivity(intent);
         });
-        title.setOnClickListener(v -> {
+        card.setOnClickListener(v -> {
+            currentEditingHabitId = habit.getId(); // Must set this
             Intent intent = new Intent(getActivity(), HabitdetailActivity.class);
-            intent.putExtra("habit_name", "Walk");
-            intent.putExtra("habit_emoji", "🌲");
-            intent.putExtra("habit_goal", 1000.0);
-            intent.putExtra("habit_unit", "steps");
-            intent.putExtra("current_value", 0.0);
-            intent.putExtra("streak_count", 3);
+            intent.putExtra("habit_name", habit.getTitle());
+            intent.putExtra("habit_emoji", habit.getEmoji());
+            intent.putExtra("habit_goal", habit.getGoal());
+            intent.putExtra("habit_unit", habit.getUnit());
+            intent.putExtra("current_value", habit.getCurrentValue());
+            intent.putExtra("streak_count", habit.getStreak());
+            intent.putExtra("last_completed_date", habit.getLastCompletedDate());
+            intent.putExtra("habit_color", habit.getColor());
 
-            startActivity(intent);
+            habitLauncher.launch(intent);
         });
 
         habitsContainer.addView(card);
     }
 
-    private void setupDragSwipe(View cardContent, ImageButton editButton, ImageButton deleteButton) {
+    private void setupDragSwipe(View cardContent, ImageButton editButton, ImageButton deleteButton, Habit habit) {
 
         cardContent.setOnTouchListener(new View.OnTouchListener() {
 
@@ -282,6 +309,22 @@ public class MainFragment extends Fragment {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
 
+                        if (!dragging && Math.abs(event.getRawX() - (downX + translation)) < TOUCH_SLOP) {
+                            currentEditingHabitId = habit.getId();
+                            Intent intent = new Intent(getActivity(), HabitdetailActivity.class);
+                            intent.putExtra("habit_name", habit.getTitle());
+                            intent.putExtra("habit_emoji", habit.getEmoji());
+                            intent.putExtra("habit_goal", habit.getGoal());
+                            intent.putExtra("habit_unit", habit.getUnit());
+                            intent.putExtra("current_value", habit.getCurrentValue());
+                            intent.putExtra("streak_count", habit.getStreak());
+                            intent.putExtra("last_completed_date", habit.getLastCompletedDate());
+                            intent.putExtra("habit_color", habit.getColor());
+                            habitLauncher.launch(intent);
+                            v.performClick();
+                            return true;
+                        }
+
                         float velocity = event.getRawX() - downX;
 
                         boolean open =
@@ -290,7 +333,6 @@ public class MainFragment extends Fragment {
 
                         if (open) {
 
-                            // 🔥 CLOSE PREVIOUS CARD FIRST
                             if (openedCard != null && openedCard != v) {
                                 closeCard(openedCard, openedEdit, openedDelete);
                             }

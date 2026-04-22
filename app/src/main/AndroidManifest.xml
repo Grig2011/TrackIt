@@ -52,9 +52,6 @@
         <receiver
             android:name=".NotificationActionReceiver"
             android:exported="false" />
-        <receiver
-            android:name=".HabitNotificationActionReciver"
-            android:exported="false" />
     </application>
 
 </manifest>

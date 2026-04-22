@@ -2,11 +2,17 @@ package grig.yeganyan.trackit;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +30,7 @@ import grig.yeganyan.trackit.R;
 
 public class HabitdetailActivity extends AppCompatActivity {
 
-
+    private View rootLayout;
     private TextView tvHabitName, tvHabitEmoji, tvCurrentValue, tvGoalLabel, tvStreakCount;
     private CircularProgressView circularProgress;
     private TextInputEditText etProgressInput;
@@ -41,6 +47,8 @@ public class HabitdetailActivity extends AppCompatActivity {
     private String habitEmoji = "🌲";
     private int stepSize = 10;
     private int streakCount = 0;
+    public String lastCompletedDate;
+
 
     private final List<ProgressEntry> entries = new ArrayList<>();
     private ProgressEntryAdapter adapter;
@@ -58,68 +66,75 @@ public class HabitdetailActivity extends AppCompatActivity {
         setupRecyclerView();
     }
 
-    // ── Intent extras ─────────────────────────────────────────────────────
+
     private void readIntentExtras() {
         if (getIntent() != null) {
-            habitName   = getIntent().getStringExtra("habit_name")  != null
+            habitName = getIntent().getStringExtra("habit_name") != null
                     ? getIntent().getStringExtra("habit_name") : habitName;
-            habitEmoji  = getIntent().getStringExtra("habit_emoji") != null
+            habitEmoji = getIntent().getStringExtra("habit_emoji") != null
                     ? getIntent().getStringExtra("habit_emoji") : habitEmoji;
-            goal        = getIntent().getDoubleExtra("habit_goal", 1000);
-            unit        = getIntent().getStringExtra("habit_unit") != null
+            goal = getIntent().getDoubleExtra("habit_goal", 1000);
+            unit = getIntent().getStringExtra("habit_unit") != null
                     ? getIntent().getStringExtra("habit_unit") : unit;
             currentValue = getIntent().getDoubleExtra("current_value", 0);
             streakCount = getIntent().getIntExtra("streak_count", 0);
+            lastCompletedDate = getIntent().getStringExtra("last_completed_date");
         }
     }
 
-    // ── View binding ──────────────────────────────────────────────────────
-    private void bindViews() {
-        tvHabitName    = findViewById(R.id.tvHabitName);
-        tvHabitEmoji   = findViewById(R.id.tvHabitEmoji);
-        tvCurrentValue = findViewById(R.id.tvCurrentValue);
-        tvGoalLabel    = findViewById(R.id.tvGoalLabel);
-        tvStreakCount  = findViewById(R.id.tvStreakCount);
 
-        // Fix: Assign to the correct field and cast to your custom class
+    private void bindViews() {
+
+        tvHabitName = findViewById(R.id.tvHabitName);
+        tvHabitEmoji = findViewById(R.id.tvHabitEmoji);
+        tvCurrentValue = findViewById(R.id.tvCurrentValue);
+        tvGoalLabel = findViewById(R.id.tvGoalLabel);
+        tvStreakCount = findViewById(R.id.tvStreakCount);
+
+
         circularProgress = findViewById(R.id.circularProgress);
 
-        etProgressInput  = findViewById(R.id.etProgressInput);
-        btnAdd   = findViewById(R.id.btnAdd);
-        btnDone  = findViewById(R.id.btnDone);
-        btnPlus  = findViewById(R.id.btnPlus);
+        etProgressInput = findViewById(R.id.etProgressInput);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnDone = findViewById(R.id.btnDone);
+        btnPlus = findViewById(R.id.btnPlus);
         btnMinus = findViewById(R.id.btnMinus);
-        rgStepSize   = findViewById(R.id.rgStepSize);
+        rgStepSize = findViewById(R.id.rgStepSize);
         layoutStreak = findViewById(R.id.layoutStreak);
-        rvEntries    = findViewById(R.id.rvEntries);
+        rvEntries = findViewById(R.id.rvEntries);
+        rootLayout = findViewById(R.id.root_layout);
     }
 
-    // ── Initial UI state ──────────────────────────────────────────────────
+
     private void setupInitialState() {
         tvHabitName.setText(habitEmoji + " " + habitName);
         tvHabitEmoji.setText(habitEmoji);
+        String habitColor = getIntent().getStringExtra("habit_color");
+        if (habitColor != null) {
+            applyThemeColor(habitColor);
+        }
         updateDisplay(false);
         if (streakCount > 0) showStreak(false);
     }
 
-    // ── Listeners ─────────────────────────────────────────────────────────
+
     private void setupListeners() {
 
-        // Back
+
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        // Step size radio
+
         rgStepSize.setOnCheckedChangeListener((group, checkedId) -> {
-            if      (checkedId == R.id.rb1)   stepSize = 1;
-            else if (checkedId == R.id.rb10)  stepSize = 10;
+            if (checkedId == R.id.rb1) stepSize = 1;
+            else if (checkedId == R.id.rb10) stepSize = 10;
             else if (checkedId == R.id.rb100) stepSize = 100;
         });
 
-        // Plus / Minus
+
         btnPlus.setOnClickListener(v -> adjustValue(stepSize));
         btnMinus.setOnClickListener(v -> adjustValue(-stepSize));
 
-        // Long-press for rapid change
+
         btnPlus.setOnLongClickListener(v -> {
             adjustValue(stepSize * 5);
             return true;
@@ -129,7 +144,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             return true;
         });
 
-        // Add button — uses typed value if present, else uses stepSize
+
         btnAdd.setOnClickListener(v -> {
             String input = etProgressInput.getText() != null
                     ? etProgressInput.getText().toString().trim() : "";
@@ -148,74 +163,97 @@ public class HabitdetailActivity extends AppCompatActivity {
             etProgressInput.setText("");
         });
 
-        // Done — marks habit complete for today, returns result
+
         btnDone.setOnClickListener(v -> {
-            // Persist changes here (Room / SharedPrefs / your storage)
-            setResult(RESULT_OK, getIntent()
-                    .putExtra("updated_value", currentValue)
-                    .putExtra("streak_count", streakCount));
+            int progressPercentage = (goal > 0) ? (int) Math.min((currentValue / goal) * 100, 100) : 0;
+
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updated_value", currentValue);
+            resultIntent.putExtra("streak_count", streakCount);
+            resultIntent.putExtra("last_completed_date", lastCompletedDate);
+            resultIntent.putExtra("progress", progressPercentage);
+
+            setResult(RESULT_OK, resultIntent);
             finish();
         });
     }
 
-    // ── RecyclerView ──────────────────────────────────────────────────────
+
     private void setupRecyclerView() {
         adapter = new ProgressEntryAdapter(entries, unit);
         rvEntries.setLayoutManager(new LinearLayoutManager(this));
         rvEntries.setAdapter(adapter);
     }
 
-    // ── Core logic ────────────────────────────────────────────────────────
 
-    /** Called by +/- buttons directly */
     private void adjustValue(double delta) {
         applyDelta(delta);
     }
 
-    /**
-     * Central method that:
-     * 1. Adds delta to currentValue (clamps to 0)
-     * 2. Records the entry
-     * 3. Checks goal and awards streak
-     * 4. Updates the UI
-     */
+
     private void applyDelta(double delta) {
+
         double before = currentValue;
         currentValue = Math.max(0, currentValue + delta);
 
-        // Record entry
-        entries.add(0, new ProgressEntry(delta, currentValue, new Date()));
+
+        entries.add(0, new ProgressEntry(delta, currentValue, new java.util.Date()));
         adapter.notifyItemInserted(0);
         rvEntries.scrollToPosition(0);
 
-        // Check goal crossing (ascending only — don't award streak on decrease)
-        boolean crossedGoal = before < goal && currentValue >= goal;
-        if (crossedGoal) {
-            streakCount++;
-            showStreak(true);
-            // Optionally: Toast or celebration animation
-            Toast.makeText(this, "🎉 Goal reached! Streak: " + streakCount, Toast.LENGTH_SHORT).show();
+
+        String today = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
+
+
+        boolean crossedGoalUp = (before < goal) && (currentValue >= goal);
+
+
+        boolean crossedGoalDown = (before >= goal) && (currentValue < goal);
+
+        if (crossedGoalUp) {
+
+            if (lastCompletedDate == null || !lastCompletedDate.equals(today)) {
+                streakCount++;
+                lastCompletedDate = today;
+                showStreak(true);
+                Toast.makeText(this, "🎉 Goal reached! Streak: " + streakCount, Toast.LENGTH_SHORT).show();
+            } else {
+
+                Toast.makeText(this, "Goal reached again!", Toast.LENGTH_SHORT).show();
+            }
+        } else if (crossedGoalDown) {
+
+            if (today.equals(lastCompletedDate)) {
+                streakCount = Math.max(0, streakCount - 1);
+                lastCompletedDate = "";
+
+                tvStreakCount.setText(streakCount + " day streak!");
+
+                if (streakCount == 0) {
+                    layoutStreak.setVisibility(View.GONE);
+                }
+                Toast.makeText(this, "Goal unreached. Streak: " + streakCount, Toast.LENGTH_SHORT).show();
+            }
         }
 
         updateDisplay(true);
     }
 
-    // ── UI helpers ────────────────────────────────────────────────────────
 
     private void updateDisplay(boolean animate) {
-        // Number text
+
         String formatted = currentValue == (long) currentValue
                 ? String.valueOf((long) currentValue)
                 : String.valueOf(currentValue);
         tvCurrentValue.setText(formatted);
 
-        // Goal label
+
         String goalFormatted = goal == (long) goal
                 ? String.valueOf((long) goal)
                 : String.valueOf(goal);
         tvGoalLabel.setText("/" + goalFormatted + " " + unit);
 
-        // Circular progress (0.0 – 1.0, capped at 1)
+
         float progress = (float) Math.min(currentValue / goal, 1.0);
         if (animate) {
             circularProgress.animateProgress(progress);
@@ -223,7 +261,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             circularProgress.setProgress(progress);
         }
 
-        // Animate number on change
+
         if (animate) {
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(tvCurrentValue, "scaleX", 1.2f, 1f);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(tvCurrentValue, "scaleY", 1.2f, 1f);
@@ -249,4 +287,37 @@ public class HabitdetailActivity extends AppCompatActivity {
                     .start();
         }
     }
+
+    private String getTodayDateString() {
+        return new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
+    }
+
+
+    private void applyThemeColor(String colorStr) {
+        try {
+            int color = Color.parseColor(colorStr);
+
+
+            circularProgress.setIndicatorColor(color);
+
+
+            btnAdd.setBackgroundColor(color);
+            btnDone.setBackgroundColor(color);
+
+
+            btnPlus.setStrokeColor(android.content.res.ColorStateList.valueOf(color));
+            btnPlus.setTextColor(color);
+            btnMinus.setStrokeColor(android.content.res.ColorStateList.valueOf(color));
+            btnMinus.setTextColor(color);
+
+
+            tvHabitName.setTextColor(color);
+            tvCurrentValue.setTextColor(color);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Helps you see if the color string format was wrong
+        }
+    }
+
+
 }

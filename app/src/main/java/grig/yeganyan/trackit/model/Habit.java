@@ -12,8 +12,12 @@ public class Habit {
     private String unit;
     private String days;
 
+    private double progress;
+    private double currentValue;
+
     private String time;
     private int streak = 0;
+    private String lastCompletedDate;
 
     public Habit() {}
 
@@ -30,7 +34,6 @@ public class Habit {
         this.days = days;
         this.time = time;
         this.streak = streak;
-
     }
 
     public String getId() {
@@ -114,5 +117,13 @@ public class Habit {
     }
     public String getTime(){return time;}
     public void setTime(String time){this.time = time;}
+
+    public double getProgress() {
+        return progress;
+    }
+    public double getCurrentValue() { return currentValue; }
+    public void setCurrentValue(double currentValue) { this.currentValue = currentValue; }
+    public String getLastCompletedDate() { return lastCompletedDate; }
+    public void setLastCompletedDate(String lastCompletedDate) { this.lastCompletedDate = lastCompletedDate; }
 
 }

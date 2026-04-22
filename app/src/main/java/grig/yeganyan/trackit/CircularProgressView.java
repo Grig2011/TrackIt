@@ -16,6 +16,8 @@ public class CircularProgressView extends View {
     private Paint trackPaint;   // background ring
     private Paint fillPaint;    // progress arc
     private RectF arcRect;
+    private Paint progressPaint;
+    private int progressColor = Color.BLUE;
 
     private float progress = 0f;          // 0.0 – 1.0
     private float displayedProgress = 0f; // animated value
@@ -56,6 +58,11 @@ public class CircularProgressView extends View {
         fillPaint.setStrokeWidth(strokePx);
         fillPaint.setColor(FILL_COLOR);
         fillPaint.setStrokeCap(Paint.Cap.ROUND);
+        progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        progressPaint.setStyle(Paint.Style.STROKE);
+        progressPaint.setStrokeWidth(20f);
+        progressPaint.setStrokeCap(Paint.Cap.ROUND);
+        progressPaint.setColor(progressColor);
 
         arcRect = new RectF();
     }
@@ -109,5 +116,15 @@ public class CircularProgressView extends View {
 
     private float dpToPx(float dp) {
         return dp * getResources().getDisplayMetrics().density;
+    }
+
+    public void setIndicatorColor(int color) {
+        this.progressColor = color;
+        // We must ensure fillPaint exists before setting its color
+        if (fillPaint == null) {
+            init(); // Re-run init if called too early
+        }
+        fillPaint.setColor(color);
+        invalidate(); // Forces the view to redraw with the new color
     }
 }

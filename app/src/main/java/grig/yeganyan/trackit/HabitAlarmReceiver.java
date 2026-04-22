@@ -13,11 +13,11 @@ public class HabitAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String habitName = intent.getStringExtra("HABIT_NAME");
-        String habitId = intent.getStringExtra("HABIT_ID");
         int requestCode = intent.getIntExtra("REQUEST_CODE", (int) System.currentTimeMillis());
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "habit_channel";
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "Habit Reminders", NotificationManager.IMPORTANCE_HIGH);
@@ -25,29 +25,20 @@ public class HabitAlarmReceiver extends BroadcastReceiver {
         }
 
 
-        Intent yesIntent = new Intent(context, HabitNotificationActionReciver.class);
-        yesIntent.setAction("ACTION_YES");
-        yesIntent.putExtra("HABIT_ID", habitId);
-        yesIntent.putExtra("NOTIFICATION_ID", requestCode);
-        PendingIntent yesPi = PendingIntent.getBroadcast(context, requestCode + 100, yesIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-
-        Intent noIntent = new Intent(context, HabitNotificationActionReciver.class);
-        noIntent.setAction("ACTION_NO");
-        noIntent.putExtra("HABIT_TITLE", habitName);
-        noIntent.putExtra("HABIT_ID", habitId);
-        noIntent.putExtra("NOTIFICATION_ID", requestCode);
-        PendingIntent noPi = PendingIntent.getBroadcast(context, requestCode + 200, noIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        Intent mainIntent = new Intent(context, MainActivity.class);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent mainPi = PendingIntent.getActivity(context, requestCode, mainIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher) // Or your habit icon
-                .setContentTitle("Habit Reminder")
-                .setContentText("Did you: " + habitName + "?")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Time for your habit!")
+                .setContentText(habitName)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .addAction(0, "Yes", yesPi)
-                .addAction(0, "No", noPi);
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentIntent(mainPi);
 
         if (manager != null) {
             manager.notify(requestCode, builder.build());
