@@ -1,5 +1,6 @@
 package grig.yeganyan.trackit;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,26 +11,55 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 public class HabitAlarmReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String habitName = intent.getStringExtra("HABIT_NAME");
-        int requestCode = intent.getIntExtra("REQUEST_CODE", (int) System.currentTimeMillis());
+        int requestCode = intent.getIntExtra("REQUEST_CODE", -1);
 
+        if (habitName != null && requestCode != -1) {
+            showNotification(context, habitName, requestCode);
+        }
+
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (am != null && requestCode != -1) {
+
+            long nextWeekMillis = System.currentTimeMillis() + (7L * 24 * 60 * 60 * 1000);
+
+            PendingIntent pi = PendingIntent.getBroadcast(
+                    context,
+                    requestCode,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextWeekMillis, pi);
+        }
+    }
+
+    private void showNotification(Context context, String habitName, int notificationId) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "habit_channel";
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "Habit Reminders", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Habit Reminders",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
             if (manager != null) manager.createNotificationChannel(channel);
         }
 
-
         Intent mainIntent = new Intent(context, MainActivity.class);
         mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent mainPi = PendingIntent.getActivity(context, requestCode, mainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        PendingIntent mainPi = PendingIntent.getActivity(
+                context,
+                notificationId,
+                mainIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -41,7 +71,7 @@ public class HabitAlarmReceiver extends BroadcastReceiver {
                 .setContentIntent(mainPi);
 
         if (manager != null) {
-            manager.notify(requestCode, builder.build());
+            manager.notify(notificationId, builder.build());
         }
     }
 }

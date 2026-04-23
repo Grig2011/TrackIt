@@ -33,11 +33,16 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import grig.yeganyan.trackit.HabitAlarmReceiver;
 import grig.yeganyan.trackit.model.Habit;
 
 public class AddHabit extends AppCompatActivity {
@@ -63,7 +68,7 @@ public class AddHabit extends AppCompatActivity {
     String colour;
     FirebaseFirestore db;
     String userId;
-
+    boolean isWalking = false;
 
     MaterialButton monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, sunBtn;
     MaterialButton[] dayButtons;
@@ -82,7 +87,7 @@ public class AddHabit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
 
-         emojiInput = findViewById(R.id.habitEmojiInput);
+        emojiInput = findViewById(R.id.habitEmojiInput);
         EmojiPickerView picker = findViewById(R.id.emoji_picker);
 
         emojiInput.setOnClickListener(v -> {
@@ -265,6 +270,25 @@ public class AddHabit extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             mode = intent.getStringExtra("MODE");
+
+            isWalking = intent.getBooleanExtra("isWalking", false);
+
+            if (isWalking) {
+                if (!unitList.contains("steps")) {
+                    unitList.add(0, "steps");
+                    unitAdapter.notifyDataSetChanged();
+                }
+                unitSpinner.setSelection(0);
+                unitSpinner.setEnabled(false);
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (checkSelfPermission(android.Manifest.permission.ACTIVITY_RECOGNITION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, 100);
+                    }
+                }
+            }
+
             habitId = intent.getStringExtra("habitId");
 
             if ("EDIT".equals(mode) && habitId != null) {
@@ -293,7 +317,7 @@ public class AddHabit extends AppCompatActivity {
                     if (spinnerPosition == -1) {
                         int customIndex = unitList.indexOf("Custom");
                         if (customIndex != -1) {
-                            unitList.add(customIndex, unitValue); // Add it before "Custom"
+                            unitList.add(customIndex, unitValue);
                         } else {
                             unitList.add(unitValue);
                         }
@@ -375,26 +399,53 @@ public class AddHabit extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    private void scheduleNotification(String habitTitle) {
+    private void scheduleNotification(String habitTitle, String daysString) {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, HabitAlarmReceiver.class);
+        if (am == null) return;
+
+        List<Integer> selectedDaysList = parseDays(daysString);
+        // The three trigger points: 1 hour before, exact time, and 1 hour after
+        int[] hourOffsets = {-1, 0, 1};
+
+        for (int dayOfWeek : selectedDaysList) {
+            for (int offset : hourOffsets) {
 
 
-        int notificationId = habitId.hashCode();
+                Calendar targetCal = (Calendar) calendar.clone();
+                targetCal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+                targetCal.add(Calendar.HOUR_OF_DAY, offset);
+                targetCal.set(Calendar.SECOND, 0);
+                targetCal.set(Calendar.MILLISECOND, 0);
 
-        intent.putExtra("HABIT_NAME", habitTitle);
-        intent.putExtra("HABIT_ID", habitId);
-        intent.putExtra("REQUEST_CODE", notificationId);
 
-        PendingIntent pi = PendingIntent.getBroadcast(this, notificationId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                if (targetCal.getTimeInMillis() <= System.currentTimeMillis()) {
+                    targetCal.add(Calendar.WEEK_OF_YEAR, 1);
+                }
 
-        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
-            calendar.add(Calendar.DATE, 1);
-        }
+                int uniqueId = Math.abs((habitId.hashCode() * 31) + (dayOfWeek * 5) + (offset + 1));
 
-        if (am != null) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
+                Intent intent = new Intent(this, HabitAlarmReceiver.class);
+                intent.putExtra("HABIT_NAME", habitTitle);
+                intent.putExtra("HABIT_ID", habitId);
+                intent.putExtra("REQUEST_CODE", uniqueId);
+
+                PendingIntent pi = PendingIntent.getBroadcast(
+                        this,
+                        uniqueId,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                );
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (am.canScheduleExactAlarms()) {
+                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pi);
+                    } else {
+                        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pi);
+                    }
+                } else {
+                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pi);
+                }
+            }
         }
     }
 
@@ -455,6 +506,7 @@ public class AddHabit extends AppCompatActivity {
         }
 
 
+
         if (title.isEmpty()) {
             titleInput.setError("Title required");
             return;
@@ -504,7 +556,8 @@ public class AddHabit extends AppCompatActivity {
             db.collection("users").document(userId).collection("habits").document(habitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
-                        if (isTimeSelected) scheduleNotification(title);
+                        if (isTimeSelected) scheduleNotification(title,days);
+
                         Toast.makeText(this, "Habit updated", Toast.LENGTH_SHORT).show();
                         finish();
                     });
@@ -514,7 +567,7 @@ public class AddHabit extends AppCompatActivity {
             db.collection("users").document(userId).collection("habits").document(newHabitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
-                        if (isTimeSelected) scheduleNotification(title);
+                        if (isTimeSelected) scheduleNotification(title,days);
                         Toast.makeText(this, "Habit saved", Toast.LENGTH_SHORT).show();
                         finish();
                     });
@@ -591,4 +644,24 @@ public class AddHabit extends AppCompatActivity {
 
         builder.show();
     }
+    private List<Integer> parseDays(String daysString) {
+        List<Integer> dayList = new ArrayList<>();
+        Map<String, Integer> dayMap = new HashMap<>();
+        dayMap.put("Sun", Calendar.SUNDAY);
+        dayMap.put("Mon", Calendar.MONDAY);
+        dayMap.put("Tue", Calendar.TUESDAY);
+        dayMap.put("Wed", Calendar.WEDNESDAY);
+        dayMap.put("Thu", Calendar.THURSDAY);
+        dayMap.put("Fri", Calendar.FRIDAY);
+        dayMap.put("Sat", Calendar.SATURDAY);
+
+        String[] splitDays = daysString.split(",\\s*");
+        for (String day : splitDays) {
+            if (dayMap.containsKey(day)) {
+                dayList.add(dayMap.get(day));
+            }
+        }
+        return dayList;
+    }
+
 }
