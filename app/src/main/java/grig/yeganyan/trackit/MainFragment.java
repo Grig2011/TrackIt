@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,6 +46,9 @@ public class MainFragment extends Fragment {
     private EditText searchInput;
 
     private String currentEditingHabitId;
+    private SensorManager sensorManager;
+    private Sensor stepSensor;
+    private double initialSteps = -1;
 
     private final ActivityResultLauncher<Intent> habitLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -128,20 +133,57 @@ public class MainFragment extends Fragment {
                 .document(userId)
                 .collection("habits")
                 .addSnapshotListener((value, error) -> {
-                    if (error != null) return;
+                    // SAFETY CHECK: If the fragment is detached, stop immediately
+                    if (error != null || !isAdded() || getContext() == null) return;
 
                     habitsContainer.removeAllViews();
 
                     if (value != null) {
+                        String today = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.DATE, -1);
+                        String yesterday = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(cal.getTime());
+
+                        // Use getContext() instead of requireContext() for safety inside the loop
+                        android.content.SharedPreferences prefs = getContext().getSharedPreferences("HabitResets", android.content.Context.MODE_PRIVATE);
+
                         for (QueryDocumentSnapshot doc : value) {
                             Habit habit = doc.toObject(Habit.class);
                             habit.setId(doc.getId());
+
+                            // --- 1. PROGRESS RESET LOGIC ---
+                            String lastResetDate = prefs.getString("reset_" + habit.getId(), "");
+                            if (!lastResetDate.equals(today)) {
+                                habit.setCurrentValue(0);
+                                habit.setProgress(0);
+
+                                db.collection("users")
+                                        .document(userId)
+                                        .collection("habits")
+                                        .document(habit.getId())
+                                        .update("currentValue", 0, "progress", 0);
+
+                                prefs.edit().putString("reset_" + habit.getId(), today).apply();
+                            }
+
+                            // --- 2. STREAK RESET LOGIC ---
+                            String lastDone = habit.getLastCompletedDate();
+                            if (lastDone != null && !lastDone.isEmpty()) {
+                                if (!lastDone.equals(today) && !lastDone.equals(yesterday)) {
+                                    habit.setStreak(0);
+                                    db.collection("users")
+                                            .document(userId)
+                                            .collection("habits")
+                                            .document(habit.getId())
+                                            .update("streak", 0);
+                                }
+                            }
+
                             addHabitCard(habit);
                         }
                     }
                 });
     }
-
     private void addHabitCard(Habit habit) {
         if (getContext() == null || habitsContainer == null) return;
 
@@ -237,16 +279,17 @@ public class MainFragment extends Fragment {
             v.getContext().startActivity(intent);
         });
         card.setOnClickListener(v -> {
-            currentEditingHabitId = habit.getId(); // Must set this
+            currentEditingHabitId = habit.getId();
             Intent intent = new Intent(getActivity(), HabitdetailActivity.class);
+            intent.putExtra("habit_id", habit.getId());
             intent.putExtra("habit_name", habit.getTitle());
             intent.putExtra("habit_emoji", habit.getEmoji());
             intent.putExtra("habit_goal", habit.getGoal());
             intent.putExtra("habit_unit", habit.getUnit());
+            intent.putExtra("habit_type", habit.getType());
             intent.putExtra("current_value", habit.getCurrentValue());
             intent.putExtra("streak_count", habit.getStreak());
             intent.putExtra("last_completed_date", habit.getLastCompletedDate());
-            intent.putExtra("habit_color", habit.getColor());
 
             habitLauncher.launch(intent);
         });
@@ -320,6 +363,7 @@ public class MainFragment extends Fragment {
                             intent.putExtra("streak_count", habit.getStreak());
                             intent.putExtra("last_completed_date", habit.getLastCompletedDate());
                             intent.putExtra("habit_color", habit.getColor());
+                            intent.putExtra("habit_type", habit.getType());
                             habitLauncher.launch(intent);
                             v.performClick();
                             return true;

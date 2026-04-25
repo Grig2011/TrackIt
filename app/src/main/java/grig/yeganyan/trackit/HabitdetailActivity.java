@@ -53,6 +53,9 @@ public class HabitdetailActivity extends AppCompatActivity {
     private final List<ProgressEntry> entries = new ArrayList<>();
     private ProgressEntryAdapter adapter;
 
+    private String habitType = "Good";
+    private String habitId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +72,36 @@ public class HabitdetailActivity extends AppCompatActivity {
 
     private void readIntentExtras() {
         if (getIntent() != null) {
-            habitName = getIntent().getStringExtra("habit_name") != null
-                    ? getIntent().getStringExtra("habit_name") : habitName;
-            habitEmoji = getIntent().getStringExtra("habit_emoji") != null
-                    ? getIntent().getStringExtra("habit_emoji") : habitEmoji;
+            habitId = getIntent().getStringExtra("habit_id"); // Essential for tracking reset
+            habitName = getIntent().getStringExtra("habit_name");
+            habitEmoji = getIntent().getStringExtra("habit_emoji");
             goal = getIntent().getDoubleExtra("habit_goal", 1000);
-            unit = getIntent().getStringExtra("habit_unit") != null
-                    ? getIntent().getStringExtra("habit_unit") : unit;
-            currentValue = getIntent().getDoubleExtra("current_value", 0);
+            unit = getIntent().getStringExtra("habit_unit");
+            habitType = getIntent().getStringExtra("habit_type"); // "Good" or "Bad"
             streakCount = getIntent().getIntExtra("streak_count", 0);
             lastCompletedDate = getIntent().getStringExtra("last_completed_date");
+
+            String today = getTodayDateString();
+            String yesterday = getYesterdayDateString();
+
+
+            android.content.SharedPreferences prefs = getSharedPreferences("TrackItPrefs", MODE_PRIVATE);
+            String lastSeenDate = prefs.getString("last_seen_" + habitId, "");
+
+            if (!lastSeenDate.equals(today)) {
+                currentValue = 0; // It's a new day! Progress is 0.
+            } else {
+                currentValue = getIntent().getDoubleExtra("current_value", 0);
+            }
+
+
+            if (lastCompletedDate != null && !lastCompletedDate.isEmpty()) {
+                if (!lastCompletedDate.equals(today) && !lastCompletedDate.equals(yesterday)) {
+                    streakCount = 0;
+                }
+            }
         }
     }
-
 
     private void bindViews() {
 
@@ -165,6 +185,11 @@ public class HabitdetailActivity extends AppCompatActivity {
 
 
         btnDone.setOnClickListener(v -> {
+            String today = getTodayDateString();
+
+            android.content.SharedPreferences prefs = getSharedPreferences("TrackItPrefs", MODE_PRIVATE);
+            prefs.edit().putString("last_seen_" + habitId, today).apply();
+
             int progressPercentage = (goal > 0) ? (int) Math.min((currentValue / goal) * 100, 100) : 0;
 
             Intent resultIntent = new Intent();
@@ -172,6 +197,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             resultIntent.putExtra("streak_count", streakCount);
             resultIntent.putExtra("last_completed_date", lastCompletedDate);
             resultIntent.putExtra("progress", progressPercentage);
+            resultIntent.putExtra("last_updated_date", today);
 
             setResult(RESULT_OK, resultIntent);
             finish();
@@ -209,35 +235,57 @@ public class HabitdetailActivity extends AppCompatActivity {
 
 
         boolean crossedGoalDown = (before >= goal) && (currentValue < goal);
+        if ("Good".equalsIgnoreCase(habitType)) {
+            if (crossedGoalUp) {
 
-        if (crossedGoalUp) {
+                if (lastCompletedDate == null || !lastCompletedDate.equals(today)) {
+                    streakCount++;
+                    lastCompletedDate = today;
+                    showStreak(true);
+                    Toast.makeText(this, "🎉 Goal reached! Streak: " + streakCount, Toast.LENGTH_SHORT).show();
+                } else {
 
-            if (lastCompletedDate == null || !lastCompletedDate.equals(today)) {
-                streakCount++;
-                lastCompletedDate = today;
-                showStreak(true);
-                Toast.makeText(this, "🎉 Goal reached! Streak: " + streakCount, Toast.LENGTH_SHORT).show();
-            } else {
-
-                Toast.makeText(this, "Goal reached again!", Toast.LENGTH_SHORT).show();
-            }
-        } else if (crossedGoalDown) {
-
-            if (today.equals(lastCompletedDate)) {
-                streakCount = Math.max(0, streakCount - 1);
-                lastCompletedDate = "";
-
-                tvStreakCount.setText(streakCount + " day streak!");
-
-                if (streakCount == 0) {
-                    layoutStreak.setVisibility(View.GONE);
+                    Toast.makeText(this, "Goal reached again!", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(this, "Goal unreached. Streak: " + streakCount, Toast.LENGTH_SHORT).show();
+            } else if (crossedGoalDown) {
+
+                if (today.equals(lastCompletedDate)) {
+                    streakCount = Math.max(0, streakCount - 1);
+                    lastCompletedDate = "";
+
+                    tvStreakCount.setText(streakCount + " day streak!");
+
+                    if (streakCount == 0) {
+                        layoutStreak.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(this, "Goal unreached. Streak: " + streakCount, Toast.LENGTH_SHORT).show();
+                }
             }
+        }else if("Bad".equals(habitType)) {
+
+            if (currentValue > goal) {
+                streakCount = 0;
+                lastCompletedDate = "";
+                layoutStreak.setVisibility(View.GONE);
+                Toast.makeText(this, "Limit reached! Streak reset.", Toast.LENGTH_SHORT).show();
+            } else {
+                if (lastCompletedDate == null || !lastCompletedDate.equals(today)) {
+                    streakCount++;
+                    lastCompletedDate = today;
+                    showStreak(true);
+                }
+            }
+        }else{
+            Toast.makeText(this,"Problem!!!!!"+habitType,Toast.LENGTH_SHORT).show();
         }
 
         updateDisplay(true);
     }
+
+
+
+
+
 
 
     private void updateDisplay(boolean animate) {
@@ -315,9 +363,13 @@ public class HabitdetailActivity extends AppCompatActivity {
             tvCurrentValue.setTextColor(color);
 
         } catch (Exception e) {
-            e.printStackTrace(); // Helps you see if the color string format was wrong
+            e.printStackTrace();
         }
     }
 
-
+    private String getYesterdayDateString() {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.add(java.util.Calendar.DATE, -1);
+        return new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(cal.getTime());
+    }
 }

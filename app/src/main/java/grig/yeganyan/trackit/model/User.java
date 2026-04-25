@@ -4,7 +4,6 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String emoji;
 
 
     public User() {}
@@ -14,7 +13,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.emoji = "👱";
     }
 
 

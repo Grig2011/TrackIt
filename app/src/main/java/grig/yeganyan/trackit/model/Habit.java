@@ -34,6 +34,7 @@ public class Habit {
         this.days = days;
         this.time = time;
         this.streak = streak;
+        this.progress = 0;
     }
 
     public String getId() {
@@ -117,13 +118,12 @@ public class Habit {
     }
     public String getTime(){return time;}
     public void setTime(String time){this.time = time;}
-
-    public double getProgress() {
-        return progress;
-    }
     public double getCurrentValue() { return currentValue; }
     public void setCurrentValue(double currentValue) { this.currentValue = currentValue; }
     public String getLastCompletedDate() { return lastCompletedDate; }
     public void setLastCompletedDate(String lastCompletedDate) { this.lastCompletedDate = lastCompletedDate; }
+    public double getProgress(){return progress; }
+
+    public void setProgress(double progress){this.progress = progress ; }
 
 }

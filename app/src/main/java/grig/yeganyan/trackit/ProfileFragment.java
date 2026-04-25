@@ -570,30 +570,30 @@ public class ProfileFragment extends Fragment {
         Context context = requireContext();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // 1. Update Firebase Auth Display Name
+
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build();
 
         user.updateProfile(profileUpdates).addOnSuccessListener(aVoid -> {
-            // 2. IMPORTANT: Update Firestore so the name change is permanent
+
             db.collection("users")
                     .document(user.getUid())
-                    .update("username", name) // This fixes the "switching back" issue
+                    .update("username", name)
                     .addOnSuccessListener(unused -> {
                         profileName.setText(name);
                         Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
                     });
         });
 
-        // 3. Update Email if changed
+
         if (!email.equals(user.getEmail())) {
             user.updateEmail(email).addOnSuccessListener(aVoid -> {
                 profileEmail.setText(email);
             });
         }
 
-        // 4. Update Password if not empty
+
         if (!password.isEmpty()) {
             user.updatePassword(password).addOnSuccessListener(aVoid -> {
                 Toast.makeText(context, "Password updated", Toast.LENGTH_SHORT).show();
