@@ -399,12 +399,12 @@ public class AddHabit extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    private void scheduleNotification(String habitTitle, String daysString) {
+    private void scheduleNotification(String habitId, String habitTitle, String daysString) {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (am == null) return;
 
         List<Integer> selectedDaysList = parseDays(daysString);
-        // The three trigger points: 1 hour before, exact time, and 1 hour after
+
         int[] hourOffsets = {-1, 0, 1};
 
         for (int dayOfWeek : selectedDaysList) {
@@ -550,13 +550,11 @@ public class AddHabit extends AppCompatActivity {
         Habit habit;
 
         if ("EDIT".equals(mode) && habitId != null) {
-
-
             habit = new Habit(habitId, emoji, title, desc, colour, habitType, goal, unit, days, timeString, currentStreak);
             db.collection("users").document(userId).collection("habits").document(habitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
-                        if (isTimeSelected) scheduleNotification(title,days);
+                        if (isTimeSelected) scheduleNotification(habitId, title, days);
 
                         Toast.makeText(this, "Habit updated", Toast.LENGTH_SHORT).show();
                         finish();
@@ -567,7 +565,9 @@ public class AddHabit extends AppCompatActivity {
             db.collection("users").document(userId).collection("habits").document(newHabitId)
                     .set(habit)
                     .addOnSuccessListener(unused -> {
-                        if (isTimeSelected) scheduleNotification(title,days);
+
+                        if (isTimeSelected) scheduleNotification(newHabitId, title, days);
+
                         Toast.makeText(this, "Habit saved", Toast.LENGTH_SHORT).show();
                         finish();
                     });

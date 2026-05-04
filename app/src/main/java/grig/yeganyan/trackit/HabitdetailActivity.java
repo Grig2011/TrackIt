@@ -72,7 +72,7 @@ public class HabitdetailActivity extends AppCompatActivity {
 
     private void readIntentExtras() {
         if (getIntent() != null) {
-            habitId = getIntent().getStringExtra("habit_id"); // Essential for tracking reset
+            habitId = getIntent().getStringExtra("habit_id");
             habitName = getIntent().getStringExtra("habit_name");
             habitEmoji = getIntent().getStringExtra("habit_emoji");
             goal = getIntent().getDoubleExtra("habit_goal", 1000);

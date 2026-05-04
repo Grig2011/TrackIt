@@ -159,6 +159,9 @@ public class ProfileFragment extends Fragment {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
+            Intent i = new Intent(getActivity(),MainActivity.class);
+            i.putExtra("FromProfile",true);
+            startActivity(i);
         });
 
 

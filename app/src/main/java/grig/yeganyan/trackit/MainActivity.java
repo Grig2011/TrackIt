@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentName = "ToDo";
             }
 
+
             if (selected != null) {
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -117,12 +118,35 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.fragmentContainer, selected)
                         .commit();
 
-                // Save current fragment
                 prefs.edit().putString(KEY_CURRENT_FRAGMENT, fragmentName).apply();
             }
 
             return true;
         });
+        Fragment selected = null;
+        if(getIntent()!=null){
 
+            boolean a = getIntent().getBooleanExtra("FromProfile",false);
+
+            if(a){
+
+                selected = new MainFragment();
+                bottomNav.setSelectedItemId(R.id.nav_home);
+                loadFragment(selected);
+
+            }
+
+        }
+
+
+    }
+    private void loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .replace(R.id.fragmentContainer, fragment)
+                    .commit();
+        }
     }
 }

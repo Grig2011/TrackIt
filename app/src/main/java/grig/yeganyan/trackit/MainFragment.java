@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -96,6 +99,22 @@ public class MainFragment extends Fragment {
         if (userId == null) {
             Toast.makeText(getContext(), "User not found. Please login again.", Toast.LENGTH_SHORT).show();
             return view;
+        }
+        TextView Avatar = view.findViewById(R.id.Avatar);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            db.collection("users")
+                    .document(user.getUid())
+                    .get()
+                    .addOnSuccessListener(document -> {
+                        if (document.exists()) {
+                            String avatar = document.getString("avatar");
+                            if (avatar != null) {
+                                Avatar.setText(avatar);
+                            }
+                        }
+                    });
         }
 
         searchInput = view.findViewById(R.id.searchInput);
