@@ -35,24 +35,25 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="10dp"
-                android:text="Back"
+                android:text="@string/btn_back"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 app:cornerRadius="12dp"
                 app:iconGravity="textStart" />
+
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Emoji"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/label_emoji"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Habit Emoji"
+                android:hint="@string/hint_habit_emoji"
                 app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -70,51 +71,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginTop="8dp"
-                android:visibility="gone" /><!-- Title -->
+                android:visibility="gone" />
+
+            <!-- Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Title"
+                android:text="@string/label_title"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Habit Title">
+                android:hint="@string/hint_habit_title">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/titleInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout> <!-- Description --> <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Description"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Description -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/label_description"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Habit Description">
+                android:hint="@string/hint_habit_description">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine" />
-            </com.google.android.material.textfield.TextInputLayout> <!-- Colour --> <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Colour"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Colour -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/label_colour"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
+
+            <!-- Row 1 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -180,7 +190,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:text=""
                     app:cornerRadius="28dp" />
-            </LinearLayout> <!-- Second row of 6 additional colors -->
+            </LinearLayout>
+
+            <!-- Row 2 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -245,7 +257,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:text=""
                     app:cornerRadius="28dp" />
-            </LinearLayout> <!-- Third row of 6 colors -->
+            </LinearLayout>
+
+            <!-- Row 3 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -310,7 +324,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:text=""
                     app:cornerRadius="28dp" />
-            </LinearLayout> <!-- Fourth row of 6 colors -->
+            </LinearLayout>
+
+            <!-- Row 4 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -375,7 +391,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:text=""
                     app:cornerRadius="28dp" />
-            </LinearLayout> <!-- Fifth row of 6 colors -->
+            </LinearLayout>
+
+            <!-- Row 5 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -440,13 +458,16 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:text=""
                     app:cornerRadius="28dp" />
-            </LinearLayout> <!-- Habit Type --> <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Habit Type"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp" />
+            </LinearLayout>
+
+            <!-- Habit Type -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/label_habit_type"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/typeButtonsLayout"
@@ -465,7 +486,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:backgroundTint="#E0E0E0"
-                    android:text="Good"
+                    android:text="@string/type_good"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -477,7 +498,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:backgroundTint="#E0E0E0"
-                    android:text="Bad"
+                    android:text="@string/type_bad"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
             </LinearLayout>
@@ -494,7 +515,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Enter value"
+                    android:hint="@string/hint_enter_value"
                     app:boxCornerRadiusBottomEnd="6dp"
                     app:boxCornerRadiusBottomStart="6dp"
                     app:boxCornerRadiusTopEnd="6dp"
@@ -518,12 +539,13 @@
                     android:paddingHorizontal="12dp"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
-            <!-- Task Days --> <!-- Task Days -->
+
+            <!-- Task Days -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Task Days"
+                android:text="@string/label_task_days"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
@@ -541,7 +563,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="M"
+                    android:text="@string/day_mon"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -552,7 +574,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="T"
+                    android:text="@string/day_tue"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -563,7 +585,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="W"
+                    android:text="@string/day_wed"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -574,7 +596,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="T"
+                    android:text="@string/day_thu"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -585,7 +607,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="F"
+                    android:text="@string/day_fri"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -596,7 +618,7 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="S"
+                    android:text="@string/day_sat"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
 
@@ -607,16 +629,17 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="#E0E0E0"
-                    android:text="S"
+                    android:text="@string/day_sun"
                     android:textColor="#000000"
                     app:cornerRadius="24dp" />
             </LinearLayout>
 
+            <!-- Reminder Time -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Reminder Time"
+                android:text="@string/label_reminder_time"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp" />
 
@@ -633,7 +656,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#E0E0E0"
-                    android:text="Set Time"
+                    android:text="@string/btn_set_time"
                     android:textAllCaps="false"
                     android:textColor="#000000"
                     app:cornerRadius="12dp" />
@@ -643,7 +666,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Not set"
+                    android:text="@string/status_not_set"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -655,7 +678,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="#187d24"
-                android:text="Save Habit"
+                android:text="@string/btn_save_habit"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
     </ScrollView>

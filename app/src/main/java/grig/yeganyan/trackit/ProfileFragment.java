@@ -53,6 +53,7 @@ public class ProfileFragment extends Fragment {
     SharedPreferences prefs;
     TextView profileAvatar;
     MaterialButton btnCoachTone;
+    Button btnTop50;
 
     TextView profileBio;
     private boolean isUserAction = false;
@@ -139,6 +140,13 @@ public class ProfileFragment extends Fragment {
                     });
         }
 
+        btnTop50 = view.findViewById(R.id.Top50Link);
+        btnTop50.setOnClickListener(v->{
+            Intent i = new Intent(getActivity(),LeaderboardActivity.class);
+            startActivity(i);
+
+        });
+
         btnCoachTone = view.findViewById(R.id.btnCoachTone);
         themeSwitch = view.findViewById(R.id.themeSwitch);
 
@@ -159,9 +167,7 @@ public class ProfileFragment extends Fragment {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-            Intent i = new Intent(getActivity(),MainActivity.class);
-            i.putExtra("FromProfile",true);
-            startActivity(i);
+
         });
 
 
@@ -193,6 +199,9 @@ public class ProfileFragment extends Fragment {
 
         btnSettings = view.findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(v -> ShowPasswordForSettings());
+
+
+
 
         return view;
     }

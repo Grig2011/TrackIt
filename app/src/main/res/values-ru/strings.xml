@@ -13,24 +13,7 @@
     <string name="logout">Выйти</string>
     <string name="delete_account">Удалить аккаунт</string>
 
-    <string name="btn_back">Назад</string>
-    <string name="btn_save_habit">Сохранить</string>
-    <string name="btn_update_habit">Обновить</string>
-    <string name="label_emoji">Эмодзи</string>
-    <string name="label_title">Название</string>
-    <string name="label_description">Описание</string>
-    <string name="label_colour">Цвет</string>
-    <string name="label_habit_type">Тип привычки</string>
-    <string name="label_task_days">Дни</string>
-    <string name="label_reminder_time">Время напоминания</string>
-    <string name="hint_enter_emoji">Введите эмодзи</string>
-    <string name="hint_habit_title">Название привычки</string>
-    <string name="hint_habit_description">Описание привычки</string>
-    <string name="hint_enter_value">Значение</string>
-    <string name="type_good">Хорошая</string>
-    <string name="type_bad">Плохая</string>
-    <string name="time_not_set">Не установлено</string>
-    <string name="btn_set_time">Выбрать время</string>
+
 
     <string name="err_user_not_found">Пользователь не найден. Войдите снова.</string>
     <string name="err_title_req">Название обязательно</string>
@@ -43,13 +26,7 @@
     <string name="msg_habit_updated">Привычка обновлена!</string>
     <string name="msg_avatar_updated">Аватар обновлен!</string>
 
-    <string name="day_mon">П</string>
-    <string name="day_tue">В</string>
-    <string name="day_wed">С</string>
-    <string name="day_thu">Ч</string>
-    <string name="day_fri">П</string>
-    <string name="day_sat">С</string>
-    <string name="day_sun">В</string>
+
 
     <string name="task_hint_title">Название задачи</string>
     <string name="task_hint_description">Описание задачи</string>
@@ -150,4 +127,31 @@
     <string name="coach_prefix">Личность наставника: </string>
 
     <string name="title_settings">Настройки</string>
+
+    <string name="view_leaderboard">Посмотреть глобальный рейтинг</string>
+
+    <string name="btn_back">Назад</string>
+    <string name="label_emoji">Эмодзи</string>
+    <string name="hint_habit_emoji">Эмодзи привычки</string>
+    <string name="label_title">Заголовок</string>
+    <string name="hint_habit_title">Название привычки</string>
+    <string name="label_description">Описание</string>
+    <string name="hint_habit_description">Описание привычки</string>
+    <string name="label_colour">Цвет</string>
+    <string name="label_habit_type">Тип привычки</string>
+    <string name="type_good">Хорошая</string>
+    <string name="type_bad">Плохая</string>
+    <string name="hint_enter_value">Введите значение</string>
+    <string name="label_task_days">Дни выполнения</string>
+    <string name="day_mon">Пн</string>
+    <string name="day_tue">Вт</string>
+    <string name="day_wed">Ср</string>
+    <string name="day_thu">Чт</string>
+    <string name="day_fri">Пт</string>
+    <string name="day_sat">Сб</string>
+    <string name="day_sun">Вс</string>
+    <string name="label_reminder_time">Время напоминания</string>
+    <string name="btn_set_time">Установить</string>
+    <string name="status_not_set">Не установлено</string>
+    <string name="btn_save_habit">Сохранить</string>
 </resources>

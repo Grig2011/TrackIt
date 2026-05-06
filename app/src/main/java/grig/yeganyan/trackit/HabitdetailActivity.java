@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +28,8 @@ import java.util.List;
 
 import grig.yeganyan.trackit.CircularProgressView;
 import grig.yeganyan.trackit.R;
+import grig.yeganyan.trackit.Services.HabitService;
+import grig.yeganyan.trackit.model.Habit;
 
 public class HabitdetailActivity extends AppCompatActivity {
 
@@ -77,7 +80,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             habitEmoji = getIntent().getStringExtra("habit_emoji");
             goal = getIntent().getDoubleExtra("habit_goal", 1000);
             unit = getIntent().getStringExtra("habit_unit");
-            habitType = getIntent().getStringExtra("habit_type"); // "Good" or "Bad"
+            habitType = getIntent().getStringExtra("habit_type");
             streakCount = getIntent().getIntExtra("streak_count", 0);
             lastCompletedDate = getIntent().getStringExtra("last_completed_date");
 
@@ -89,7 +92,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             String lastSeenDate = prefs.getString("last_seen_" + habitId, "");
 
             if (!lastSeenDate.equals(today)) {
-                currentValue = 0; // It's a new day! Progress is 0.
+                currentValue = 0;
             } else {
                 currentValue = getIntent().getDoubleExtra("current_value", 0);
             }
@@ -200,6 +203,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             resultIntent.putExtra("last_updated_date", today);
 
             setResult(RESULT_OK, resultIntent);
+            onHabitCompleted();
             finish();
         });
     }
@@ -371,5 +375,15 @@ public class HabitdetailActivity extends AppCompatActivity {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.add(java.util.Calendar.DATE, -1);
         return new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(cal.getTime());
+    }
+
+    public void onHabitCompleted() {
+        HabitService habitService = new HabitService();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+        habitService.getUsersAllHabits(uid, habitList -> {
+            habitService.syncBestStreak(uid, habitList);
+        });
     }
 }

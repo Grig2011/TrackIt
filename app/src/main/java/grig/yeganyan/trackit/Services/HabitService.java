@@ -57,6 +57,31 @@ public class HabitService {
         return sb.toString();
     }
 
+    public void syncBestStreak(String userId, List<Habit> habitList) {
+        if (habitList == null || habitList.isEmpty()) return;
+
+        int maxStreak = 0;
+        String bestHabitName = "";
+
+
+        for (Habit habit : habitList) {
+            Log.d("SyncCheck", "Checking: " + habit.getTitle() + " Streak: " + habit.getStreak());
+            if (habit.getStreak() > maxStreak) {
+                maxStreak = habit.getStreak();
+                bestHabitName = habit.getTitle();
+            }
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(userId)
+                .update(
+                        "bestStreak", maxStreak,
+                        "bestStreakHabitName", bestHabitName
+                )
+                .addOnSuccessListener(aVoid -> Log.d("StreakSync", "Leaderboard data updated"))
+                .addOnFailureListener(e -> Log.e("StreakSync", "Failed to update", e));
+    }
+
 
 
 

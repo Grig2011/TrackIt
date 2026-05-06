@@ -13,6 +13,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
+
+import grig.yeganyan.trackit.Services.HabitCallback;
+import grig.yeganyan.trackit.Services.HabitService;
+import grig.yeganyan.trackit.model.Habit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+
 
 
 
