@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Rank with Primary Color Background -->
+
         <TextView
             android:id="@+id/rankText"
             android:layout_width="36dp"
@@ -28,7 +28,7 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <!-- Emoji Avatar -->
+
         <TextView
             android:id="@+id/emojiAvatar"
             android:layout_width="45dp"
@@ -39,7 +39,7 @@
             android:text="👤"
             android:textSize="24sp" />
 
-        <!-- User Info -->
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Streak Value with Fire Icon -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

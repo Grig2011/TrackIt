@@ -14,6 +14,10 @@
     <string name="delete_account">Ջնջել հաշիվը</string>
 
 
+    <string name="first_fragment_label">Առաջին հատված</string>
+    <string name="second_fragment_label">Երկրորդ հատված</string>
+    <string name="next">Հաջորդը</string>
+    <string name="previous">Նախորդը</string>
 
     <string name="err_user_not_found">Օգտատերը չի գտնվել: Նորից մուտք գործեք:</string>
     <string name="err_title_req">Վերնագիրը պարտադիր է</string>
@@ -154,4 +158,10 @@
     <string name="btn_set_time">Սահմանել</string>
     <string name="status_not_set">Սահմանված չէ</string>
     <string name="btn_save_habit">Պահպանել</string>
+
+    <string name="nav_home">Գլխավոր</string>
+    <string name="nav_tasks">Առաջադրանքներ</string>
+    <string name="nav_ai_coach">AI Մարզիչ</string>
+    <string name="nav_habit">Սովորույթ</string>
+    <string name="nav_profile">Իմ էջը</string>
 </resources>

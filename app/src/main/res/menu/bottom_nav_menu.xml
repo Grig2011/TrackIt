@@ -3,26 +3,26 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/outline_add_home_24"
-        android:title="Home" />
+        android:title="@string/nav_home" />
 
     <item
         android:id="@+id/nav_todo"
         android:icon="@drawable/baseline_list_24"
-        android:title="Tasks" />
+        android:title="@string/nav_tasks" />
 
     <item
         android:id="@+id/nav_chat"
         android:icon="@drawable/outline_chat_24"
-        android:title="AI Coach" />
+        android:title="@string/nav_ai_coach" />
 
     <item
         android:id="@+id/nav_habit"
         android:icon="@drawable/outline_check_24"
-        android:title="Habit" />
+        android:title="@string/nav_habit" />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/outline_account_circle_24"
-        android:title="Profile" />
+        android:title="@string/nav_profile" />
 
 </menu>

@@ -152,7 +152,7 @@ public class MainFragment extends Fragment {
                 .document(userId)
                 .collection("habits")
                 .addSnapshotListener((value, error) -> {
-                    // SAFETY CHECK: If the fragment is detached, stop immediately
+
                     if (error != null || !isAdded() || getContext() == null) return;
 
                     habitsContainer.removeAllViews();
@@ -163,14 +163,14 @@ public class MainFragment extends Fragment {
                         cal.add(java.util.Calendar.DATE, -1);
                         String yesterday = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(cal.getTime());
 
-                        // Use getContext() instead of requireContext() for safety inside the loop
+
                         android.content.SharedPreferences prefs = getContext().getSharedPreferences("HabitResets", android.content.Context.MODE_PRIVATE);
 
                         for (QueryDocumentSnapshot doc : value) {
                             Habit habit = doc.toObject(Habit.class);
                             habit.setId(doc.getId());
 
-                            // --- 1. PROGRESS RESET LOGIC ---
+
                             String lastResetDate = prefs.getString("reset_" + habit.getId(), "");
                             if (!lastResetDate.equals(today)) {
                                 habit.setCurrentValue(0);
@@ -185,7 +185,7 @@ public class MainFragment extends Fragment {
                                 prefs.edit().putString("reset_" + habit.getId(), today).apply();
                             }
 
-                            // --- 2. STREAK RESET LOGIC ---
+
                             String lastDone = habit.getLastCompletedDate();
                             if (lastDone != null && !lastDone.isEmpty()) {
                                 if (!lastDone.equals(today) && !lastDone.equals(yesterday)) {

@@ -13,19 +13,19 @@ import android.view.animation.DecelerateInterpolator;
  */
 public class CircularProgressView extends View {
 
-    private Paint trackPaint;   // background ring
-    private Paint fillPaint;    // progress arc
+    private Paint trackPaint;
+    private Paint fillPaint;
     private RectF arcRect;
     private Paint progressPaint;
     private int progressColor = Color.BLUE;
 
-    private float progress = 0f;          // 0.0 – 1.0
-    private float displayedProgress = 0f; // animated value
+    private float progress = 0f;
+    private float displayedProgress = 0f;
 
     private static final float STROKE_WIDTH_DP = 18f;
-    private static final int   TRACK_COLOR     = 0xFFFFFFFF;      // white ring
-    private static final int   FILL_COLOR      = 0xFF2D6A4F;      // forest green
-    private static final float START_ANGLE     = -90f;            // top
+    private static final int   TRACK_COLOR     = 0xFFFFFFFF;
+    private static final int   FILL_COLOR      = 0xFF2D6A4F;
+    private static final float START_ANGLE     = -90f;
 
     public CircularProgressView(Context context) {
         super(context);
@@ -49,7 +49,7 @@ public class CircularProgressView extends View {
         trackPaint.setStyle(Paint.Style.STROKE);
         trackPaint.setStrokeWidth(strokePx);
         trackPaint.setColor(TRACK_COLOR);
-        // Soft shadow for the white ring
+
         trackPaint.setShadowLayer(dpToPx(8), 0, dpToPx(4), 0x22000000);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
 
@@ -76,10 +76,10 @@ public class CircularProgressView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // Full ring (track)
+
         canvas.drawArc(arcRect, 0, 360, false, trackPaint);
 
-        // Progress arc
+
         if (displayedProgress > 0f) {
             float sweep = 360f * displayedProgress;
             canvas.drawArc(arcRect, START_ANGLE, sweep, false, fillPaint);
@@ -120,11 +120,11 @@ public class CircularProgressView extends View {
 
     public void setIndicatorColor(int color) {
         this.progressColor = color;
-        // We must ensure fillPaint exists before setting its color
+
         if (fillPaint == null) {
-            init(); // Re-run init if called too early
+            init();
         }
         fillPaint.setColor(color);
-        invalidate(); // Forces the view to redraw with the new color
+        invalidate();
     }
 }

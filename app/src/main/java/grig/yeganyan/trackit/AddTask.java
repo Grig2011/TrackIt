@@ -145,7 +145,7 @@ public class AddTask extends DialogFragment {
         AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), TaskAlarmReceiver.class);
         intent.putExtra("TASK_TITLE", title);
-        intent.putExtra("TASK_ID", id); // ADD THIS LINE
+        intent.putExtra("TASK_ID", id);
         int requestCode = id.hashCode();
         intent.putExtra("REQUEST_CODE", requestCode);
 

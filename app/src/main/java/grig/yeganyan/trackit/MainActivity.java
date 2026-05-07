@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean darkMode = prefs.getBoolean(KEY_DARK_MODE, false);
 
-        // Apply theme before setContentView
+
         if (darkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragmentContainer, initialFragment)
                 .commit();
 
-        // Bottom nav listener
+
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selected = null;
             String fragmentName = "Home";

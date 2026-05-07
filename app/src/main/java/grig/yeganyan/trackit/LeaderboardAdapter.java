@@ -22,7 +22,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Ensure this layout name matches your XML file name
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_leaderboard, parent, false);
         return new ViewHolder(view);
     }
@@ -31,33 +31,33 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = userList.get(position);
 
-        // 1. Set the Rank Number
+
         int rank = position + 1;
         holder.rankText.setText(String.valueOf(rank));
 
-        // 2. Professional Rank Highlighting
-        if (position == 0) { // Gold/Fire
+
+        if (position == 0) {
             holder.rankText.setBackgroundTintList(ColorStateList.valueOf(
                     ContextCompat.getColor(holder.itemView.getContext(), R.color.orange_streak)));
             holder.rankText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.habit_bg_color));
-        } else if (position < 3) { // Top 3 Green
+        } else if (position < 3) {
             holder.rankText.setBackgroundTintList(ColorStateList.valueOf(
                     ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_color)));
             holder.rankText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.habit_bg_color));
-        } else { // Others Gray
+        } else {
             holder.rankText.setBackgroundTintList(ColorStateList.valueOf(
                     ContextCompat.getColor(holder.itemView.getContext(), R.color.track_gray)));
             holder.rankText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.text_primary));
         }
 
-        // 3. Bind User Identity
+
         holder.userName.setText(user.getUsername() != null ? user.getUsername() : "Anonymous");
 
-        // Bind the Emoji Avatar from the "avatar" field
+
         String emoji = user.getAvatar();
         holder.emojiAvatar.setText(emoji != null && !emoji.isEmpty() ? emoji : "👤");
 
-        // 4. Bind Habit and Streak Info
+
         String habitName = user.getBestStreakHabitName();
         holder.habitNameText.setText(habitName != null ? habitName : "New Member");
         holder.streakValue.setText(String.valueOf(user.getBestStreak()));

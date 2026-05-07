@@ -23,8 +23,8 @@ public class NotificationHelper {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_HIGH) // For Android 7.1 and lower
-                .setDefaults(NotificationCompat.DEFAULT_ALL)   // TRiggers default sound/vibrate
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);
 
         if (notificationManager != null) {

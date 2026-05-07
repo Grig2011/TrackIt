@@ -26,7 +26,6 @@ public class HabitFragment extends Fragment {
     private List<String> habitTitles = new ArrayList<>();
 
     public HabitFragment() {
-        // Required empty constructor
     }
 
     @Override
@@ -45,7 +44,6 @@ public class HabitFragment extends Fragment {
         CardView card9 = view.findViewById(R.id.habitCard9);
         CardView card10 = view.findViewById(R.id.habitCard10);
 
-        // Add cards to list for filtering
         habitCards.add(card2);
         habitCards.add(card3);
         habitCards.add(card4);
@@ -78,7 +76,7 @@ public class HabitFragment extends Fragment {
 
         searchInput = view.findViewById(R.id.searchInput);
 
-        // Close keyboard when pressing Done
+
         searchInput.setOnEditorActionListener((v, actionId, event) -> {
 
             if (actionId == EditorInfo.IME_ACTION_DONE) {

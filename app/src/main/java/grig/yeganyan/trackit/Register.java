@@ -52,7 +52,7 @@ public class Register extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Input validation
+
         if (username.isEmpty()) {
             etUsername.setError("Username required");
             etUsername.requestFocus();
