@@ -1,6 +1,16 @@
 package grig.yeganyan.trackit.model;
 
-public class Habit {
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+public class Habit implements Serializable {
 
     private String id;
     private String emoji;
@@ -19,6 +29,44 @@ public class Habit {
     private int streak = 0;
     private String lastCompletedDate;
 
+    private Map<String, Integer> history = new HashMap<>();
+
+
+    public List<Integer> getLastSevenDays() {
+        List<Integer> stats = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+
+
+        cal.add(Calendar.DAY_OF_YEAR, -6);
+
+        for (int i = 0; i < 7; i++) {
+            String dateKey = sdf.format(cal.getTime());
+            stats.add(history.getOrDefault(dateKey, 0));
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        return stats;
+    }
+    public List<String> getDayLabels() {
+        List<String> labels = new ArrayList<>();
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEE", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+
+        cal.add(Calendar.DAY_OF_YEAR, -6);
+
+        for (int i = 0; i < 7; i++) {
+            labels.add(dayFormat.format(cal.getTime()));
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        return labels;
+    }
+    public void recordProgress(int value) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String today = sdf.format(new Date());
+
+
+        history.put(today, value);
+    }
     public Habit() {}
 
     public Habit(String id, String emoji, String title, String description, String color,

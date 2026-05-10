@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 1. The Subtle Outer Glow/Border -->
+    <item>
+        <shape>
+            <corners android:radius="24dp" />
+            <solid android:color="#26FFFFFF" /> <!-- Very faint white for a thin edge -->
+        </shape>
+    </item>
+
+    <!-- 2. The Main Glass Body (Inset by 1dp to show the border) -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape>
+            <corners android:radius="23dp" />
+            <!-- Semi-transparent dark fill to create depth against the background -->
+            <gradient
+                android:angle="135"
+                android:startColor="#1AFFFFFF"
+                android:centerColor="#0DFFFFFF"
+                android:endColor="#05FFFFFF" />
+        </shape>
+    </item>
+
+</layer-list>

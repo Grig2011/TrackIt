@@ -38,6 +38,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.Serializable;
+
 import grig.yeganyan.trackit.model.Habit;
 
 public class MainFragment extends Fragment {
@@ -301,6 +303,7 @@ public class MainFragment extends Fragment {
             currentEditingHabitId = habit.getId();
             Intent intent = new Intent(getActivity(), HabitdetailActivity.class);
             intent.putExtra("habit_id", habit.getId());
+            intent.putExtra("habit", (Serializable) habit);
             intent.putExtra("habit_name", habit.getTitle());
             intent.putExtra("habit_emoji", habit.getEmoji());
             intent.putExtra("habit_goal", habit.getGoal());
@@ -375,6 +378,7 @@ public class MainFragment extends Fragment {
                             currentEditingHabitId = habit.getId();
                             Intent intent = new Intent(getActivity(), HabitdetailActivity.class);
                             intent.putExtra("habit_name", habit.getTitle());
+                            intent.putExtra("habit", (Serializable) habit);
                             intent.putExtra("habit_emoji", habit.getEmoji());
                             intent.putExtra("habit_goal", habit.getGoal());
                             intent.putExtra("habit_unit", habit.getUnit());

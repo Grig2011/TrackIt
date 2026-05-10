@@ -297,6 +297,7 @@ public class AddHabit extends AppCompatActivity {
                 descInput.setText(intent.getStringExtra("description"));
                 goalInput.setText(intent.getStringExtra("goal"));
 
+
                 timeString = intent.getStringExtra("time");
                 if (timeString != null) {
                     tvSelectedTime.setText(timeString);
