@@ -216,7 +216,7 @@
     <string name="type_good">Good</string>
     <string name="type_bad">Bad</string>
     <string name="hint_enter_value">Enter value</string>
-    <string name="label_task_days">Task Days</string>
+    <string name="label_task_days">Reminder Days</string>
     <string name="day_mon">M</string>
     <string name="day_tue">T</string>
     <string name="day_wed">W</string>
@@ -251,4 +251,27 @@
     <string name="guide_btn_next">Next</string>
     <string name="guide_btn_finish">Let\'s Go!</string>
     <string name="guide_btn_close">✕ Close</string>
+
+    <string name="error_empty_fields">Please fill in all fields</string>
+    <string name="error_invalid_email">The email address is badly formatted.</string>
+    <string name="error_user_not_found">No account found with this email.</string>
+    <string name="error_wrong_password">Incorrect password. Please try again.</string>
+    <string name="error_account_disabled">This account has been disabled.</string>
+    <string name="error_login_failed">Login failed. Please try again.</string>
+    <string name="welcome_user">Welcome, %1$s!</string>
+    <string name="please_verify_email">Please verify your email</string>
+
+    <string name="error_username_required">Username is required</string>
+    <string name="error_email_required">Email is required</string>
+    <string name="error_password_required">Password is required</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="verify_email_sent">Verification email sent to %1$s</string>
+    <string name="verify_email_failed">Failed to send verification email</string>
+    <string name="register_success">Registered successfully! Please verify your email before logging in.</string>
+    <string name="error_firestore_save">Error saving user info</string>
+    <string name="error_email_exists">This email is already registered.</string>
+    <string name="error_weak_password">Password is too weak. Use at least 6 characters.</string>
+    <string name="error_register_failed">Registration failed. Please try again.</string>
+
+    <string name="guide_menu_title">📖 User Guide &amp; App Info</string>
 </resources>

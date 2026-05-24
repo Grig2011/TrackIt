@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -19,7 +21,7 @@ import grig.yeganyan.trackit.model.User;
 
 public class Register extends AppCompatActivity {
 
-    private EditText etUsername, etEmail, etPassword,etConfPassword;
+    private EditText etUsername, etEmail, etPassword, etConfPassword;
     private Button btnRegister;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -51,29 +53,29 @@ public class Register extends AppCompatActivity {
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
+        String confPassword = etConfPassword.getText().toString().trim();
 
 
         if (username.isEmpty()) {
-            etUsername.setError("Username required");
+            etUsername.setError(getString(R.string.error_username_required));
             etUsername.requestFocus();
             return;
         }
         if (email.isEmpty()) {
-            etEmail.setError("Email required");
+            etEmail.setError(getString(R.string.error_email_required));
             etEmail.requestFocus();
             return;
         }
         if (password.isEmpty()) {
-            etPassword.setError("Password required");
+            etPassword.setError(getString(R.string.error_password_required));
             etPassword.requestFocus();
             return;
         }
-        if(!password.equals(etConfPassword.getText().toString().trim())){
-            etConfPassword.setError("Wrong repeat");
+        if (!password.equals(confPassword)) {
+            etConfPassword.setError(getString(R.string.error_password_mismatch));
             etConfPassword.requestFocus();
             return;
         }
-
 
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
@@ -86,14 +88,13 @@ public class Register extends AppCompatActivity {
                                     .addOnCompleteListener(verifyTask -> {
                                         if (verifyTask.isSuccessful()) {
                                             Toast.makeText(this,
-                                                    "Verification email sent to " + email,
+                                                    getString(R.string.verify_email_sent, email),
                                                     Toast.LENGTH_LONG).show();
                                             Log.d("FIREBASE_VERIFY", "Email sent to " + email);
                                         } else {
-                                            Log.e("FIREBASE_VERIFY", "Failed to send email",
-                                                    verifyTask.getException());
+                                            Log.e("FIREBASE_VERIFY", "Failed to send email", verifyTask.getException());
                                             Toast.makeText(this,
-                                                    "Failed to send verification email",
+                                                    getString(R.string.verify_email_failed),
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -104,14 +105,12 @@ public class Register extends AppCompatActivity {
                                     .set(user)
                                     .addOnSuccessListener(aVoid -> {
                                         Toast.makeText(this,
-                                                "Registered Successfully! Please verify your email before login.",
+                                                getString(R.string.register_success),
                                                 Toast.LENGTH_LONG).show();
-
 
                                         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                                         prefs.edit().putBoolean("registered", true).apply();
                                         prefs.edit().putString("userId", firebaseUser.getUid()).apply();
-
 
                                         startActivity(new Intent(Register.this, Login.class));
                                         finish();
@@ -119,15 +118,22 @@ public class Register extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Log.e("FIRESTORE", "Error saving user", e);
                                         Toast.makeText(this,
-                                                "Error saving user info: " + e.getMessage(),
+                                                getString(R.string.error_firestore_save) + ": " + e.getLocalizedMessage(),
                                                 Toast.LENGTH_SHORT).show();
                                     });
                         }
                     } else {
-                        Log.e("REGISTER", "Registration failed", task.getException());
-                        Toast.makeText(this,
-                                "Registration failed: " + task.getException().getMessage(),
-                                Toast.LENGTH_LONG).show();
+
+                        Exception exception = task.getException();
+                        Log.e("REGISTER", "Registration failed", exception);
+
+                        if (exception instanceof FirebaseAuthUserCollisionException) {
+                            Toast.makeText(this, getString(R.string.error_email_exists), Toast.LENGTH_LONG).show();
+                        } else if (exception instanceof FirebaseAuthWeakPasswordException) {
+                            Toast.makeText(this, getString(R.string.error_weak_password), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(this, getString(R.string.error_register_failed), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
     }

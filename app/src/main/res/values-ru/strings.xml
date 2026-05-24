@@ -142,7 +142,7 @@
     <string name="type_good">Хорошая</string>
     <string name="type_bad">Плохая</string>
     <string name="hint_enter_value">Введите значение</string>
-    <string name="label_task_days">Дни выполнения</string>
+    <string name="label_task_days">Дни напоминания</string>
     <string name="day_mon">Пн</string>
     <string name="day_tue">Вт</string>
     <string name="day_wed">Ср</string>
@@ -185,4 +185,27 @@
     <string name="guide_btn_next">Далее</string>
     <string name="guide_btn_finish">Погнали!</string>
     <string name="guide_btn_close">✕ Закрыть</string>
+
+    <string name="error_empty_fields">Пожалуйста, заполните все поля</string>
+    <string name="error_invalid_email">Неверный формат адреса электронной почты.</string>
+    <string name="error_user_not_found">Аккаунт с таким email не найден.</string>
+    <string name="error_wrong_password">Неверный пароль. Пожалуйста, попробуйте еще раз.</string>
+    <string name="error_account_disabled">Этот аккаунт заблокирован.</string>
+    <string name="error_login_failed">Ошибка входа. Пожалуйста, попробуйте еще раз.</string>
+    <string name="welcome_user">Добро пожаловать, %1$s!</string>
+    <string name="please_verify_email">Пожалуйста, подтвердите ваш email</string>
+
+    <string name="error_username_required">Имя пользователя обязательно</string>
+    <string name="error_email_required">Email обязателен</string>
+    <string name="error_password_required">Пароль обязателен</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+    <string name="verify_email_sent">Письмо для подтверждения отправлено на %1$s</string>
+    <string name="verify_email_failed">Не удалось отправить письмо для подтверждения</string>
+    <string name="register_success">Регистрация успешна! Пожалуйста, подтвердите email перед входом.</string>
+    <string name="error_firestore_save">Ошибка сохранения данных пользователя</string>
+    <string name="error_email_exists">Этот email уже зарегистрирован.</string>
+    <string name="error_weak_password">Пароль слишком слабый. Используйте минимум 6 символов.</string>
+    <string name="error_register_failed">Ошибка регистрации. Пожалуйста, попробуйте еще раз.</string>
+
+    <string name="guide_menu_title">📖 Руководство пользователя и О приложении</string>
 </resources>

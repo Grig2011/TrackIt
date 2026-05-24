@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color">
@@ -22,34 +23,52 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:hint="Email"
-            android:background="#FFFFFFFF"
-            android:padding="12dp"
-            android:textColor="#000000"
-            android:textColorHint="#99000000"
-            android:inputType="textEmailAddress"
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="#32A852"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:hintTextColor="#32A852">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="16dp"
+                android:textColor="#000000"
+                android:textColorHint="#99000000" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="#32A852"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="#32A852"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            app:hintTextColor="#32A852">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFFFFFFF"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:padding="12dp"
+                android:padding="16dp"
                 android:textColor="#000000"
                 android:textColorHint="#99000000" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -60,16 +79,23 @@
             android:textColor="#32A852"
             android:textSize="14sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:paddingEnd="4dp" />
 
-        <Button
-            android:layout_marginTop="20dp"
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_marginTop="24dp"
             android:id="@+id/btnLogin"
             android:text="Login"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#32A852"
+            app:backgroundTint="#32A852"
+            app:cornerRadius="12dp"
+            android:padding="14dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+
         <LinearLayout
             android:id="@+id/btn_google_sign_in"
             android:layout_width="match_parent"
@@ -83,7 +109,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="24dp"
             android:elevation="2dp"
-            android:layout_marginTop="30px">
+            android:layout_marginTop="16dp">
 
             <ImageView
                 android:layout_width="20dp"
@@ -107,16 +133,38 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/Guest"
-            android:text="Login as guest for Test"
-            android:textColor="#32A852"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="52dp"
+            android:background="@drawable/bg_google_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="24dp"
+            android:elevation="2dp"
+            android:layout_marginTop="16dp">
+
+
+
+            <View
+                android:layout_width="12dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign in as guest for test"
+                android:textColor="#1F1F1F"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.01" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

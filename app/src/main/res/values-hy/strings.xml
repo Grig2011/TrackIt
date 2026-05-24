@@ -146,7 +146,7 @@
     <string name="type_good">Լավ</string>
     <string name="type_bad">Վատ</string>
     <string name="hint_enter_value">Մուտքագրեք արժեքը</string>
-    <string name="label_task_days">Կատարման օրերը</string>
+    <string name="label_task_days">հիշեցման օրեր</string>
     <string name="day_mon">Երկ</string>
     <string name="day_tue">Երք</string>
     <string name="day_wed">Չոր</string>
@@ -185,5 +185,28 @@
         <string name="guide_btn_next">Առաջ</string>
         <string name="guide_btn_finish">Սկսե՛նք</string>
         <string name="guide_btn_close">✕ Փակել</string>
+
+    <string name="error_empty_fields">Խնդրում ենք լրացնել բոլոր դաշտերը</string>
+    <string name="error_invalid_email">Էլ. փոստի հասցեն սխալ է ձևաչափված:</string>
+    <string name="error_user_not_found">Այս էլ. փոստով հաշիվ չի գտնվել:</string>
+    <string name="error_wrong_password">Սխալ գաղտնաբառ: Խնդրում ենք նորից փորձել:</string>
+    <string name="error_account_disabled">Այս հաշիվը կասեցված է:</string>
+    <string name="error_login_failed">Մուտքի ձախողում: Խնդրում ենք նորից փորձել:</string>
+    <string name="welcome_user">Բարի գալուստ, %1$s՛:</string>
+    <string name="please_verify_email">Խնդրում ենք հաստատել Ձեր էլ. փոստը</string>
+
+    <string name="error_username_required">Օգտանունը պարտադիր է</string>
+    <string name="error_email_required">Էլ. փոստը պարտադիր է</string>
+    <string name="error_password_required">Գաղտնաբառը պարտադիր է</string>
+    <string name="error_password_mismatch">Գաղտնաբառերը չեն համընկնում</string>
+    <string name="verify_email_sent">Հաստատման նամակն ուղարկվել է %1$s հասցեին</string>
+    <string name="verify_email_failed">Չհաջողվեց ուղարկել հաստատման նամակը</string>
+    <string name="register_success">Գրանցումը հաջողվեց: Խնդրում ենք հաստատել էլ. փոստը նախքան մուտք գործելը:</string>
+    <string name="error_firestore_save">Օգտատիրոջ տվյալները պահպանելու սխալ</string>
+    <string name="error_email_exists">Այս էլ. փոստն արդեն գրանցված է:</string>
+    <string name="error_weak_password">Գաղտնաբառը չափազանց թույլ է: Օգտագործեք առնվազն 6 նիշ:</string>
+    <string name="error_register_failed">Գրանցումը ձախողվեց: Խնդրում ենք նորից փորձել:</string>
+
+    <string name="guide_menu_title">📖 Օգտագործողի ուղեցույց և Հավելվածի մասին</string>
 
 </resources>

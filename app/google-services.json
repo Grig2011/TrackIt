@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "123924111347",
+    "firebase_url": "https://trackit-f0ac7-default-rtdb.firebaseio.com",
     "project_id": "trackit-f0ac7",
     "storage_bucket": "trackit-f0ac7.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "grig.yeganyan.trackit"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "123924111347-rg6rilne8jbfj6fougivon3tivms4db4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "grig.yeganyan.trackit",
+            "certificate_hash": "d6e82af0e9655e301e89fd86f13a4f5def42c9d0"
+          }
+        },
+        {
+          "client_id": "123924111347-r0imoh0kl70ej1djb3ta13f9pqts6h57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDGlyBleTDa_-JFv59WVOoq49JnSIyFgUE"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123924111347-r0imoh0kl70ej1djb3ta13f9pqts6h57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
