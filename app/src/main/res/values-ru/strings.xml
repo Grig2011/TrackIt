@@ -165,4 +165,24 @@
     <string name="nav_ai_coach">AI Тренер</string>
     <string name="nav_habit">Привычка</string>
     <string name="nav_profile">Профиль</string>
+
+    <string name="guide_title_welcome">Добро пожаловать в TrackIt</string>
+    <string name="guide_desc_welcome">Ваш идеальный помощник для создания полезных привычек, управления ежедневными задачами и достижения целей.</string>
+
+
+    <string name="guide_title_habits">Привычки и Задачи</string>
+    <string name="guide_desc_habits">Отслеживайте привычки с помощью ежедневных серий или организуйте свой список дел. Смахните карточку вправо для быстрого редактирования или удаления!</string>
+
+
+    <string name="guide_title_coach">Ваш личный ИИ-Коуч</string>
+    <string name="guide_desc_coach">Нужен толчок для мотивации? Перейдите в настройки профиля, чтобы выбрать характер вашего ИИ-коуча (например, Стоик, Мягкий или Дисциплинированный) для получения персонализированных ответов.</string>
+
+
+    <string name="guide_title_leaderboard">Топ-50 Лидеров</string>
+    <string name="guide_desc_leaderboard">Соревнуйтесь по всему миру! Будьте последовательны, копите очки серий и проверьте, сможете ли вы занять место в глобальной таблице лидеров.</string>
+
+
+    <string name="guide_btn_next">Далее</string>
+    <string name="guide_btn_finish">Погнали!</string>
+    <string name="guide_btn_close">✕ Закрыть</string>
 </resources>

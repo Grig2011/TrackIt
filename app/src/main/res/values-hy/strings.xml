@@ -164,4 +164,26 @@
     <string name="nav_ai_coach">AI Մարզիչ</string>
     <string name="nav_habit">Սովորույթ</string>
     <string name="nav_profile">Իմ էջը</string>
+
+
+        <string name="guide_title_welcome">Բարի գալուստ TrackIt</string>
+        <string name="guide_desc_welcome">Ձեր լավագույն օգնականը՝ կայուն սովորություններ ձևավորելու, օրական առաջադրանքները կառավարելու և նպատակներին հասնելու համար:</string>
+
+
+        <string name="guide_title_habits">Սովորություններ և Առաջադրանքներ</string>
+        <string name="guide_desc_habits">Հետևեք սովորություններին օրական սթրիքներով կամ կազմակերպեք ձեր To-Do ցուցակը: Սահեցրեք քարտը դեպի աջ՝ արագ խմբագրելու կամ ջնջելու համար:</string>
+
+
+        <string name="guide_title_coach">Ձեր անհատական AI Մարզիչը</string>
+        <string name="guide_desc_coach">Մոտիվացիայի կարիք ունե՞ք: Անցեք Պրոֆիլի կարգավորումներին՝ ընտրելու ձեր AI մարզիչի բնավորությունը (օրինակ՝ Ստոիկ, Մեղմ կամ Կարգապահ) անհատականացված արձագանքների համար:</string>
+
+
+        <string name="guide_title_leaderboard">Թոփ 50 Առաջատարներ</string>
+        <string name="guide_desc_leaderboard">Մրցեք գլոբալ հարթակում: Եղեք հետևողական, հավաքեք սթրիք միավորներ և տեսեք, թե արդյոք կարող եք տեղ գրավել համաշխարհային առաջատարների աղյուսակում:</string>
+
+
+        <string name="guide_btn_next">Առաջ</string>
+        <string name="guide_btn_finish">Սկսե՛նք</string>
+        <string name="guide_btn_close">✕ Փակել</string>
+
 </resources>

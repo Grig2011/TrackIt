@@ -235,4 +235,20 @@
     <string name="nav_ai_coach">AI Coach</string>
     <string name="nav_habit">Habit</string>
     <string name="nav_profile">Profile</string>
+
+    <string name="guide_title_welcome">Welcome to TrackIt</string>
+    <string name="guide_desc_welcome">Your ultimate companion to build long-lasting habits, manage daily tasks, and reach your goals.</string>
+
+    <string name="guide_title_habits">Habits &amp; Daily Tasks</string>
+    <string name="guide_desc_habits">Track habits with daily streaks or organize your To-Do List. Swipe right on any card to quickly Edit or Delete them seamlessly!</string>
+
+    <string name="guide_title_coach">Your Custom AI Coach</string>
+    <string name="guide_desc_coach">Need an accountability push? Head over to Profile settings to pick your AI Coach personality (like Stoic, Gentle, or Disciplined) for personalized updates.</string>
+
+    <string name="guide_title_leaderboard">Top 50 Leaderboard</string>
+    <string name="guide_desc_leaderboard">Compete globally! Stay consistent with your habits, rack up streak points, and see if you have what it takes to land a spot on the global leaderboard.</string>
+
+    <string name="guide_btn_next">Next</string>
+    <string name="guide_btn_finish">Let\'s Go!</string>
+    <string name="guide_btn_close">✕ Close</string>
 </resources>

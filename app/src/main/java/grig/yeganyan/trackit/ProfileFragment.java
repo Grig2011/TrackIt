@@ -146,6 +146,18 @@ public class ProfileFragment extends Fragment {
             startActivity(i);
 
         });
+        MaterialButton btnInstructionGuide = view.findViewById(R.id.btnInstructionGuide);
+        btnInstructionGuide.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), instructionActivity.class);
+            startActivity(intent);
+
+            if (getActivity() != null) {
+                getActivity().overridePendingTransition(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left
+                );
+            }
+        });
 
         btnCoachTone = view.findViewById(R.id.btnCoachTone);
         themeSwitch = view.findViewById(R.id.themeSwitch);

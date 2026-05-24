@@ -79,7 +79,10 @@ public class MainFragment extends Fragment {
                                         "lastCompletedDate", lastDate
                                 )
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(getContext(), "Habit Updated!", Toast.LENGTH_SHORT).show();
+
+                                    if (isAdded() && getContext() != null) {
+                                        Toast.makeText(getContext(), "Habit Updated!", Toast.LENGTH_SHORT).show();
+                                    }
                                 });
                     }
                     checkAndShowCelebration(data);
@@ -158,7 +161,7 @@ public class MainFragment extends Fragment {
                 .collection("habits")
                 .addSnapshotListener((value, error) -> {
 
-                    if (error != null || !isAdded() || getContext() == null) return;
+                    if (error != null || !isAdded() || getContext() == null ) return;
 
                     habitsContainer.removeAllViews();
 
