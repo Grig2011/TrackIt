@@ -38,6 +38,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
 
         db.collection("users")
+                .whereGreaterThan("bestStreak", 0)
                 .orderBy("bestStreak", Query.Direction.DESCENDING)
                 .limit(50)
                 .get()
