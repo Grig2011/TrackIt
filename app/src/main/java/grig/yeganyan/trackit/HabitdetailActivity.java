@@ -43,6 +43,8 @@ public class HabitdetailActivity extends AppCompatActivity {
     private LinearLayout layoutStreak;
     private RecyclerView rvEntries;
 
+    private boolean isStreakIncreasedThisSession = false;
+
 
     private double currentValue = 0;
     private double goal = 1000;
@@ -205,6 +207,7 @@ public class HabitdetailActivity extends AppCompatActivity {
             resultIntent.putExtra("last_completed_date", lastCompletedDate);
             resultIntent.putExtra("progress", progressPercentage);
             resultIntent.putExtra("last_updated_date", today);
+            resultIntent.putExtra("streak_increased", isStreakIncreasedThisSession);
 
             setResult(RESULT_OK, resultIntent);
             onHabitCompleted();
@@ -252,6 +255,7 @@ public class HabitdetailActivity extends AppCompatActivity {
                     streakCount++;
                     lastCompletedDate = today;
                     showStreak(true);
+                    isStreakIncreasedThisSession = true;
                     Toast.makeText(this, "🎉 Goal reached! Streak: " + streakCount, Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -268,6 +272,7 @@ public class HabitdetailActivity extends AppCompatActivity {
                     if (streakCount == 0) {
                         layoutStreak.setVisibility(View.GONE);
                     }
+                    isStreakIncreasedThisSession = false;
                     Toast.makeText(this, "Goal unreached. Streak: " + streakCount, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -277,11 +282,13 @@ public class HabitdetailActivity extends AppCompatActivity {
                 streakCount = 0;
                 lastCompletedDate = "";
                 layoutStreak.setVisibility(View.GONE);
+                isStreakIncreasedThisSession = false;
                 Toast.makeText(this, "Limit reached! Streak reset.", Toast.LENGTH_SHORT).show();
             } else {
                 if (lastCompletedDate == null || !lastCompletedDate.equals(today)) {
                     streakCount++;
                     lastCompletedDate = today;
+                    isStreakIncreasedThisSession = true;
                     showStreak(true);
                 }
             }
@@ -344,6 +351,7 @@ public class HabitdetailActivity extends AppCompatActivity {
                     .setInterpolator(new OvershootInterpolator(2f))
                     .start();
         }
+
     }
 
     private String getTodayDateString() {
@@ -402,44 +410,43 @@ public class HabitdetailActivity extends AppCompatActivity {
         List<Integer> stats = habit.getLastSevenDays();
         List<String> labels = habit.getDayLabels();
 
-        // Use the dynamic goal from your Intent
         float currentGoal = (goal > 0) ? (float) goal : 100f;
         float scale = getResources().getDisplayMetrics().density;
 
         for (int i = 0; i < stats.size(); i++) {
             int progress = stats.get(i);
-            String dayName = labels.get(i); // Matches the bar exactly
+            String dayName = labels.get(i);
 
-            // 1. Column Container
+
             LinearLayout column = new LinearLayout(this);
             LinearLayout.LayoutParams columnParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
             column.setLayoutParams(columnParams);
             column.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
             column.setOrientation(LinearLayout.VERTICAL);
 
-            // 2. The Bar
+
             View bar = new View(this);
-            // Calculate height: (progress / goal) * maxHeight (120dp)
+
             int barHeightDp = (int) ((progress / currentGoal) * 120);
             int heightPx = (int) (barHeightDp * scale);
 
             LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(
-                    (int) (14 * scale), // Minimalist bar width
-                    Math.max(heightPx, (int) (4 * scale)) // Ensures bar is visible even at 0
+                    (int) (14 * scale),
+                    Math.max(heightPx, (int) (4 * scale))
             );
-            barParams.setMargins(0, 0, 0, (int) (6 * scale)); // Space for label
+            barParams.setMargins(0, 0, 0, (int) (6 * scale));
             bar.setLayoutParams(barParams);
             bar.setBackgroundResource(R.drawable.bar_gradient);
 
-            // 3. The Day Label (Sun, Mon...)
+
             TextView tvDay = new TextView(this);
             tvDay.setText(dayName);
             tvDay.setTextSize(10);
             tvDay.setTextColor(Color.WHITE);
-            tvDay.setAlpha(0.5f); // Neo-noir subtle styling
+            tvDay.setAlpha(0.5f);
             tvDay.setGravity(Gravity.CENTER);
 
-            // 4. Combine
+
             column.addView(bar);
             column.addView(tvDay);
             chartLayout.addView(column);

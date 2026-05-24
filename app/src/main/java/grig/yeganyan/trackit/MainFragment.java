@@ -12,6 +12,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,7 +82,9 @@ public class MainFragment extends Fragment {
                                     Toast.makeText(getContext(), "Habit Updated!", Toast.LENGTH_SHORT).show();
                                 });
                     }
+                    checkAndShowCelebration(data);
                 }
+
             }
     );
     @Nullable
@@ -469,5 +472,114 @@ public class MainFragment extends Fragment {
             openedEdit = null;
             openedDelete = null;
         }
+    }
+    private void checkAndShowCelebration(Intent data) {
+        if (data != null && data.getBooleanExtra("streak_increased", false)) {
+            int finalStreak = data.getIntExtra("streak_count", 1);
+            showStreakCelebrationDialog(finalStreak);
+        }
+    }
+
+    private void showStreakCelebrationDialog(int streak) {
+        if (getContext() == null) return;
+
+        // Create a sleek, borderless dialog
+        android.app.Dialog dialog = new android.app.Dialog(getContext(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+
+        // Programmatically design a Neo-Noir clean dark layout card
+        LinearLayout container = new LinearLayout(getContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setGravity(Gravity.CENTER);
+        container.setBackgroundColor(Color.parseColor("#D9000000")); // 85% transparent deep blur background
+        container.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+        // Card Box Content
+        LinearLayout card = new LinearLayout(getContext());
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(Gravity.CENTER);
+        card.setPadding(60, 60, 60, 60);
+
+        // Setup background shape with rounded corners
+        GradientDrawable cardBg = new GradientDrawable();
+        cardBg.setColor(Color.parseColor("#121212")); // Sleek dark surface
+        cardBg.setCornerRadius(48f);
+        cardBg.setStroke(4, Color.parseColor("#187D24")); // Sharp Brand Border
+        card.setBackground(cardBg);
+
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        cardParams.setMargins(80, 0, 80, 0);
+        card.setLayoutParams(cardParams);
+
+        // Emoji Frame Animation Target
+        TextView tvEmoji = new TextView(getContext());
+        tvEmoji.setText("🔥");
+        tvEmoji.setTextSize(64);
+        tvEmoji.setGravity(Gravity.CENTER);
+
+        // Title text
+        TextView tvTitle = new TextView(getContext());
+        tvTitle.setText("STREAK EXTENDED!");
+        tvTitle.setTextSize(22);
+        tvTitle.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        tvTitle.setTextColor(Color.WHITE);
+        tvTitle.setLetterSpacing(0.08f);
+        tvTitle.setPadding(0, 30, 0, 10);
+        tvTitle.setGravity(Gravity.CENTER);
+
+        // Streak Count details
+        TextView tvMessage = new TextView(getContext());
+        tvMessage.setText(streak + " Days Strong");
+        tvMessage.setTextSize(18);
+        tvMessage.setTextColor(Color.parseColor("#187D24"));
+        tvMessage.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        tvMessage.setPadding(0, 0, 0, 40);
+        tvMessage.setGravity(Gravity.CENTER);
+
+        // Simple Dismiss Action Button
+        com.google.android.material.button.MaterialButton btnClose = new com.google.android.material.button.MaterialButton(getContext());
+        btnClose.setText("LET'S GO");
+        btnClose.setBackgroundColor(Color.parseColor("#187D24"));
+        btnClose.setTextColor(Color.WHITE);
+        btnClose.setCornerRadius(24);
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        // Assemble components together
+        card.addView(tvEmoji);
+        card.addView(tvTitle);
+        card.addView(tvMessage);
+        card.addView(btnClose);
+        container.addView(card);
+        dialog.setContentView(container);
+
+        dialog.show();
+
+        // --- EXECUTE CRISP OVERSHOOT ANIMATION ---
+        card.setAlpha(0f);
+        card.setScaleX(0.4f);
+        card.setScaleY(0.4f);
+
+        card.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(500)
+                .setInterpolator(new android.view.animation.OvershootInterpolator(1.4f))
+                .start();
+
+        // Animate the fire emoji independently to pop out extra clean
+        tvEmoji.setScaleX(0f);
+        tvEmoji.setScaleY(0f);
+        tvEmoji.animate()
+                .scaleX(1.3f)
+                .scaleY(1.3f)
+                .setDuration(600)
+                .setStartDelay(200)
+                .setInterpolator(new android.view.animation.OvershootInterpolator(3.0f))
+                .withEndAction(() -> {
+                    tvEmoji.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                })
+                .start();
     }
 }
