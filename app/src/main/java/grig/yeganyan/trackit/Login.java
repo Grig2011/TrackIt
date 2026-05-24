@@ -33,6 +33,9 @@ public class Login extends AppCompatActivity {
     FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
+
+    private static final String GUEST_EMAIL = "innovationcampus26@gmail.com";
+    private static final String GUEST_PASSWORD = "Samsung2026";
     private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,30 +126,57 @@ public class Login extends AppCompatActivity {
     }
     private void Guest() {
 
-        auth.signInAnonymously()
+        auth.signInWithEmailAndPassword(GUEST_EMAIL, GUEST_PASSWORD)
                 .addOnCompleteListener(this, task -> {
-
                     if (task.isSuccessful()) {
-
                         FirebaseUser user = auth.getCurrentUser();
-
-                        if(user != null){
-
+                        if (user != null) {
                             SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                            prefs.edit().putBoolean("registered", false).apply();
-                            prefs.edit().putString("userId", user.getUid()).apply();
+                            prefs.edit().putBoolean("registered", false)
+                                    .putString("userId", user.getUid())
+                                    .putString("username", "Guest")
+                                    .apply();
 
                             Toast.makeText(this, "Guest login success", Toast.LENGTH_SHORT).show();
-
                             startActivity(new Intent(Login.this, MainActivity.class));
                             finish();
                         }
-
                     } else {
-
                         Exception e = task.getException();
-                        Log.e("AUTH_ERROR", e.getMessage());
-                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+
+                        if (e instanceof com.google.firebase.auth.FirebaseAuthInvalidUserException ||
+                                e instanceof com.google.firebase.auth.FirebaseAuthInvalidCredentialsException) {
+
+                            Log.d("GUEST_AUTH", "Static profile missing or credential mismatched. Forcing auto-registration reset...");
+
+                            auth.createUserWithEmailAndPassword(GUEST_EMAIL, GUEST_PASSWORD)
+                                    .addOnCompleteListener(this, createWithEmailTask -> {
+                                        if (createWithEmailTask.isSuccessful()) {
+                                            FirebaseUser newUser = auth.getCurrentUser();
+                                            if (newUser != null) {
+                                                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                                                prefs.edit().putBoolean("registered", false)
+                                                        .putString("userId", newUser.getUid())
+                                                        .putString("username", "Guest")
+                                                        .apply();
+
+                                                Toast.makeText(this, "Guest login success", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(Login.this, MainActivity.class));
+                                                finish();
+                                            }
+                                        } else {
+                                            Exception err = createWithEmailTask.getException();
+                                            String msg = (err != null && err.getMessage() != null) ? err.getMessage() : "Registration barrier";
+                                            Log.e("GUEST_AUTH_ERROR", msg);
+                                            Toast.makeText(this, "Error: " + msg, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        } else {
+                            String msg = (e != null && e.getMessage() != null) ? e.getMessage() : "Authentication failed";
+                            Log.e("GUEST_AUTH_ERROR", msg);
+                            Toast.makeText(this, "Error: " + msg, Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
     }
