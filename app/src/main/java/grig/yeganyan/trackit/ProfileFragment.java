@@ -73,12 +73,25 @@ public class ProfileFragment extends Fragment {
 
         Spinner spinner = view.findViewById(R.id.langSpinner);
 
-        SharedPreferences prefs = requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        String currentLang = prefs.getString("My_Lang", "en");
 
-        if (currentLang.equals("hy")) spinner.setSelection(1);
-        else if (currentLang.equals("ru")) spinner.setSelection(2);
-        else spinner.setSelection(0);
+        LocaleListCompat currentLocales = AppCompatDelegate.getApplicationLocales();
+        String currentLang;
+
+        if (!currentLocales.isEmpty() && currentLocales.get(0) != null) {
+            currentLang = currentLocales.get(0).getLanguage();
+        } else {
+
+            currentLang = requireContext().getResources().getConfiguration().getLocales().get(0).getLanguage();
+        }
+
+
+        if (currentLang.startsWith("hy")) {
+            spinner.setSelection(1);
+        } else if (currentLang.startsWith("ru")) {
+            spinner.setSelection(2);
+        } else {
+            spinner.setSelection(0);
+        }
 
         spinner.setOnTouchListener((v, event) -> {
             isUserAction = true;

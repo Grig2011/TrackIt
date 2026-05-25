@@ -38,7 +38,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
 
         db.collection("users")
-                .whereGreaterThan("bestStreak", 0)
+               .whereGreaterThan("bestStreak", 0)
                 .orderBy("bestStreak", Query.Direction.DESCENDING)
                 .limit(50)
                 .get()
@@ -47,6 +47,8 @@ public class LeaderboardActivity extends AppCompatActivity {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         userList.clear();
                         userList.addAll(queryDocumentSnapshots.toObjects(User.class));
+
+                        android.util.Log.d("LeaderboardDebug", "Loaded user count: " + userList.size());
 
                         adapter = new LeaderboardAdapter(userList);
                         rvLeaderboard.setAdapter(adapter);
