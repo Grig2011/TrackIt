@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +40,9 @@ public class ToDoList extends Fragment {
     private ListenerRegistration listenerRegistration;
     private String currentUserId;
 
-    private View currentlyOpenedCard = null;
-    private View currentlyOpenedButtons = null;
+    private View openedCard = null;
+    private ImageButton openedEdit = null;
+    private ImageButton openedDelete = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -129,68 +130,90 @@ public class ToDoList extends Fragment {
             holder.tvTime.setText(task.getTime());
 
             holder.cardContent.setTranslationX(0);
+            holder.buttonContainer.setVisibility(View.GONE);
             holder.buttonContainer.setAlpha(0f);
+            holder.btnEdit.setVisibility(View.GONE);
+            holder.btnDelete.setVisibility(View.GONE);
 
-            setupManualSwipe(holder);
+            setupDragSwipe(holder.cardContent, holder.buttonContainer, holder.btnEdit, holder.btnDelete, task);
 
             holder.btnDelete.setOnClickListener(v -> deleteTask(task));
             holder.btnEdit.setOnClickListener(v -> editTask(task));
         }
 
-        private void setupManualSwipe(TaskViewHolder holder) {
-            View card = holder.cardContent;
-            View buttons = holder.buttonContainer;
-
-            card.setOnTouchListener(new View.OnTouchListener() {
-                float startX, initialTranslation;
-                boolean isMoving = false;
-                final int TOUCH_SLOP = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-                final float MAX_SWIPE = 350f;
+        private void setupDragSwipe(View cardContent, View buttonContainer, ImageButton editButton, ImageButton deleteButton, Tasks task) {
+            cardContent.setOnTouchListener(new View.OnTouchListener() {
+                float downX;
+                float translation = 0;
+                float swipeDistance = 0;
+                boolean dragging = false;
+                final float TOUCH_SLOP = 12f;
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
+                    if (swipeDistance == 0) {
+                        swipeDistance = v.getWidth() * 0.35f;
+                    }
+
+                    switch (event.getActionMasked()) {
                         case MotionEvent.ACTION_DOWN:
-                            startX = event.getRawX();
-                            initialTranslation = v.getTranslationX();
+                            downX = event.getRawX() - translation;
+                            dragging = false;
                             return true;
 
                         case MotionEvent.ACTION_MOVE:
-                            float deltaX = event.getRawX() - startX;
-                            if (!isMoving && Math.abs(deltaX) > TOUCH_SLOP) {
-                                isMoving = true;
-                                if (currentlyOpenedCard != null && currentlyOpenedCard != v) {
-                                    closeVisibleCard(currentlyOpenedCard, currentlyOpenedButtons);
-                                }
+                            float delta = event.getRawX() - downX;
+                            if (!dragging && Math.abs(delta) > TOUCH_SLOP) {
+                                dragging = true;
                             }
-                            if (isMoving) {
-                                float newTranslate = Math.max(0, Math.min(initialTranslation + deltaX, MAX_SWIPE));
-                                v.setTranslationX(newTranslate);
-                                buttons.setAlpha(newTranslate / MAX_SWIPE);
-                                return true;
-                            }
-                            break;
+                            if (!dragging) return true;
+
+                            float limited = Math.max(0, Math.min(delta, swipeDistance));
+                            float progress = limited / swipeDistance;
+                            float resistance = (float) (1 - Math.pow(progress, 2));
+                            translation = limited * resistance + limited * (1 - resistance);
+
+                            v.setTranslationX(translation);
+                            float alpha = translation / swipeDistance;
+
+                            buttonContainer.setVisibility(View.VISIBLE);
+                            editButton.setVisibility(View.VISIBLE);
+                            deleteButton.setVisibility(View.VISIBLE);
+
+                            buttonContainer.setAlpha(alpha);
+                            editButton.setAlpha(alpha);
+                            deleteButton.setAlpha(alpha);
+                            return true;
 
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
-                            if (isMoving) {
-                                isMoving = false;
-                                float currentX = v.getTranslationX();
-                                if (currentX > MAX_SWIPE * 0.4f) {
-                                    v.animate()
-                                            .translationX(MAX_SWIPE)
-                                            .setDuration(300)
-                                            .setInterpolator(new OvershootInterpolator(1.2f))
-                                            .start();
-                                    buttons.animate().alpha(1f).setDuration(200).start();
-                                    currentlyOpenedCard = v;
-                                    currentlyOpenedButtons = buttons;
-                                } else {
-                                    closeVisibleCard(v, buttons);
-                                }
+                            if (!dragging && Math.abs(event.getRawX() - (downX + translation)) < TOUCH_SLOP) {
+                                editTask(task);
+                                v.performClick();
                                 return true;
                             }
-                            break;
+
+                            float velocity = event.getRawX() - downX;
+                            boolean open = translation > swipeDistance * 0.25f || velocity > 1200;
+
+                            if (open) {
+                                if (openedCard != null && openedCard != v) {
+                                    closeCard(openedCard, openedEdit != null ? (View) openedEdit.getParent() : null, openedEdit, openedDelete);
+                                }
+                                v.animate().translationX(swipeDistance).setDuration(140).start();
+                                buttonContainer.animate().alpha(1f).setDuration(100).start();
+                                editButton.setAlpha(1f);
+                                deleteButton.setAlpha(1f);
+
+                                openedCard = v;
+                                openedEdit = editButton;
+                                openedDelete = deleteButton;
+                                translation = swipeDistance;
+                            } else {
+                                closeCard(v, buttonContainer, editButton, deleteButton);
+                                translation = 0;
+                            }
+                            return true;
                     }
                     return false;
                 }
@@ -220,12 +243,23 @@ public class ToDoList extends Fragment {
         }
     }
 
-    private void closeVisibleCard(View card, View buttons) {
-        if (card != null) card.animate().translationX(0).setDuration(250).start();
-        if (buttons != null) buttons.animate().alpha(0f).setDuration(200).start();
-        if (card == currentlyOpenedCard) {
-            currentlyOpenedCard = null;
-            currentlyOpenedButtons = null;
+    private void closeCard(View card, View container, ImageButton edit, ImageButton delete) {
+        if (card != null) {
+            card.animate().translationX(0).setDuration(140).start();
+        }
+        if (container != null) {
+            container.animate().alpha(0f).setDuration(100).withEndAction(() -> container.setVisibility(View.GONE)).start();
+        }
+        if (edit != null) {
+            edit.animate().alpha(0f).setDuration(100).withEndAction(() -> edit.setVisibility(View.GONE)).start();
+        }
+        if (delete != null) {
+            delete.animate().alpha(0f).setDuration(100).withEndAction(() -> delete.setVisibility(View.GONE)).start();
+        }
+        if (card == openedCard) {
+            openedCard = null;
+            openedEdit = null;
+            openedDelete = null;
         }
     }
 

@@ -380,6 +380,9 @@ public class HabitdetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        int color = Color.parseColor(habit.getColor());
+        double brightness = (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color));
+        btnDone.setIconTint(ColorStateList.valueOf(brightness > 186 ? Color.BLACK : Color.WHITE));
     }
 
     private String getYesterdayDateString() {

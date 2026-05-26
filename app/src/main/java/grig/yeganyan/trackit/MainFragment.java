@@ -109,6 +109,7 @@ public class MainFragment extends Fragment {
             return view;
         }
         TextView Avatar = view.findViewById(R.id.Avatar);
+        Avatar.setText("👤");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -486,69 +487,77 @@ public class MainFragment extends Fragment {
     private void showStreakCelebrationDialog(int streak) {
         if (getContext() == null) return;
 
-        // Create a sleek, borderless dialog
         android.app.Dialog dialog = new android.app.Dialog(getContext(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
-        // Programmatically design a Neo-Noir clean dark layout card
+        int backgroundColor = getContext().getResources().getColor(R.color.bg_color);
+        int cardSurfaceColor = getContext().getResources().getColor(R.color.habit_bg_color);
+        int primaryBrandColor = getContext().getResources().getColor(R.color.primary_color);
+        int textPrimaryColor = getContext().getResources().getColor(R.color.text_primary);
+        int textSecondaryColor = getContext().getResources().getColor(R.color.text_secondary);
+        int orangeStreakColor = getContext().getResources().getColor(R.color.orange_streak);
+        int trackGrayColor = getContext().getResources().getColor(R.color.track_gray);
+
         LinearLayout container = new LinearLayout(getContext());
         container.setOrientation(LinearLayout.VERTICAL);
         container.setGravity(Gravity.CENTER);
-        container.setBackgroundColor(Color.parseColor("#D9000000")); // 85% transparent deep blur background
+
+        int dimmedOverlay = (backgroundColor & 0x00FFFFFF) | 0xC0000000;
+        container.setBackgroundColor(dimmedOverlay);
         container.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-        // Card Box Content
         LinearLayout card = new LinearLayout(getContext());
         card.setOrientation(LinearLayout.VERTICAL);
         card.setGravity(Gravity.CENTER);
-        card.setPadding(60, 60, 60, 60);
+        card.setPadding(64, 80, 64, 80);
 
-        // Setup background shape with rounded corners
         GradientDrawable cardBg = new GradientDrawable();
-        cardBg.setColor(Color.parseColor("#121212")); // Sleek dark surface
-        cardBg.setCornerRadius(48f);
-        cardBg.setStroke(4, Color.parseColor("#187D24")); // Sharp Brand Border
+        cardBg.setColor(cardSurfaceColor);
+        cardBg.setCornerRadius(64f);
+        cardBg.setStroke(3, trackGrayColor);
         card.setBackground(cardBg);
 
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        cardParams.setMargins(80, 0, 80, 0);
+        cardParams.setMargins(96, 0, 96, 0);
         card.setLayoutParams(cardParams);
 
-        // Emoji Frame Animation Target
         TextView tvEmoji = new TextView(getContext());
         tvEmoji.setText("🔥");
-        tvEmoji.setTextSize(64);
+        tvEmoji.setTextSize(72);
         tvEmoji.setGravity(Gravity.CENTER);
 
-        // Title text
         TextView tvTitle = new TextView(getContext());
-        tvTitle.setText("STREAK EXTENDED!");
-        tvTitle.setTextSize(22);
-        tvTitle.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
-        tvTitle.setTextColor(Color.WHITE);
-        tvTitle.setLetterSpacing(0.08f);
-        tvTitle.setPadding(0, 30, 0, 10);
+        tvTitle.setText(getContext().getString(R.string.streak_extended));
+        tvTitle.setTextSize(20);
+        tvTitle.setTypeface(android.graphics.Typeface.create("sans-serif-black", android.graphics.Typeface.BOLD));
+        tvTitle.setTextColor(textPrimaryColor);
+        tvTitle.setLetterSpacing(0.12f);
+        tvTitle.setPadding(0, 40, 0, 8);
         tvTitle.setGravity(Gravity.CENTER);
 
-        // Streak Count details
         TextView tvMessage = new TextView(getContext());
-        tvMessage.setText(streak + " Days Strong");
-        tvMessage.setTextSize(18);
-        tvMessage.setTextColor(Color.parseColor("#187D24"));
-        tvMessage.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
-        tvMessage.setPadding(0, 0, 0, 40);
+        tvMessage.setText(getContext().getString(R.string.streak_days_strong, streak));
+        tvMessage.setTextSize(24);
+        tvMessage.setTextColor(orangeStreakColor);
+        tvMessage.setTypeface(android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL));
+        tvMessage.setPadding(0, 0, 0, 56);
         tvMessage.setGravity(Gravity.CENTER);
 
-        // Simple Dismiss Action Button
         com.google.android.material.button.MaterialButton btnClose = new com.google.android.material.button.MaterialButton(getContext());
-        btnClose.setText("LET'S GO");
-        btnClose.setBackgroundColor(Color.parseColor("#187D24"));
-        btnClose.setTextColor(Color.WHITE);
-        btnClose.setCornerRadius(24);
+        btnClose.setText(getContext().getString(R.string.streak_button_continue));
+        btnClose.setBackgroundColor(primaryBrandColor);
+        btnClose.setTextColor(cardSurfaceColor);
+        btnClose.setTextSize(14);
+        btnClose.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        btnClose.setLetterSpacing(0.05f);
+        btnClose.setCornerRadius(32);
+
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 130);
+        btnClose.setLayoutParams(btnParams);
         btnClose.setOnClickListener(v -> dialog.dismiss());
 
-        // Assemble components together
         card.addView(tvEmoji);
         card.addView(tvTitle);
         card.addView(tvMessage);
@@ -558,30 +567,32 @@ public class MainFragment extends Fragment {
 
         dialog.show();
 
-        // --- EXECUTE CRISP OVERSHOOT ANIMATION ---
         card.setAlpha(0f);
-        card.setScaleX(0.4f);
-        card.setScaleY(0.4f);
-
+        card.setScaleX(0.7f);
+        card.setScaleY(0.7f);
         card.animate()
                 .alpha(1f)
                 .scaleX(1f)
                 .scaleY(1f)
-                .setDuration(500)
-                .setInterpolator(new android.view.animation.OvershootInterpolator(1.4f))
+                .setDuration(450)
+                .setInterpolator(new android.view.animation.OvershootInterpolator(1.1f))
                 .start();
 
-        // Animate the fire emoji independently to pop out extra clean
         tvEmoji.setScaleX(0f);
         tvEmoji.setScaleY(0f);
         tvEmoji.animate()
-                .scaleX(1.3f)
-                .scaleY(1.3f)
-                .setDuration(600)
-                .setStartDelay(200)
-                .setInterpolator(new android.view.animation.OvershootInterpolator(3.0f))
+                .scaleX(1.4f)
+                .scaleY(1.4f)
+                .setDuration(500)
+                .setStartDelay(150)
+                .setInterpolator(new android.view.animation.OvershootInterpolator(2.2f))
                 .withEndAction(() -> {
-                    tvEmoji.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                    tvEmoji.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(200)
+                            .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                            .start();
                 })
                 .start();
     }

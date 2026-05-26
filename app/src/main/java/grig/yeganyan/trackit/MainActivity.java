@@ -48,40 +48,40 @@ public class MainActivity extends AppCompatActivity {
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        // Check if the data is loaded
+
                         if (isAppReady) {
-                            // Data is ready, remove listener and proceed to app
+
                             content.getViewTreeObserver().removeOnPreDrawListener(this);
                             return true;
                         } else {
-                            // Data is still loading, keep holding the splash screen
+
                             return false;
                         }
                     }
                 }
         );
 
-        // 4. Customize the +1 Exit Animation
+
         splashScreen.setOnExitAnimationListener(splashScreenView -> {
             View view = splashScreenView.getView();
             View iconView = splashScreenView.getIconView();
 
-            // Create a fade-out animation for the entire background
+
             ObjectAnimator fadeOut = ObjectAnimator.ofFloat(view, View.ALPHA, 1f, 0f);
             fadeOut.setDuration(400L);
 
-            // Create an elegant shrink/zoom-out animation for your center logo
+
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconView, View.SCALE_X, 1f, 0.6f);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconView, View.SCALE_Y, 1f, 0.6f);
             scaleX.setDuration(400L);
             scaleY.setDuration(400L);
 
-            // Group them to play at the same time with a premium Material bounce-back interpolator
+
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.setInterpolator(new AnticipateInterpolator());
             animatorSet.playTogether(fadeOut, scaleX, scaleY);
 
-            // Remove the view safely when the animation finishes
+
             animatorSet.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // Start the show
+
             animatorSet.start();
         });
 
@@ -224,14 +224,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startLoadingData() {
-        // Simulating an asynchronous database fetch or user session check (1.5 seconds)
+
         new Thread(() -> {
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Switch flag on the main thread so the UI can update safely
+
             runOnUiThread(() -> isAppReady = true);
         }).start();
     }

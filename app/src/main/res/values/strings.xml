@@ -273,4 +273,39 @@
     <string name="error_register_failed">Registration failed. Please try again.</string>
 
     <string name="guide_menu_title">📖 User Guide &amp; App Info</string>
+
+    <string name="streak_extended">STREAK EXTENDED!</string>
+    <string name="streak_days_strong">%1$d Days Strong</string>
+    <string name="streak_button_continue">LET\'S KEEP IT UP</string>
+
+    <string name="temp_title_meditate">Meditate</string>
+    <string name="temp_desc_meditate">10 minutes of mindfulness</string>
+    <string name="temp_title_workout">Workout</string>
+    <string name="temp_desc_workout">Quick daily exercise</string>
+    <string name="temp_title_language">Language</string>
+    <string name="temp_desc_language">Practice a new language</string>
+    <string name="temp_title_budget">Budget</string>
+    <string name="temp_desc_budget">Track daily expenses</string>
+    <string name="temp_title_disconnect">Disconnect</string>
+    <string name="temp_desc_disconnect">1 hour screen-free</string>
+    <string name="temp_title_family">Family</string>
+    <string name="temp_desc_family">Call a loved one</string>
+
+    <string name="temp_title_cook">Cook</string>
+    <string name="temp_desc_cook">Prepare a home meal</string>
+    <string name="temp_title_clean">Clean</string>
+    <string name="temp_desc_clean">15 min tidy up</string>
+    <string name="temp_title_plan">Plan Day</string>
+    <string name="temp_desc_plan">Set daily goals</string>
+    <string name="temp_title_vitamins">Vitamins</string>
+    <string name="temp_desc_vitamins">Take daily supplements</string>
+    <string name="temp_title_hobby">Hobby</string>
+    <string name="temp_desc_hobby">Work on a side project</string>
+    <string name="temp_title_gratitude">Gratitude</string>
+    <string name="temp_desc_gratitude">List 3 things you are grateful for</string>
+    <string name="temp_title_podcast">Podcast</string>
+    <string name="temp_desc_podcast">Listen to an educational episode</string>
+    <string name="temp_title_inbox">Inbox Zero</string>
+    <string name="temp_desc_inbox">Clear out unread emails</string>
+
 </resources>

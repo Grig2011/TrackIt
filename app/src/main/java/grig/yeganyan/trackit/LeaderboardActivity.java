@@ -29,6 +29,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
         progressBar = findViewById(R.id.progressBar);
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         loadLeaderboardData();
     }

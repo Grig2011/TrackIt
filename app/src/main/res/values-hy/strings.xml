@@ -209,4 +209,37 @@
 
     <string name="guide_menu_title">📖 Օգտագործողի ուղեցույց և Հավելվածի մասին</string>
 
+    <string name="streak_extended">ՕՐԵՐԻ ՇԱՐՔԸ ԵՐԿԱՐԱՁԳՎԵՑ</string>
+    <string name="streak_days_strong">%1$d օր անընդմեջ</string>
+    <string name="streak_button_continue">ՇԱՐՈՒՆԱԿԵՆՔ ՆՈՒՅՆ ՈԳՈՎ</string>
+
+    <string name="temp_title_meditate">Մեդիտացիա</string>
+    <string name="temp_desc_meditate">10 րոպե գիտակցություն</string>
+    <string name="temp_title_workout">Մարզանք</string>
+    <string name="temp_desc_workout">Արագ ամենօրյա վարժություն</string>
+    <string name="temp_title_language">Լեզու</string>
+    <string name="temp_desc_language">Սովորել նոր լեզու</string>
+    <string name="temp_title_budget">Բյուջե</string>
+    <string name="temp_desc_budget">Հետևել ծախսերին</string>
+    <string name="temp_title_disconnect">Անջատում ցանցից</string>
+    <string name="temp_desc_disconnect">1 ժամ առանց էկրանի</string>
+    <string name="temp_title_family">Ընտանիք</string>
+    <string name="temp_desc_family">Զանգել հարազատին</string>
+
+    <string name="temp_title_cook">Եփել</string>
+    <string name="temp_desc_cook">Պատրաստել տնային ուտելիք</string>
+    <string name="temp_title_clean">Մաքրում</string>
+    <string name="temp_desc_clean">15 րոպե մաքրություն</string>
+    <string name="temp_title_plan">Պլանավորում</string>
+    <string name="temp_desc_plan">Սահմանել օրվա նպատակները</string>
+    <string name="temp_title_vitamins">Վիտամիններ</string>
+    <string name="temp_desc_vitamins">Ընդունել վիտամիններ</string>
+    <string name="temp_title_hobby">Հոբբի</string>
+    <string name="temp_desc_hobby">Զբաղվել սիրելի գործով</string>
+    <string name="temp_title_gratitude">Երախտագիտություն</string>
+    <string name="temp_desc_gratitude">Նշել 3 լավ բան</string>
+    <string name="temp_title_podcast">Փոդքասթ</string>
+    <string name="temp_desc_podcast">Լսել ուսուցողական նյութ</string>
+    <string name="temp_title_inbox">Մաքուր փոստ</string>
+    <string name="temp_desc_inbox">Կարդալ բոլոր նամակները</string>
 </resources>

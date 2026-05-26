@@ -208,4 +208,37 @@
     <string name="error_register_failed">Ошибка регистрации. Пожалуйста, попробуйте еще раз.</string>
 
     <string name="guide_menu_title">📖 Руководство пользователя и О приложении</string>
+
+    <string name="streak_extended">СЕРИЯ ПРОДЛЕНА!</string>
+    <string name="streak_days_strong">%1$d дней подряд</string>
+    <string name="streak_button_continue">ТАК ДЕРЖАТЬ</string>
+    <string name="temp_title_meditate">Медитация</string>
+    <string name="temp_desc_meditate">10 минут осознанности</string>
+    <string name="temp_title_workout">Тренировка</string>
+    <string name="temp_desc_workout">Быстрая ежедневная разминка</string>
+    <string name="temp_title_language">Язык</string>
+    <string name="temp_desc_language">Практика нового языка</string>
+    <string name="temp_title_budget">Бюджет</string>
+    <string name="temp_desc_budget">Отслеживание расходов</string>
+    <string name="temp_title_disconnect">Без экранов</string>
+    <string name="temp_desc_disconnect">1 час без телефона</string>
+    <string name="temp_title_family">Семья</string>
+    <string name="temp_desc_family">Позвонить близким</string>
+
+    <string name="temp_title_cook">Готовка</string>
+    <string name="temp_desc_cook">Домашняя еда</string>
+    <string name="temp_title_clean">Уборка</string>
+    <string name="temp_desc_clean">15 минут наведения порядка</string>
+    <string name="temp_title_plan">Планирование</string>
+    <string name="temp_desc_plan">Цели на день</string>
+    <string name="temp_title_vitamins">Витамины</string>
+    <string name="temp_desc_vitamins">Принять витамины</string>
+    <string name="temp_title_hobby">Хобби</string>
+    <string name="temp_desc_hobby">Время для увлечений</string>
+    <string name="temp_title_gratitude">Благодарность</string>
+    <string name="temp_desc_gratitude">Записать 3 хорошие вещи</string>
+    <string name="temp_title_podcast">Подкаст</string>
+    <string name="temp_desc_podcast">Послушать полезный выпуск</string>
+    <string name="temp_title_inbox">Входящие ноль</string>
+    <string name="temp_desc_inbox">Разобрать почту</string>
 </resources>

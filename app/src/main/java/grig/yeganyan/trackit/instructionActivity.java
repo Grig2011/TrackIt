@@ -83,7 +83,7 @@ public class instructionActivity extends AppCompatActivity {
                 txtTitle.setText(getString(R.string.guide_title_leaderboard));
                 txtDesc.setText(getString(R.string.guide_desc_leaderboard));
                 updateDotIndicator(dot4, dot3, dot2, dot1);
-                btnNext.setText(getString(R.string.guide_btn_finish)); // Changes to local "Let's Go!" / "Սկսե՛նք" / "Погнали!"
+                btnNext.setText(getString(R.string.guide_btn_finish));
                 break;
         }
 
