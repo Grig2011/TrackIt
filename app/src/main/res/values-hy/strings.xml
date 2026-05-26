@@ -242,4 +242,6 @@
     <string name="temp_desc_podcast">Լսել ուսուցողական նյութ</string>
     <string name="temp_title_inbox">Մաքուր փոստ</string>
     <string name="temp_desc_inbox">Կարդալ բոլոր նամակները</string>
+
+    <string name="ai_disclaimer">Trackit-ը ԱԲ է: Այն կարող է սխալներ թույլ տալ:</string>
 </resources>

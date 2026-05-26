@@ -241,4 +241,6 @@
     <string name="temp_desc_podcast">Послушать полезный выпуск</string>
     <string name="temp_title_inbox">Входящие ноль</string>
     <string name="temp_desc_inbox">Разобрать почту</string>
+
+    <string name="ai_disclaimer">Trackit – это ИИ. Он может ошибаться.</string>
 </resources>
