@@ -1,5 +1,9 @@
 package grig.yeganyan.trackit;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.RenderEffect;
@@ -7,9 +11,12 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AnticipateInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,10 +33,67 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "settings";
     private static final String KEY_DARK_MODE = "darkMode";
     private static final String KEY_CURRENT_FRAGMENT = "currentFragment";
+    private boolean isAppReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+
         super.onCreate(savedInstanceState);
+
+        startLoadingData();
+
+        final View content = findViewById(android.R.id.content);
+        content.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        // Check if the data is loaded
+                        if (isAppReady) {
+                            // Data is ready, remove listener and proceed to app
+                            content.getViewTreeObserver().removeOnPreDrawListener(this);
+                            return true;
+                        } else {
+                            // Data is still loading, keep holding the splash screen
+                            return false;
+                        }
+                    }
+                }
+        );
+
+        // 4. Customize the +1 Exit Animation
+        splashScreen.setOnExitAnimationListener(splashScreenView -> {
+            View view = splashScreenView.getView();
+            View iconView = splashScreenView.getIconView();
+
+            // Create a fade-out animation for the entire background
+            ObjectAnimator fadeOut = ObjectAnimator.ofFloat(view, View.ALPHA, 1f, 0f);
+            fadeOut.setDuration(400L);
+
+            // Create an elegant shrink/zoom-out animation for your center logo
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(iconView, View.SCALE_X, 1f, 0.6f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(iconView, View.SCALE_Y, 1f, 0.6f);
+            scaleX.setDuration(400L);
+            scaleY.setDuration(400L);
+
+            // Group them to play at the same time with a premium Material bounce-back interpolator
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.setInterpolator(new AnticipateInterpolator());
+            animatorSet.playTogether(fadeOut, scaleX, scaleY);
+
+            // Remove the view safely when the animation finishes
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    splashScreenView.remove();
+                }
+            });
+
+            // Start the show
+            animatorSet.start();
+        });
+
+
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -157,5 +221,18 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragmentContainer, fragment)
                     .commit();
         }
+    }
+
+    private void startLoadingData() {
+        // Simulating an asynchronous database fetch or user session check (1.5 seconds)
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Switch flag on the main thread so the UI can update safely
+            runOnUiThread(() -> isAppReady = true);
+        }).start();
     }
 }

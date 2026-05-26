@@ -72,7 +72,7 @@ dependencies {
     implementation("com.google.guava:guava:31.1-android")
 
     implementation(libs.activity)
-
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 
     implementation(libs.emoji2.emojipicker)

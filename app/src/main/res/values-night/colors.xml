@@ -1,6 +1,11 @@
 <resources>
-    <color name="bg_color">#121212</color>
-    <color name="primary_color">#187D24</color>
-    <color name="text_primary">#FFFFFF</color>
-    <color name="habit_bg_color">#000000</color>
+    <color name="bg_color">#121412</color>
+    <color name="habit_bg_color">#1E221F</color>
+    <color name="primary_color">#4CD066</color>
+    <color name="text_primary">#E1E3E1</color>
+    <color name="text_secondary">#8C938C</color>
+    <color name="red_delete">#FF6B68</color>
+    <color name="purple_700">#A382F9</color>
+    <color name="orange_streak">#FF914D</color>
+    <color name="track_gray">#2D322E</color>
 </resources>

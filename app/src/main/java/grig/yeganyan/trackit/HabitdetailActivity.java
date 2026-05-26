@@ -74,7 +74,6 @@ public class HabitdetailActivity extends AppCompatActivity {
         setupInitialState();
         setupListeners();
         setupRecyclerView();
-        setupDiagram(habit);
 
     }
 
@@ -233,8 +232,6 @@ public class HabitdetailActivity extends AppCompatActivity {
         double before = currentValue;
         currentValue = Math.max(0, currentValue + delta);
 
-        habit.recordProgress((int)currentValue);
-        setupDiagram(habit);
 
         entries.add(0, new ProgressEntry(delta, currentValue, new java.util.Date()));
         adapter.notifyItemInserted(0);
@@ -400,56 +397,5 @@ public class HabitdetailActivity extends AppCompatActivity {
             habitService.syncBestStreak(uid, habitList);
         });
     }
-    private void setupDiagram(Habit habit) {
-        LinearLayout chartLayout = findViewById(R.id.barChartLayout);
-        if (chartLayout == null || habit == null) return;
 
-        chartLayout.removeAllViews();
-
-
-        List<Integer> stats = habit.getLastSevenDays();
-        List<String> labels = habit.getDayLabels();
-
-        float currentGoal = (goal > 0) ? (float) goal : 100f;
-        float scale = getResources().getDisplayMetrics().density;
-
-        for (int i = 0; i < stats.size(); i++) {
-            int progress = stats.get(i);
-            String dayName = labels.get(i);
-
-
-            LinearLayout column = new LinearLayout(this);
-            LinearLayout.LayoutParams columnParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
-            column.setLayoutParams(columnParams);
-            column.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-            column.setOrientation(LinearLayout.VERTICAL);
-
-
-            View bar = new View(this);
-
-            int barHeightDp = (int) ((progress / currentGoal) * 120);
-            int heightPx = (int) (barHeightDp * scale);
-
-            LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(
-                    (int) (14 * scale),
-                    Math.max(heightPx, (int) (4 * scale))
-            );
-            barParams.setMargins(0, 0, 0, (int) (6 * scale));
-            bar.setLayoutParams(barParams);
-            bar.setBackgroundResource(R.drawable.bar_gradient);
-
-
-            TextView tvDay = new TextView(this);
-            tvDay.setText(dayName);
-            tvDay.setTextSize(10);
-            tvDay.setTextColor(Color.WHITE);
-            tvDay.setAlpha(0.5f);
-            tvDay.setGravity(Gravity.CENTER);
-
-
-            column.addView(bar);
-            column.addView(tvDay);
-            chartLayout.addView(column);
-        }
-    }
 }
